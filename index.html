@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#667eea">
+<title>Pense-Bêtes Dev · Noah</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --purple: #667eea;
+  --purple-dark: #764ba2;
+  --orange: #e34c26;
+  --yellow: #f0db4f;
+  --blue: #264de4;
+}
+
+body { 
+  font-family: 'Segoe UI', system-ui, sans-serif; 
+  background: linear-gradient(135deg, var(--purple) 0%, var(--purple-dark) 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animations de fond */
+body::before {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  top: -250px;
+  right: -250px;
+  animation: float 20s ease-in-out infinite;
+}
+
+body::after {
+  content: '';
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+  border-radius: 50%;
+  bottom: -200px;
+  left: -200px;
+  animation: float 15s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(30px, 30px) rotate(180deg); }
+}
+
+.container { 
+  max-width: 900px; 
+  width: 100%; 
+  position: relative;
+  z-index: 1;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 48px;
+  animation: slideDown 0.6s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.logo {
+  font-size: 4rem;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+  animation: bounce 2s ease infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+h1 { 
+  color: #fff; 
+  font-size: 2.5rem; 
+  margin-bottom: 12px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  font-weight: 700;
+}
+
+.subtitle {
+  color: rgba(255,255,255,0.9);
+  font-size: 1.1rem;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+.grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+  gap: 24px; 
+  margin-bottom: 40px;
+}
+
+.card { 
+  background: #fff; 
+  border-radius: 16px; 
+  padding: 32px; 
+  text-decoration: none; 
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+  animation: fadeIn 0.6s ease backwards;
+}
+
+.card:nth-child(1) { animation-delay: 0.1s; }
+.card:nth-child(2) { animation-delay: 0.2s; }
+.card:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.5s;
+}
+
+.card:hover::before {
+  left: 100%;
+}
+
+.card:hover { 
+  transform: translateY(-8px); 
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+.card-icon {
+  font-size: 4rem;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+  transition: transform 0.3s ease;
+}
+
+.card:hover .card-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.card-title { 
+  font-size: 1.5rem; 
+  font-weight: 700; 
+  color: #1f2937;
+  text-align: center;
+}
+
+.card-desc {
+  font-size: 0.9rem;
+  color: #6b7280;
+  text-align: center;
+  line-height: 1.6;
+  min-height: 60px;
+}
+
+.badge {
+  background: #10b981;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.badge.coming {
+  background: #94a3b8;
+  box-shadow: 0 2px 8px rgba(148, 163, 184, 0.3);
+}
+
+/* Accent de couleur pour chaque carte */
+.card-js { border-top: 4px solid var(--yellow); }
+.card-html { border-top: 4px solid var(--orange); }
+.card-css { border-top: 4px solid var(--blue); }
+
+.card-js .card-title { color: #c5a005; }
+.card-html .card-title { color: #e34c26; }
+.card-css .card-title { color: #264de4; }
+
+footer {
+  text-align: center;
+  color: rgba(255,255,255,0.85);
+  font-size: 0.9rem;
+  animation: fadeIn 0.6s ease 0.4s backwards;
+}
+
+footer a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 2px solid rgba(255,255,255,0.3);
+  transition: border-color 0.3s;
+}
+
+footer a:hover {
+  border-bottom-color: #fff;
+}
+
+@media (max-width: 600px) {
+  h1 { font-size: 2rem; }
+  .subtitle { font-size: 1rem; }
+  .logo { font-size: 3rem; }
+  .grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="logo">💻</div>
+    <h1>Pense-Bêtes Dev</h1>
+    <p class="subtitle">Mes fiches de référence pour le développement web</p>
+  </header>
+
+  <div class="grid">
+    
+    <a href="js/index.html" class="card card-js">
+      <div class="card-icon">📜</div>
+      <div class="card-title">JavaScript</div>
+      <div class="card-desc">Variables, opérateurs, conditions, boucles, fonctions, tableaux et manipulation du DOM</div>
+      <span class="badge">Disponible</span>
+    </a>
+
+    <a href="html/index.html" class="card card-html">
+      <div class="card-icon">🏗️</div>
+      <div class="card-title">HTML</div>
+      <div class="card-desc">Structure, balises, formulaires, sémantique et raccourcis clavier VS Code</div>
+      <span class="badge">Disponible</span>
+    </a>
+
+    <a href="css/index.html" class="card card-css">
+      <div class="card-icon">🎨</div>
+      <div class="card-title">CSS</div>
+      <div class="card-desc">Sélecteurs, flexbox, grid, animations et responsive design</div>
+      <span class="badge coming">Bientôt</span>
+    </a>
+
+  </div>
+
+  <footer>
+    Cours personnalisés · Créé pour Noah avec ❤️
+  </footer>
+</div>
+
+</body>
+</html>
