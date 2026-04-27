@@ -1,1 +1,1188 @@
-hello
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#7c3aed">
+<title>JS Pense-Bête</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:      #0f1117;
+  --bg2:     #161b27;
+  --bg3:     #1e2535;
+  --border:  #2a3347;
+  --purple:  #7c3aed;
+  --purple2: #9d5bf0;
+  --blue:    #3b82f6;
+  --cyan:    #06b6d4;
+  --green:   #22c55e;
+  --yellow:  #f59e0b;
+  --red:     #ef4444;
+  --text:    #e2e8f0;
+  --text2:   #94a3b8;
+  --text3:   #64748b;
+  --kw:  #c678dd;
+  --fn:  #61afef;
+  --str: #98c379;
+  --num: #d19a66;
+  --op:  #56b6c2;
+  --cmt: #5c6370;
+  --vr:  #e06c75;
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 15px; line-height: 1.6; }
+
+/* HEADER */
+header { background: var(--bg2); border-bottom: 2px solid var(--purple); padding: 14px 20px; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; gap: 14px; }
+.logo { font-family: 'Consolas', monospace; font-size: 1.4rem; font-weight: 700; color: var(--purple2); flex-shrink: 0; }
+.logo span { color: var(--cyan); }
+.tabs-scroll { display: flex; gap: 6px; overflow-x: auto; flex: 1; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.tabs-scroll::-webkit-scrollbar { display: none; }
+.tab-btn { white-space: nowrap; padding: 7px 14px; border: 1.5px solid var(--border); border-radius: 20px; background: transparent; color: var(--text2); cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: all 0.2s; flex-shrink: 0; }
+.tab-btn.active { background: var(--purple); border-color: var(--purple); color: #fff; }
+.tab-btn:hover:not(.active) { border-color: var(--purple2); color: var(--text); }
+
+/* CONTENU */
+main { max-width: 900px; margin: 0 auto; padding: 20px 16px 60px; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; animation: fadein 0.25s ease; }
+@keyframes fadein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; } }
+
+/* CARDS */
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 22px; margin-bottom: 20px; }
+h2 { font-size: 1.15rem; font-weight: 700; color: var(--purple2); margin-bottom: 16px; }
+h3 { font-size: 0.95rem; font-weight: 600; color: var(--cyan); margin: 16px 0 8px; }
+
+/* CODE */
+.code { background: #11131a; border: 1px solid var(--border); border-left: 3px solid var(--purple); border-radius: 8px; padding: 14px 16px; font-family: 'Consolas', 'Monaco', monospace; font-size: 0.9rem; line-height: 1.8; white-space: pre; overflow-x: auto; margin: 8px 0; color: #abb2bf; }
+.kw  { color: var(--kw); }
+.fn  { color: var(--fn); }
+.str { color: var(--str); }
+.num { color: var(--num); }
+.op  { color: var(--op); }
+.cmt { color: var(--cmt); font-style: italic; }
+.vr  { color: var(--vr); }
+code { background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; font-family: 'Consolas', monospace; font-size: 0.88em; color: var(--cyan); }
+
+/* TABLEAUX */
+.tbl { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.tbl th { background: var(--bg3); color: var(--purple2); padding: 10px 12px; text-align: left; font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.tbl td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.tbl tr:last-child td { border-bottom: none; }
+.tbl tr:hover td { background: rgba(124,58,237,0.06); }
+.sym { font-family: 'Consolas', monospace; font-weight: 700; color: var(--cyan); font-size: 1.1rem; }
+
+/* AUTOPSIE */
+.autopsy { display: flex; flex-direction: column; gap: 5px; }
+.autoline { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.autoline-code { background: #11131a; border-right: 1px solid var(--border); padding: 12px 14px; font-family: 'Consolas', monospace; font-size: 0.88rem; color: #abb2bf; }
+.autoline-desc { padding: 12px 14px; font-size: 0.88rem; color: var(--text2); line-height: 1.5; }
+.autoline-desc strong { color: var(--yellow); }
+.badge { display: inline-block; background: var(--purple); color: #fff; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; padding: 1px 6px; border-radius: 3px; margin-right: 6px; }
+
+/* ALERTS */
+.alert { border-radius: 8px; padding: 12px 16px; margin: 12px 0; font-size: 0.88rem; border-left: 4px solid; display: flex; gap: 10px; align-items: flex-start; }
+.alert-icon { font-size: 1.1rem; flex-shrink: 0; }
+.alert.warn   { background: rgba(245,158,11,0.1);  border-color: var(--yellow); }
+.alert.info   { background: rgba(59,130,246,0.1);  border-color: var(--blue); }
+.alert.good   { background: rgba(34,197,94,0.1);   border-color: var(--green); }
+.alert.danger { background: rgba(239,68,68,0.1);   border-color: var(--red); }
+
+/* BLOC ACCOLADES — explication visuelle */
+.bloc-schema { border: 2px solid var(--border); border-radius: 10px; overflow: hidden; margin: 12px 0; }
+.bloc-header { background: var(--bg3); padding: 10px 14px; font-family: 'Consolas', monospace; font-size: 0.88rem; color: #abb2bf; display: flex; align-items: center; gap: 10px; }
+.bloc-inner { border-left: 4px solid var(--purple); margin: 0 10px; padding: 10px 14px; font-family: 'Consolas', monospace; font-size: 0.88rem; color: #abb2bf; background: #11131a; }
+.bloc-footer { background: var(--bg3); padding: 10px 14px; font-family: 'Consolas', monospace; font-size: 0.88rem; color: #abb2bf; }
+.bloc-label { font-size: 0.75rem; background: var(--cyan); color: #000; font-weight: 700; padding: 2px 8px; border-radius: 4px; font-family: sans-serif; }
+
+/* TESTEUR */
+.tester { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 18px; margin-top: 12px; }
+.tester-title { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: var(--purple2); letter-spacing: 0.06em; margin-bottom: 16px; }
+
+/* SLIDER */
+.slider-row { margin-bottom: 14px; }
+.slider-row label { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--text2); margin-bottom: 6px; }
+.slider-val { font-family: 'Consolas', monospace; font-weight: 700; color: var(--cyan); font-size: 1rem; background: var(--bg2); border: 1px solid var(--border); padding: 2px 10px; border-radius: 6px; min-width: 48px; text-align: center; }
+input[type="range"] { width: 100%; accent-color: var(--purple); height: 6px; cursor: pointer; }
+select { width: 100%; background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; color: var(--text); padding: 8px 10px; font-size: 0.9rem; font-family: inherit; margin-bottom: 10px; }
+input[type="text"] { width: 100%; background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; color: var(--text); padding: 8px 10px; font-size: 0.9rem; font-family: inherit; }
+
+.result-code { background: #11131a; border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-family: 'Consolas', monospace; font-size: 0.85rem; line-height: 1.8; white-space: pre; overflow-x: auto; color: #abb2bf; min-height: 100px; margin-top: 12px; }
+.console-out { background: #000; border: 1px solid #1a2a1a; border-radius: 8px; padding: 14px; font-family: 'Consolas', monospace; font-size: 0.85rem; color: #4ade80; min-height: 60px; line-height: 1.7; margin-top: 10px; }
+
+/* GRILLE */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.vs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.vs-box { border-radius: 8px; padding: 14px; }
+.vs-good { background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.3); }
+.vs-bad  { background: rgba(239,68,68,0.08);  border: 1px solid rgba(239,68,68,0.3); }
+.vs-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+.vs-good .vs-label { color: var(--green); }
+.vs-bad  .vs-label { color: var(--red); }
+
+@media (max-width: 600px) {
+  .autoline { grid-template-columns: 1fr; }
+  .autoline-code { border-right: none; border-bottom: 1px solid var(--border); }
+  .grid2 { grid-template-columns: 1fr; }
+  .vs-grid { grid-template-columns: 1fr; }
+}
+
+footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 40px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">JS<span>()</span></div>
+  <div class="tabs-scroll">
+    <button class="tab-btn active" onclick="showTab('variables',this)">📦 Variables</button>
+    <button class="tab-btn" onclick="showTab('operateurs',this)">⚙️ Opérateurs</button>
+    <button class="tab-btn" onclick="showTab('conditions',this)">🔀 Conditions</button>
+    <button class="tab-btn" onclick="showTab('boucles',this)">🔁 Boucles</button>
+    <button class="tab-btn" onclick="showTab('fonctions',this)">🛠️ Fonctions</button>
+    <button class="tab-btn" onclick="showTab('tableaux',this)">📋 Tableaux</button>
+    <button class="tab-btn" onclick="showTab('dom',this)">🌐 DOM</button>
+  </div>
+</header>
+
+<main>
+
+<!-- ============================================================
+     VARIABLES
+============================================================ -->
+<div id="tab-variables" class="tab-panel active">
+
+  <div class="card">
+    <h2>📦 Les trois mots-clés</h2>
+    <table class="tbl">
+      <thead><tr><th>Mot-clé</th><th>Peut changer ?</th><th>Portée (zone de vie)</th><th>Exemple</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>let</code></td>
+          <td>✅ Oui</td>
+          <td>Le bloc <code>{ }</code> où elle est déclarée</td>
+          <td><code>let score = 10;</code></td>
+        </tr>
+        <tr>
+          <td><code>const</code></td>
+          <td>❌ Non</td>
+          <td>Le bloc <code>{ }</code> où elle est déclarée</td>
+          <td><code>const nom = "Noah";</code></td>
+        </tr>
+        <tr>
+          <td><code>var</code></td>
+          <td>✅ Oui</td>
+          <td>Toute la fonction (plus large)</td>
+          <td><code>var ancien = 5;</code> <em style="color:var(--text3)">(à éviter)</em></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="alert warn">
+      <span class="alert-icon">⚠️</span>
+      <div>Utilise toujours <code>const</code> par défaut. Passe à <code>let</code> seulement si tu dois modifier la valeur plus tard.</div>
+    </div>
+  </div>
+
+  <!-- EXPLICATION BLOC { } -->
+  <div class="card">
+    <h2>🧱 C'est quoi un bloc <code>{ }</code> ?</h2>
+    <p style="color:var(--text2);margin-bottom:14px">Un <strong style="color:var(--text)">bloc</strong> c'est tout ce qui se trouve entre une accolade ouvrante <code>{</code> et une accolade fermante <code>}</code>. C'est comme une <strong style="color:var(--yellow)">pièce fermée</strong> : ce qui est créé à l'intérieur <em>reste</em> à l'intérieur.</p>
+
+    <div class="bloc-schema">
+      <div class="bloc-header">
+        <span class="bloc-label">DEHORS</span>
+        <span class="kw">if</span> (score <span class="op">&gt;</span> <span class="num">10</span>) <span style="color:var(--cyan);font-weight:700">{</span>
+        <span style="color:var(--text3);font-size:0.8rem">← accolade ouvrante = début du bloc</span>
+      </div>
+      <div class="bloc-inner">
+        <span class="bloc-label" style="background:var(--purple);color:#fff;margin-right:8px">DEDANS</span>
+        <span class="kw">let</span> <span class="vr">message</span> <span class="op">=</span> <span class="str">"Gagné !"</span>;
+        <span style="color:var(--text3);font-size:0.8rem;display:block;margin-top:4px">↑ cette variable n'existe QUE dans ce bloc</span>
+      </div>
+      <div class="bloc-footer">
+        <span style="color:var(--cyan);font-weight:700">}</span>
+        <span style="color:var(--text3);font-size:0.8rem;margin-left:8px">← accolade fermante = fin du bloc · <code>message</code> n'existe plus ici</span>
+      </div>
+    </div>
+
+    <div class="alert info">
+      <span class="alert-icon">💡</span>
+      <div>
+        <strong>Règle simple :</strong> une variable <code>let</code> ou <code>const</code> ne vit que dans le bloc <code>{ }</code> où elle est née. En dehors, elle est invisible. On appelle ça la <strong>portée</strong> (scope en anglais).
+      </div>
+    </div>
+
+    <h3>Exemple concret</h3>
+    <div class="code"><span class="kw">let</span> <span class="vr">score</span> <span class="op">=</span> <span class="num">15</span>;           <span class="cmt">// ← DEHORS : visible partout</span>
+
+<span class="kw">if</span> (<span class="vr">score</span> <span class="op">&gt;</span> <span class="num">10</span>) {              <span class="cmt">// Début du bloc</span>
+  <span class="kw">let</span> <span class="vr">bonus</span> <span class="op">=</span> <span class="num">5</span>;             <span class="cmt">// ← DEDANS : existe seulement ici</span>
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">score</span>);        <span class="cmt">// ✅ OK (score est dehors)</span>
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">bonus</span>);        <span class="cmt">// ✅ OK (bonus est dedans)</span>
+}                              <span class="cmt">// Fin du bloc → bonus disparaît</span>
+
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">score</span>);          <span class="cmt">// ✅ OK</span>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">bonus</span>);          <span class="cmt">// ❌ ERREUR : bonus n'existe plus !</span></div>
+  </div>
+
+  <div class="card">
+    <h2>🔠 Valeur, type, chaîne… le vocabulaire de base</h2>
+    <p style="color:var(--text2);margin-bottom:14px">Avant de coder, il faut connaître ces mots. On les utilise tout le temps.</p>
+
+    <!-- VALEUR -->
+    <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px;">
+      <div style="background:var(--bg3);padding:10px 14px;display:flex;align-items:center;gap:10px;">
+        <span style="background:#7c3aed;color:#fff;font-size:0.72rem;font-weight:700;text-transform:uppercase;padding:2px 8px;border-radius:4px;">Valeur</span>
+        <span style="color:var(--text);font-weight:600;">Ce qu'on met dans une variable — le contenu réel</span>
+      </div>
+      <div style="padding:12px 14px;font-size:0.88rem;color:var(--text2);">
+        Dans <code>let score = <span style="color:#d19a66">10</span></code>, la valeur c'est <strong style="color:#d19a66">10</strong>.<br>
+        Dans <code>let nom = <span style="color:#98c379">"Noah"</span></code>, la valeur c'est <strong style="color:#98c379">"Noah"</strong>.<br>
+        La valeur peut être un nombre, du texte, vrai/faux, une liste…
+      </div>
+    </div>
+
+    <!-- STRING -->
+    <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px;">
+      <div style="background:var(--bg3);padding:10px 14px;display:flex;align-items:center;gap:10px;">
+        <span style="background:#22863a;color:#fff;font-size:0.72rem;font-weight:700;text-transform:uppercase;padding:2px 8px;border-radius:4px;">String</span>
+        <span style="color:var(--text);font-weight:600;">Chaîne de caractères — du texte</span>
+      </div>
+      <div style="padding:12px 14px;font-size:0.88rem;color:var(--text2);">
+        Une suite de lettres, chiffres, espaces, symboles… <strong>toujours entre guillemets</strong>.<br>
+        <code style="color:#98c379">"Bonjour"</code> &nbsp;·&nbsp; <code style="color:#98c379">'Hello'</code> &nbsp;·&nbsp; <code style="color:#98c379">"1100 messages"</code> &nbsp;·&nbsp; <code style="color:#98c379">"a"</code><br>
+        <span style="color:var(--red);font-size:0.82rem;">⚠️ <code>"42"</code> est une String (texte), pas un nombre — on ne peut pas faire de calcul avec.</span>
+      </div>
+    </div>
+
+    <!-- NUMBER -->
+    <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px;">
+      <div style="background:var(--bg3);padding:10px 14px;display:flex;align-items:center;gap:10px;">
+        <span style="background:#d97706;color:#fff;font-size:0.72rem;font-weight:700;text-transform:uppercase;padding:2px 8px;border-radius:4px;">Number</span>
+        <span style="color:var(--text);font-weight:600;">Nombre — entier ou décimal</span>
+      </div>
+      <div style="padding:12px 14px;font-size:0.88rem;color:var(--text2);">
+        Sans guillemets. On peut faire des calculs avec.<br>
+        <code style="color:#d19a66">42</code> &nbsp;·&nbsp; <code style="color:#d19a66">3.14</code> &nbsp;·&nbsp; <code style="color:#d19a66">1100</code> &nbsp;·&nbsp; <code style="color:#d19a66">-5</code>
+      </div>
+    </div>
+
+    <!-- BOOLEAN -->
+    <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px;">
+      <div style="background:var(--bg3);padding:10px 14px;display:flex;align-items:center;gap:10px;">
+        <span style="background:#0e7490;color:#fff;font-size:0.72rem;font-weight:700;text-transform:uppercase;padding:2px 8px;border-radius:4px;">Boolean</span>
+        <span style="color:var(--text);font-weight:600;">Booléen — seulement deux valeurs possibles : vrai ou faux</span>
+      </div>
+      <div style="padding:12px 14px;font-size:0.88rem;color:var(--text2);">
+        <code style="color:#c678dd">true</code> (vrai) &nbsp;ou&nbsp; <code style="color:#c678dd">false</code> (faux). Jamais de guillemets, jamais de nombre.<br>
+        C'est le résultat de toute comparaison : <code>1100 &gt; 1000</code> → <code style="color:#22c55e">true</code>
+      </div>
+    </div>
+
+    <!-- ARRAY -->
+    <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px;">
+      <div style="background:var(--bg3);padding:10px 14px;display:flex;align-items:center;gap:10px;">
+        <span style="background:#6d28d9;color:#fff;font-size:0.72rem;font-weight:700;text-transform:uppercase;padding:2px 8px;border-radius:4px;">Array</span>
+        <span style="color:var(--text);font-weight:600;">Tableau — une liste ordonnée de valeurs</span>
+      </div>
+      <div style="padding:12px 14px;font-size:0.88rem;color:var(--text2);">
+        Entre crochets <code>[ ]</code>, séparées par des virgules. Chaque case a un numéro qui commence à 0.<br>
+        <code>[<span style="color:#98c379">"pomme"</span>, <span style="color:#98c379">"banane"</span>, <span style="color:#98c379">"cerise"</span>]</code> → 3 éléments, indices 0, 1, 2
+      </div>
+    </div>
+
+    <!-- OBJECT -->
+    <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px;">
+      <div style="background:var(--bg3);padding:10px 14px;display:flex;align-items:center;gap:10px;">
+        <span style="background:#1d4ed8;color:#fff;font-size:0.72rem;font-weight:700;text-transform:uppercase;padding:2px 8px;border-radius:4px;">Object</span>
+        <span style="color:var(--text);font-weight:600;">Objet — des données regroupées avec des étiquettes</span>
+      </div>
+      <div style="padding:12px 14px;font-size:0.88rem;color:var(--text2);">
+        Entre accolades <code>{ }</code>. Chaque donnée a un nom (clé) et une valeur.<br>
+        <code>{ <span style="color:#e06c75">nom</span>: <span style="color:#98c379">"Noah"</span>, <span style="color:#e06c75">age</span>: <span style="color:#d19a66">13</span>, <span style="color:#e06c75">actif</span>: <span style="color:#c678dd">true</span> }</code>
+      </div>
+    </div>
+
+    <div class="alert info">
+      <span class="alert-icon">💡</span>
+      <div><strong>Résumé facile :</strong> le <em>type</em> dit <em>quelle sorte</em> de donnée c'est (texte ? nombre ? vrai/faux ?). La <em>valeur</em> c'est le contenu réel. JS se comporte différemment selon le type — c'est pourquoi <code>42 + 1</code> donne <strong>43</strong> mais <code>"42" + 1</code> donne <strong>"421"</strong> (collage de texte).</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>✏️ Template Literals — écrire du texte avec des variables</h2>
+    <div class="vs-grid">
+      <div class="vs-box vs-bad">
+        <div class="vs-label">❌ Ancienne façon</div>
+        <div class="code"><span class="kw">let</span> <span class="vr">msg</span> <span class="op">=</span> <span class="str">"Bonjour "</span> <span class="op">+</span> <span class="vr">prenom</span> <span class="op">+</span> <span class="str">" !"</span>;</div>
+      </div>
+      <div class="vs-box vs-good">
+        <div class="vs-label">✅ Nouvelle façon (backticks)</div>
+        <div class="code"><span class="kw">let</span> <span class="vr">msg</span> <span class="op">=</span> <span class="str">`Bonjour <span class="op">${</span><span class="vr">prenom</span><span class="op">}</span> !`</span>;</div>
+      </div>
+    </div>
+    <div class="alert info"><span class="alert-icon">💡</span><div>Les backticks <code>`...`</code> permettent d'insérer des variables avec <code>${variable}</code>. Tu peux aussi calculer : <code>${2 + 2}</code> affiche <strong>4</strong>.</div></div>
+  </div>
+
+  <div class="card">
+    <h2>🔬 Autopsie d'une déclaration</h2>
+    <div class="autopsy">
+      <div class="autoline">
+        <div class="autoline-code"><span class="kw">let</span> <span class="vr">age</span> <span class="op">=</span> <span class="num">13</span>;</div>
+        <div class="autoline-desc"><span class="badge">mot-clé</span> <code>let</code> → Je crée une boîte modifiable.<br><span class="badge">nom</span> <code>age</code> → L'étiquette de la boîte.<br><span class="badge">=</span> Opérateur d'<strong>affectation</strong> : je mets quelque chose dedans.<br><span class="badge">valeur</span> <code>13</code> → Ce qu'on met dans la boîte.</div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span class="kw">const</span> <span class="vr">NOM</span> <span class="op">=</span> <span class="str">"Noah"</span>;</div>
+        <div class="autoline-desc"><span class="badge">const</span> → Boîte <strong>scellée</strong>, impossible de la changer après.</div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span class="vr">age</span> <span class="op">=</span> <span class="num">14</span>; <span class="cmt">// Réaffectation</span></div>
+        <div class="autoline-desc">Pas de <code>let</code> ici → on ne recrée pas la boîte, on change juste son contenu. Fonctionne seulement avec <code>let</code>.</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /variables -->
+
+
+<!-- ============================================================
+     OPERATEURS
+============================================================ -->
+<div id="tab-operateurs" class="tab-panel">
+
+  <div class="card">
+    <h2>➕ Opérateurs arithmétiques</h2>
+    <table class="tbl">
+      <thead><tr><th>Symbole</th><th>Action</th><th>Exemple</th><th>Résultat</th></tr></thead>
+      <tbody>
+        <tr><td class="sym">+</td><td>Addition</td><td><code>8 + 5</code></td><td><strong>13</strong></td></tr>
+        <tr><td class="sym">-</td><td>Soustraction</td><td><code>8 - 5</code></td><td><strong>3</strong></td></tr>
+        <tr><td class="sym">*</td><td>Multiplication</td><td><code>8 * 5</code></td><td><strong>40</strong></td></tr>
+        <tr><td class="sym">/</td><td>Division</td><td><code>8 / 5</code></td><td><strong>1.6</strong></td></tr>
+        <tr><td class="sym">%</td><td>Modulo (reste)</td><td><code>8 % 5</code></td><td><strong>3</strong></td></tr>
+        <tr><td class="sym">**</td><td>Puissance</td><td><code>2 ** 8</code></td><td><strong>256</strong></td></tr>
+      </tbody>
+    </table>
+    <div class="alert info"><span class="alert-icon">💡</span><div>Le <strong>modulo (%)</strong> donne le reste de la division entière. Très utile pour savoir si un nombre est pair : <code>n % 2 === 0</code></div></div>
+  </div>
+
+  <div class="card">
+    <h2>🤔 Opérateurs de comparaison</h2>
+    <table class="tbl">
+      <thead><tr><th>Symbole</th><th>Signification</th><th>Exemple</th><th>Résultat</th></tr></thead>
+      <tbody>
+        <tr><td class="sym">===</td><td>Égal (valeur ET type)</td><td><code>5 === 5</code></td><td><code>true</code></td></tr>
+        <tr><td class="sym">!==</td><td>Différent</td><td><code>5 !== "5"</code></td><td><code>true</code></td></tr>
+        <tr><td class="sym">&gt;</td><td>Supérieur à</td><td><code>10 &gt; 3</code></td><td><code>true</code></td></tr>
+        <tr><td class="sym">&lt;</td><td>Inférieur à</td><td><code>10 &lt; 3</code></td><td><code>false</code></td></tr>
+        <tr><td class="sym">&gt;=</td><td>Supérieur ou égal</td><td><code>5 &gt;= 5</code></td><td><code>true</code></td></tr>
+        <tr><td class="sym">&lt;=</td><td>Inférieur ou égal</td><td><code>3 &lt;= 5</code></td><td><code>true</code></td></tr>
+      </tbody>
+    </table>
+    <div class="vs-grid">
+      <div class="vs-box vs-bad">
+        <div class="vs-label">❌ == (à éviter)</div>
+        <div class="code"><span class="num">5</span> <span class="op">==</span> <span class="str">"5"</span>  <span class="cmt">// true — PIÈGE !</span></div>
+        <p style="font-size:0.82rem;color:var(--text2);margin-top:8px">JS convertit le type tout seul → bugs invisibles</p>
+      </div>
+      <div class="vs-box vs-good">
+        <div class="vs-label">✅ === (toujours utiliser ça)</div>
+        <div class="code"><span class="num">5</span> <span class="op">===</span> <span class="str">"5"</span> <span class="cmt">// false — correct</span></div>
+        <p style="font-size:0.82rem;color:var(--text2);margin-top:8px">Vérifie la valeur ET le type → fiable</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🔗 Opérateurs logiques</h2>
+    <table class="tbl">
+      <thead><tr><th>Symbole</th><th>Nom</th><th>Vrai quand…</th><th>Exemple</th></tr></thead>
+      <tbody>
+        <tr><td class="sym">&&</td><td>ET (AND)</td><td>Les DEUX conditions sont vraies</td><td><code>age > 10 && age &lt; 18</code></td></tr>
+        <tr><td class="sym">||</td><td>OU (OR)</td><td>Au MOINS UNE est vraie</td><td><code>jour === "Sam" || jour === "Dim"</code></td></tr>
+        <tr><td class="sym">!</td><td>NON (NOT)</td><td>Inverse le résultat</td><td><code>!estConnecte</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>📝 Raccourcis d'affectation</h2>
+    <div class="grid2">
+      <div class="code"><span class="vr">x</span> <span class="op">+=</span> <span class="num">5</span>;  <span class="cmt">// x = x + 5</span>
+<span class="vr">x</span> <span class="op">-=</span> <span class="num">3</span>;  <span class="cmt">// x = x - 3</span>
+<span class="vr">x</span> <span class="op">*=</span> <span class="num">2</span>;  <span class="cmt">// x = x * 2</span>
+<span class="vr">x</span> <span class="op">/=</span> <span class="num">4</span>;  <span class="cmt">// x = x / 4</span></div>
+      <div class="code"><span class="vr">x</span><span class="op">++</span>;    <span class="cmt">// x = x + 1</span>
+<span class="vr">x</span><span class="op">--</span>;    <span class="cmt">// x = x - 1</span>
+
+<span class="kw">let</span> <span class="vr">vies</span> <span class="op">=</span> <span class="num">3</span>;
+<span class="vr">vies</span><span class="op">--</span>; <span class="cmt">// → 2</span></div>
+    </div>
+  </div>
+
+  <!-- TESTEUR messages — lecture ligne par ligne -->
+  <div class="card">
+    <h2>🛠️ Exemple concret : la boîte mail</h2>
+    <p style="color:var(--text2);margin-bottom:14px">Voici comment JS lit ce programme, <strong>ligne par ligne de haut en bas</strong>. Déplace le slider pour changer le nombre de messages et vois quelle ligne s'active.</p>
+
+    <div class="tester">
+      <div class="tester-title">📬 Nombre de messages dans la boîte</div>
+      <div class="slider-row">
+        <label>Messages <span class="slider-val" id="msg-disp">1100</span></label>
+        <input type="range" id="msg-range" min="0" max="2000" value="1100" oninput="document.getElementById('msg-disp').textContent=this.value;updateMsg()">
+      </div>
+
+      <!-- Lecture ligne par ligne interactive -->
+      <div id="msg-autopsy" style="display:flex;flex-direction:column;gap:4px;margin:14px 0;"></div>
+
+      <div class="console-out" id="msg-cons"></div>
+    </div>
+
+    <div class="alert info" style="margin-top:14px">
+      <span class="alert-icon">📖</span>
+      <div>
+        <strong>La règle d'or de la lecture :</strong> JS lit toujours <strong>de haut en bas, une ligne à la fois</strong>. Il ne passe à la ligne suivante qu'une fois la précédente terminée. Si une condition est fausse, il saute tout le bloc <code>{ }</code> qui suit et continue après.
+      </div>
+    </div>
+  </div>
+
+  <!-- Testeur comparaison simple en bonus -->
+  <div class="card">
+    <h2>🔬 Testeur — N'importe quelle comparaison</h2>
+    <div class="tester">
+      <div class="tester-title">Choisis deux valeurs et un opérateur</div>
+      <div class="slider-row">
+        <label>Valeur A <span class="slider-val" id="op-a-val">10</span></label>
+        <input type="range" id="op-a" min="0" max="50" value="10" oninput="document.getElementById('op-a-val').textContent=this.value;updateOp()">
+      </div>
+      <div class="slider-row">
+        <label>Valeur B <span class="slider-val" id="op-b-val">5</span></label>
+        <input type="range" id="op-b" min="0" max="50" value="5" oninput="document.getElementById('op-b-val').textContent=this.value;updateOp()">
+      </div>
+      <div class="slider-row">
+        <label>Opérateur</label>
+        <select id="op-sel" onchange="updateOp()">
+          <option value="===">===  égal strict</option>
+          <option value="!==">!== différent</option>
+          <option value=">" selected>&gt;  supérieur</option>
+          <option value="<">&lt;  inférieur</option>
+          <option value=">=">&gt;= supérieur ou égal</option>
+          <option value="<=">&lt;= inférieur ou égal</option>
+        </select>
+      </div>
+      <div class="result-code" id="op-code"></div>
+      <div class="console-out" id="op-cons"></div>
+    </div>
+  </div>
+
+</div><!-- /operateurs -->
+
+
+<!-- ============================================================
+     CONDITIONS
+============================================================ -->
+<div id="tab-conditions" class="tab-panel">
+
+  <div class="card">
+    <h2>🔀 Structure if / else if / else</h2>
+    <div class="code"><span class="kw">if</span> (condition1) {
+  <span class="cmt">// Bloc 1 — exécuté si condition1 est vraie</span>
+} <span class="kw">else if</span> (condition2) {
+  <span class="cmt">// Bloc 2 — exécuté si condition2 est vraie</span>
+} <span class="kw">else</span> {
+  <span class="cmt">// Bloc 3 — exécuté si aucune condition n'est vraie</span>
+}</div>
+    <div class="alert info"><span class="alert-icon">📌</span><div>JS lit de <strong>haut en bas</strong>. Dès qu'une condition est vraie, il exécute ce bloc et <strong>ignore tous les autres</strong>.</div></div>
+  </div>
+
+  <div class="card">
+    <h2>🧱 Les blocs <code>{ }</code> dans un if</h2>
+    <p style="color:var(--text2);margin-bottom:12px">Chaque <code>if</code>, <code>else if</code> et <code>else</code> a son propre bloc. JS n'entre dans un bloc que si la condition est vraie :</p>
+    <div class="bloc-schema">
+      <div class="bloc-header"><span class="kw">if</span> (<span class="vr">note</span> <span class="op">>=</span> <span class="num">16</span>) <span style="color:var(--cyan);font-weight:700">{</span><span style="color:var(--text3);font-size:0.8rem;margin-left:10px">← entre ici SEULEMENT si note ≥ 16</span></div>
+      <div class="bloc-inner"><span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Très bien !"</span>);</div>
+      <div class="bloc-footer"><span style="color:var(--cyan);font-weight:700">}</span> <span class="kw">else if</span> (<span class="vr">note</span> <span class="op">>=</span> <span class="num">10</span>) <span style="color:var(--cyan);font-weight:700">{</span><span style="color:var(--text3);font-size:0.8rem;margin-left:10px">← entre ici si note ≥ 10 (et &lt; 16)</span></div>
+    </div>
+    <div class="bloc-schema" style="margin-top:4px">
+      <div class="bloc-inner"><span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Reçu"</span>);</div>
+      <div class="bloc-footer"><span style="color:var(--cyan);font-weight:700">}</span> <span class="kw">else</span> <span style="color:var(--cyan);font-weight:700">{</span><span style="color:var(--text3);font-size:0.8rem;margin-left:10px">← entre ici si aucun des blocs précédents n'a été vrai</span></div>
+    </div>
+    <div class="bloc-schema" style="margin-top:4px">
+      <div class="bloc-inner"><span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Échoué"</span>);</div>
+      <div class="bloc-footer"><span style="color:var(--cyan);font-weight:700">}</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>⚡ Opérateur ternaire — if en une ligne</h2>
+    <div class="code"><span class="cmt">// condition ? valeur_si_vrai : valeur_si_faux</span>
+
+<span class="kw">let</span> <span class="vr">age</span> <span class="op">=</span> <span class="num">17</span>;
+<span class="kw">let</span> <span class="vr">acces</span> <span class="op">=</span> <span class="vr">age</span> <span class="op">>=</span> <span class="num">18</span> <span class="op">?</span> <span class="str">"Autorisé"</span> <span class="op">:</span> <span class="str">"Interdit"</span>;
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">acces</span>); <span class="cmt">// "Interdit"</span></div>
+  </div>
+
+  <div class="card">
+    <h2>🔀 switch / case</h2>
+    <div class="code"><span class="kw">let</span> <span class="vr">jour</span> <span class="op">=</span> <span class="str">"Lundi"</span>;
+
+<span class="kw">switch</span> (<span class="vr">jour</span>) {
+  <span class="kw">case</span> <span class="str">"Lundi"</span>:
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Début de semaine"</span>);
+    <span class="kw">break</span>; <span class="cmt">// ← OBLIGATOIRE pour stopper</span>
+  <span class="kw">case</span> <span class="str">"Samedi"</span>:
+  <span class="kw">case</span> <span class="str">"Dimanche"</span>:
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Week-end !"</span>);
+    <span class="kw">break</span>;
+  <span class="kw">default</span>:
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Jour ordinaire"</span>);
+}</div>
+    <div class="alert warn"><span class="alert-icon">⚠️</span><div>Sans <code>break</code>, JS continue sur le case suivant ! C'est le bug classique du switch.</div></div>
+  </div>
+
+  <!-- TESTEUR notes — slider -->
+  <div class="card">
+    <h2>🛠️ Testeur — Notes et mentions</h2>
+    <div class="tester">
+      <div class="tester-title">🎓 Déplace le slider pour changer la note</div>
+      <div class="slider-row">
+        <label>Note sur 20 <span class="slider-val" id="note-disp">14</span></label>
+        <input type="range" id="note-range" min="0" max="20" value="14" oninput="document.getElementById('note-disp').textContent=this.value;updateNote()">
+      </div>
+      <div class="console-out" id="note-cons"></div>
+      <div class="result-code" id="note-code"></div>
+    </div>
+  </div>
+
+</div><!-- /conditions -->
+
+
+<!-- ============================================================
+     BOUCLES
+============================================================ -->
+<div id="tab-boucles" class="tab-panel">
+
+  <div class="card">
+    <h2>🔁 La boucle for — Quand on sait combien de fois</h2>
+    <div class="code"><span class="cmt">// for (départ ; condition ; étape)</span>
+<span class="kw">for</span> (<span class="kw">let</span> <span class="vr">i</span> <span class="op">=</span> <span class="num">0</span>; <span class="vr">i</span> <span class="op">&lt;</span> <span class="num">5</span>; <span class="vr">i</span><span class="op">++</span>) {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">`Tour n°<span class="op">${</span><span class="vr">i</span><span class="op">}</span>`</span>);
+}
+<span class="cmt">// Affiche : Tour n°0, n°1, n°2, n°3, n°4</span></div>
+
+    <div class="autopsy" style="margin-top:12px">
+      <div class="autoline">
+        <div class="autoline-code"><span class="kw">let</span> <span class="vr">i</span> <span class="op">=</span> <span class="num">0</span></div>
+        <div class="autoline-desc"><span class="badge">départ</span> Le compteur démarre à <strong>0</strong>. S'exécute une seule fois au début.</div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span class="vr">i</span> <span class="op">&lt;</span> <span class="num">5</span></div>
+        <div class="autoline-desc"><span class="badge">condition</span> Vérifiée avant chaque tour. Dès que faux → la boucle s'arrête.</div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span class="vr">i</span><span class="op">++</span></div>
+        <div class="autoline-desc"><span class="badge">étape</span> Après chaque tour, on ajoute 1 au compteur.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🔁 La boucle while</h2>
+    <div class="code"><span class="kw">let</span> <span class="vr">energie</span> <span class="op">=</span> <span class="num">100</span>;
+
+<span class="kw">while</span> (<span class="vr">energie</span> <span class="op">></span> <span class="num">0</span>) {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">`Énergie : <span class="op">${</span><span class="vr">energie</span><span class="op">}</span>`</span>);
+  <span class="vr">energie</span> <span class="op">-=</span> <span class="num">30</span>;
+}
+<span class="cmt">// Affiche 100, 70, 40, 10</span></div>
+    <div class="alert danger"><span class="alert-icon">🚨</span><div>Si tu oublies de faire avancer la condition dans un <code>while</code>, la boucle tourne à l'infini et bloque le navigateur !</div></div>
+  </div>
+
+  <div class="card">
+    <h2>📋 for...of — Parcourir un tableau</h2>
+    <div class="code"><span class="kw">const</span> <span class="vr">fruits</span> <span class="op">=</span> [<span class="str">"pomme"</span>, <span class="str">"banane"</span>, <span class="str">"cerise"</span>];
+
+<span class="kw">for</span> (<span class="kw">const</span> <span class="vr">fruit</span> <span class="kw">of</span> <span class="vr">fruits</span>) {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">fruit</span>);
+}
+<span class="cmt">// pomme, banane, cerise</span></div>
+    <div class="alert good"><span class="alert-icon">✅</span><div><code>for...of</code> est la façon moderne de parcourir un tableau. Plus simple que le <code>for</code> classique.</div></div>
+  </div>
+
+  <div class="card">
+    <h2>🛠️ break et continue</h2>
+    <div class="grid2">
+      <div>
+        <h3>break — Stopper la boucle</h3>
+        <div class="code"><span class="kw">for</span> (<span class="kw">let</span> <span class="vr">i</span> <span class="op">=</span> <span class="num">0</span>; <span class="vr">i</span> <span class="op">&lt;</span> <span class="num">10</span>; <span class="vr">i</span><span class="op">++</span>) {
+  <span class="kw">if</span> (<span class="vr">i</span> <span class="op">===</span> <span class="num">5</span>) <span class="kw">break</span>;
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">i</span>);
+}
+<span class="cmt">// 0, 1, 2, 3, 4</span></div>
+      </div>
+      <div>
+        <h3>continue — Sauter un tour</h3>
+        <div class="code"><span class="kw">for</span> (<span class="kw">let</span> <span class="vr">i</span> <span class="op">=</span> <span class="num">0</span>; <span class="vr">i</span> <span class="op">&lt;</span> <span class="num">6</span>; <span class="vr">i</span><span class="op">++</span>) {
+  <span class="kw">if</span> (<span class="vr">i</span> <span class="op">%</span> <span class="num">2</span> <span class="op">===</span> <span class="num">0</span>) <span class="kw">continue</span>;
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">i</span>);
+}
+<span class="cmt">// 1, 3, 5 (impairs)</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TESTEUR boucle — sliders -->
+  <div class="card">
+    <h2>🛠️ Testeur — Paramètre ta boucle for</h2>
+    <div class="tester">
+      <div class="tester-title">⚙️ Déplace les sliders</div>
+      <div class="slider-row">
+        <label>Départ (i = …) <span class="slider-val" id="ls-disp">0</span></label>
+        <input type="range" id="loop-start" min="0" max="15" value="0" oninput="document.getElementById('ls-disp').textContent=this.value;updateLoop()">
+      </div>
+      <div class="slider-row">
+        <label>Limite (i &lt; …) <span class="slider-val" id="le-disp">8</span></label>
+        <input type="range" id="loop-end" min="1" max="20" value="8" oninput="document.getElementById('le-disp').textContent=this.value;updateLoop()">
+      </div>
+      <div class="slider-row">
+        <label>Étape (i += …) <span class="slider-val" id="lp-disp">1</span></label>
+        <input type="range" id="loop-step" min="1" max="5" value="1" oninput="document.getElementById('lp-disp').textContent=this.value;updateLoop()">
+      </div>
+      <div class="result-code" id="loop-code"></div>
+      <div class="console-out" id="loop-cons"></div>
+    </div>
+  </div>
+
+</div><!-- /boucles -->
+
+
+<!-- ============================================================
+     FONCTIONS
+============================================================ -->
+<div id="tab-fonctions" class="tab-panel">
+
+  <div class="card">
+    <h2>🛠️ Créer une fonction</h2>
+    <div class="vs-grid">
+      <div>
+        <h3>Déclaration classique</h3>
+        <div class="code"><span class="kw">function</span> <span class="fn">saluer</span>(<span class="vr">prenom</span>) {
+  <span class="kw">return</span> <span class="str">`Bonjour <span class="op">${</span><span class="vr">prenom</span><span class="op">}</span> !`</span>;
+}
+
+<span class="fn">saluer</span>(<span class="str">"Noah"</span>);
+<span class="cmt">// → "Bonjour Noah !"</span></div>
+      </div>
+      <div>
+        <h3>Fonction fléchée (moderne)</h3>
+        <div class="code"><span class="kw">const</span> <span class="fn">saluer</span> <span class="op">=</span> (<span class="vr">prenom</span>) <span class="op">=></span> {
+  <span class="kw">return</span> <span class="str">`Bonjour <span class="op">${</span><span class="vr">prenom</span><span class="op">}</span> !`</span>;
+};
+
+<span class="cmt">// Version ultra-courte (1 ligne) :</span>
+<span class="kw">const</span> <span class="fn">saluer</span> <span class="op">=</span> <span class="vr">prenom</span> <span class="op">=></span> <span class="str">`Bonjour <span class="op">${</span><span class="vr">prenom</span><span class="op">}</span> !`</span>;</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🔬 Autopsie d'une fonction</h2>
+    <div class="autopsy">
+      <div class="autoline">
+        <div class="autoline-code"><span class="kw">function</span> <span class="fn">additionner</span>(<span class="vr">a</span>, <span class="vr">b</span>) {</div>
+        <div class="autoline-desc"><span class="badge">function</span> Mot-clé pour déclarer.<br><span class="badge">nom</span> <code>additionner</code> → Comment on l'appelle.<br><span class="badge">paramètres</span> <code>a</code> et <code>b</code> → Les boîtes locales du bloc de la fonction.</div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code">  <span class="kw">return</span> <span class="vr">a</span> <span class="op">+</span> <span class="vr">b</span>;</div>
+        <div class="autoline-desc"><span class="badge">return</span> Renvoie le résultat. La fonction s'arrête immédiatement après.</div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code">}</div>
+        <div class="autoline-desc">Fin du bloc. Les variables <code>a</code> et <code>b</code> n'existent plus.</div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span class="kw">let</span> <span class="vr">res</span> <span class="op">=</span> <span class="fn">additionner</span>(<span class="num">3</span>, <span class="num">7</span>);</div>
+        <div class="autoline-desc"><span class="badge">appel</span> On passe <code>3</code> et <code>7</code> comme arguments. La fonction retourne <strong>10</strong>.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📌 Paramètres par défaut</h2>
+    <div class="code"><span class="kw">function</span> <span class="fn">saluer</span>(<span class="vr">prenom</span> <span class="op">=</span> <span class="str">"visiteur"</span>) {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">`Bonjour <span class="op">${</span><span class="vr">prenom</span><span class="op">}</span> !`</span>);
+}
+
+<span class="fn">saluer</span>(<span class="str">"Noah"</span>);  <span class="cmt">// "Bonjour Noah !"</span>
+<span class="fn">saluer</span>();        <span class="cmt">// "Bonjour visiteur !" ← valeur par défaut</span></div>
+  </div>
+
+  <div class="card">
+    <h2>🔄 Portée (scope) — Où existe une variable ?</h2>
+    <div class="code"><span class="kw">let</span> <span class="vr">global</span> <span class="op">=</span> <span class="str">"Visible partout"</span>;
+
+<span class="kw">function</span> <span class="fn">maFonction</span>() {
+  <span class="kw">let</span> <span class="vr">local</span> <span class="op">=</span> <span class="str">"Visible seulement ici"</span>;
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">global</span>); <span class="cmt">// ✅ OK</span>
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">local</span>);  <span class="cmt">// ✅ OK</span>
+}
+
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">global</span>); <span class="cmt">// ✅ OK</span>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">local</span>);  <span class="cmt">// ❌ ERREUR : local n'existe pas ici</span></div>
+    <div class="alert info"><span class="alert-icon">📌</span><div>C'est la même règle que les blocs <code>{ }</code> : une variable <code>let</code> ou <code>const</code> dans une fonction n'existe qu'à l'intérieur de cette fonction.</div></div>
+  </div>
+
+  <!-- TESTEUR fonctions — slider -->
+  <div class="card">
+    <h2>🛠️ Testeur — Calculatrice</h2>
+    <div class="tester">
+      <div class="tester-title">🔢 Déplace les sliders</div>
+      <div class="slider-row">
+        <label>Valeur A <span class="slider-val" id="fn-a-disp">6</span></label>
+        <input type="range" id="fn-a" min="0" max="20" value="6" oninput="document.getElementById('fn-a-disp').textContent=this.value;updateFn()">
+      </div>
+      <div class="slider-row">
+        <label>Valeur B <span class="slider-val" id="fn-b-disp">4</span></label>
+        <input type="range" id="fn-b" min="0" max="20" value="4" oninput="document.getElementById('fn-b-disp').textContent=this.value;updateFn()">
+      </div>
+      <div class="slider-row">
+        <label>Opération</label>
+        <select id="fn-op" onchange="updateFn()">
+          <option value="+">additionner (a + b)</option>
+          <option value="-">soustraire (a - b)</option>
+          <option value="*">multiplier (a * b)</option>
+          <option value="/">diviser (a / b)</option>
+          <option value="%">modulo (a % b)</option>
+        </select>
+      </div>
+      <div class="result-code" id="fn-code"></div>
+      <div class="console-out" id="fn-cons"></div>
+    </div>
+  </div>
+
+</div><!-- /fonctions -->
+
+
+<!-- ============================================================
+     TABLEAUX
+============================================================ -->
+<div id="tab-tableaux" class="tab-panel">
+
+  <div class="card">
+    <h2>📋 Créer et accéder</h2>
+    <div class="code"><span class="kw">const</span> <span class="vr">fruits</span> <span class="op">=</span> [<span class="str">"pomme"</span>, <span class="str">"banane"</span>, <span class="str">"cerise"</span>];
+<span class="cmt">//                   [0]         [1]         [2]   ← indices</span>
+
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">fruits</span>[<span class="num">0</span>]);      <span class="cmt">// "pomme"</span>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">fruits</span>.<span class="fn">length</span>);  <span class="cmt">// 3</span></div>
+    <div class="alert warn"><span class="alert-icon">⚠️</span><div>Les indices commencent à <strong>0</strong>, pas à 1. Un tableau de 3 éléments → indices 0, 1, 2.</div></div>
+  </div>
+
+  <div class="card">
+    <h2>🔧 Méthodes essentielles</h2>
+    <table class="tbl">
+      <thead><tr><th>Méthode</th><th>Action</th><th>Exemple</th></tr></thead>
+      <tbody>
+        <tr><td><code>.push(x)</code></td><td>Ajoute à la fin</td><td><code>fruits.push("mangue")</code></td></tr>
+        <tr><td><code>.pop()</code></td><td>Retire le dernier</td><td><code>fruits.pop()</code></td></tr>
+        <tr><td><code>.unshift(x)</code></td><td>Ajoute au début</td><td><code>fruits.unshift("fraise")</code></td></tr>
+        <tr><td><code>.shift()</code></td><td>Retire le premier</td><td><code>fruits.shift()</code></td></tr>
+        <tr><td><code>.indexOf(x)</code></td><td>Trouve l'index (ou -1)</td><td><code>fruits.indexOf("banane") // 1</code></td></tr>
+        <tr><td><code>.includes(x)</code></td><td>Existe ? (true/false)</td><td><code>fruits.includes("kiwi") // false</code></td></tr>
+        <tr><td><code>.join(sépa)</code></td><td>Tableau → String</td><td><code>fruits.join(", ")</code></td></tr>
+        <tr><td><code>.reverse()</code></td><td>Inverse l'ordre</td><td><code>fruits.reverse()</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>⚡ Méthodes modernes</h2>
+    <div class="code"><span class="kw">const</span> <span class="vr">nums</span> <span class="op">=</span> [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>];
+
+<span class="cmt">// forEach — Faire quelque chose pour chaque élément</span>
+<span class="vr">nums</span>.<span class="fn">forEach</span>(<span class="vr">n</span> <span class="op">=></span> <span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">n</span>));
+
+<span class="cmt">// map — Créer un NOUVEAU tableau transformé</span>
+<span class="kw">const</span> <span class="vr">doubles</span> <span class="op">=</span> <span class="vr">nums</span>.<span class="fn">map</span>(<span class="vr">n</span> <span class="op">=></span> <span class="vr">n</span> <span class="op">*</span> <span class="num">2</span>);
+<span class="cmt">// doubles = [2, 4, 6, 8, 10]</span>
+
+<span class="cmt">// filter — Garder seulement certains éléments</span>
+<span class="kw">const</span> <span class="vr">pairs</span> <span class="op">=</span> <span class="vr">nums</span>.<span class="fn">filter</span>(<span class="vr">n</span> <span class="op">=></span> <span class="vr">n</span> <span class="op">%</span> <span class="num">2</span> <span class="op">===</span> <span class="num">0</span>);
+<span class="cmt">// pairs = [2, 4]</span>
+
+<span class="cmt">// find — Trouver le premier qui correspond</span>
+<span class="kw">const</span> <span class="vr">trouve</span> <span class="op">=</span> <span class="vr">nums</span>.<span class="fn">find</span>(<span class="vr">n</span> <span class="op">=></span> <span class="vr">n</span> <span class="op">></span> <span class="num">3</span>);
+<span class="cmt">// trouve = 4</span></div>
+  </div>
+
+  <!-- TESTEUR tableaux — slider -->
+  <div class="card">
+    <h2>🛠️ Testeur — Accès par index</h2>
+    <div class="tester">
+      <div class="tester-title">📋 Explore le tableau avec le slider</div>
+      <div id="arr-display" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px"></div>
+      <div class="slider-row">
+        <label>Index sélectionné <span class="slider-val" id="arr-idx-disp">0</span></label>
+        <input type="range" id="arr-idx" min="0" max="5" value="0" oninput="document.getElementById('arr-idx-disp').textContent=this.value;updateArr()">
+      </div>
+      <div class="result-code" id="arr-code"></div>
+      <div class="console-out" id="arr-cons"></div>
+    </div>
+  </div>
+
+</div><!-- /tableaux -->
+
+
+<!-- ============================================================
+     DOM
+============================================================ -->
+<div id="tab-dom" class="tab-panel">
+
+  <div class="card">
+    <h2>🌐 C'est quoi le DOM ?</h2>
+    <p style="color:var(--text2);margin-bottom:12px">Le DOM (Document Object Model) est la représentation de ta page HTML sous forme d'objets JavaScript. Grâce à lui, JS peut lire et modifier le contenu, le style et la structure de ta page en temps réel.</p>
+    <div class="code"><span class="cmt">// La page HTML = un arbre :</span>
+<span class="cmt">// html → body → div → p → "Du texte"</span>
+<span class="cmt">// JS peut attraper n'importe quelle branche et la modifier</span></div>
+  </div>
+
+  <div class="card">
+    <h2>🎯 Sélectionner des éléments</h2>
+    <table class="tbl">
+      <thead><tr><th>Méthode</th><th>Sélectionne…</th><th>Exemple</th></tr></thead>
+      <tbody>
+        <tr><td><code>getElementById</code></td><td>L'élément avec cet id</td><td><code>document.getElementById("titre")</code></td></tr>
+        <tr><td><code>querySelector</code></td><td>Le premier qui correspond (CSS)</td><td><code>document.querySelector(".carte")</code></td></tr>
+        <tr><td><code>querySelectorAll</code></td><td>Tous ceux qui correspondent</td><td><code>document.querySelectorAll("p")</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>✏️ Modifier le contenu et le style</h2>
+    <div class="code"><span class="kw">const</span> <span class="vr">titre</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">getElementById</span>(<span class="str">"titre"</span>);
+
+<span class="vr">titre</span>.<span class="fn">textContent</span> <span class="op">=</span> <span class="str">"Nouveau titre !"</span>;  <span class="cmt">// Changer le texte</span>
+<span class="vr">titre</span>.<span class="fn">innerHTML</span> <span class="op">=</span> <span class="str">"Titre &lt;strong&gt;gras&lt;/strong&gt;"</span>; <span class="cmt">// HTML dedans</span>
+<span class="vr">titre</span>.<span class="fn">style</span>.<span class="fn">color</span> <span class="op">=</span> <span class="str">"red"</span>;            <span class="cmt">// Changer le CSS</span>
+<span class="vr">titre</span>.<span class="fn">classList</span>.<span class="fn">add</span>(<span class="str">"actif"</span>);       <span class="cmt">// Ajouter une classe</span>
+<span class="vr">titre</span>.<span class="fn">classList</span>.<span class="fn">remove</span>(<span class="str">"cache"</span>);    <span class="cmt">// Retirer une classe</span>
+<span class="vr">titre</span>.<span class="fn">classList</span>.<span class="fn">toggle</span>(<span class="str">"sombre"</span>);   <span class="cmt">// Basculer (ajoute/retire)</span></div>
+  </div>
+
+  <div class="card">
+    <h2>👂 Écouter des événements</h2>
+    <div class="code"><span class="kw">const</span> <span class="vr">btn</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">querySelector</span>(<span class="str">"#monBouton"</span>);
+
+<span class="vr">btn</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, () <span class="op">=></span> {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Bouton cliqué !"</span>);
+});
+
+<span class="cmt">// "mouseover"  — souris passe dessus</span>
+<span class="cmt">// "keydown"    — touche du clavier</span>
+<span class="cmt">// "input"      — champ de texte modifié</span>
+<span class="cmt">// "submit"     — formulaire envoyé</span></div>
+  </div>
+
+  <!-- TESTEUR DOM -->
+  <div class="card">
+    <h2>🛠️ Testeur — DOM en direct</h2>
+    <div class="tester">
+      <div class="tester-title">🖱️ Modifie l'élément en bas</div>
+      <div class="slider-row">
+        <label>Taille du texte <span class="slider-val" id="dom-size-disp">24</span>px</label>
+        <input type="range" id="dom-size" min="12" max="60" value="24" oninput="document.getElementById('dom-size-disp').textContent=this.value;updateDom()">
+      </div>
+      <div class="slider-row">
+        <label>Couleur (teinte) <span class="slider-val" id="dom-hue-disp">270</span>°</label>
+        <input type="range" id="dom-hue" min="0" max="360" value="270" oninput="document.getElementById('dom-hue-disp').textContent=this.value;updateDom()">
+      </div>
+      <div class="slider-row">
+        <label>Texte</label>
+        <input type="text" id="dom-txt" value="Modifie-moi !" oninput="updateDom()">
+      </div>
+      <div id="dom-preview" style="background:var(--bg2);border:2px dashed var(--border);border-radius:10px;padding:28px;text-align:center;font-weight:700;min-height:80px;transition:all 0.2s;margin:10px 0;">
+        Modifie-moi !
+      </div>
+      <div class="result-code" id="dom-code"></div>
+    </div>
+  </div>
+
+</div><!-- /dom -->
+
+</main>
+
+<footer>JS Pense-Bête · Pour Noah · Cours personnalisé</footer>
+
+<script>
+/* ===== NAVIGATION ===== */
+function showTab(id, btn) {
+  var panels = document.querySelectorAll('.tab-panel');
+  var btns = document.querySelectorAll('.tab-btn');
+  for (var i = 0; i < panels.length; i++) panels[i].classList.remove('active');
+  for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+/* ===== TESTEUR MESSAGES — lecture ligne par ligne ===== */
+function updateMsg() {
+  var m = parseInt(document.getElementById('msg-range').value);
+  var limite = 1000;
+  var inboxFull = m > limite;
+
+  // Chaque ligne : [code HTML, explication, état: 'active'|'skipped'|'neutral']
+  var lines = [
+    {
+      code: '<span class="kw">let</span> <span class="vr">messages</span> <span class="op">=</span> <span class="num">' + m + '</span>;',
+      desc: 'Ligne 1 — JS cr\u00e9e une bo\u00eete <strong>messages</strong> et y met <strong>' + m + '</strong> (un Number).',
+      state: 'done'
+    },
+    {
+      code: '<span class="kw">let</span> <span class="vr">inboxFull</span> <span class="op">=</span> <span class="kw">false</span>;',
+      desc: 'Ligne 2 — JS cr\u00e9e une bo\u00eete <strong>inboxFull</strong> et y met <strong>false</strong> (un Boolean). Point de d\u00e9part : on suppose que la bo\u00eete n\'est pas pleine.',
+      state: 'done'
+    },
+    {
+      code: '<span class="kw">if</span> (<span class="vr">messages</span> <span class="op">&gt;</span> <span class="num">' + limite + '</span>) {',
+      desc: 'Ligne 3 — JS \u00e9value la condition : <strong>' + m + ' &gt; ' + limite + '</strong> est-ce <strong>' + (inboxFull ? 'VRAI' : 'FAUX') + '</strong> ? ' + (inboxFull ? '✅ VRAI → il entre dans le bloc.' : '❌ FAUX → il saute tout le bloc et va au else.'),
+      state: 'active'
+    },
+    {
+      code: '  <span class="vr">inboxFull</span> <span class="op">=</span> <span class="kw">true</span>;',
+      desc: inboxFull
+        ? 'Ligne 4 — La condition \u00e9tait vraie, JS <strong>entre dans ce bloc</strong> et remplace <strong>false</strong> par <strong>true</strong> dans inboxFull.'
+        : 'Ligne 4 — \u23e9 SAUT\u00c9E. La condition \u00e9tait fausse, JS ignore tout ce bloc.',
+      state: inboxFull ? 'active' : 'skipped'
+    },
+    {
+      code: '} <span class="kw">else</span> {',
+      desc: inboxFull
+        ? '\u23e9 SAUT\u00c9E. Le if \u00e9tait vrai, donc le else est ignor\u00e9.'
+        : 'JS arrive ici parce que le if \u00e9tait faux. Il entre dans le bloc else.',
+      state: inboxFull ? 'skipped' : 'active'
+    },
+    {
+      code: '  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Un nouveau message"</span>);',
+      desc: inboxFull
+        ? '\u23e9 SAUT\u00c9E. On est dans le else qui est ignor\u00e9.'
+        : 'Ligne 6 — JS <strong>ex\u00e9cute cette ligne</strong> et affiche "Un nouveau message" dans la console.',
+      state: inboxFull ? 'skipped' : 'active'
+    },
+    {
+      code: '}',
+      desc: 'Fin du programme. JS a termin\u00e9 la lecture.',
+      state: 'done'
+    }
+  ];
+
+  var colors = {
+    done:    { bg: '#11131a', border: '#2a3347', label: '', labelBg: '' },
+    active:  { bg: 'rgba(34,197,94,0.08)',  border: '#22c55e', label: '\u25b6 JS PASSE ICI', labelBg: '#22c55e' },
+    skipped: { bg: 'rgba(100,116,139,0.08)', border: '#334155', label: '\u23e9 SAUT\u00c9', labelBg: '#475569' }
+  };
+
+  var html = '';
+  lines.forEach(function(ln, idx) {
+    var c = colors[ln.state];
+    var labelHtml = c.label
+      ? '<span style="background:' + c.labelBg + ';color:#fff;font-size:0.65rem;font-weight:700;padding:1px 7px;border-radius:3px;margin-left:10px;font-family:sans-serif;">' + c.label + '</span>'
+      : '';
+    html +=
+      '<div style="display:grid;grid-template-columns:1fr 1fr;border:1px solid ' + c.border + ';border-radius:7px;overflow:hidden;transition:all 0.3s;">' +
+        '<div style="background:' + (c.bg !== '#11131a' ? c.bg : '#11131a') + ';border-right:1px solid ' + c.border + ';padding:10px 14px;font-family:Consolas,monospace;font-size:0.85rem;color:#abb2bf;display:flex;align-items:center;">' +
+          '<span style="color:#3d4455;margin-right:10px;font-size:0.75rem;user-select:none;">' + (idx+1) + '</span>' +
+          ln.code + labelHtml +
+        '</div>' +
+        '<div style="padding:10px 14px;font-size:0.83rem;color:' + (ln.state === 'skipped' ? '#475569' : '#94a3b8') + ';line-height:1.5;">' +
+          ln.desc +
+        '</div>' +
+      '</div>';
+  });
+
+  document.getElementById('msg-autopsy').innerHTML = html;
+
+  var consCol = inboxFull ? '#f59e0b' : '#22c55e';
+  var consMsg = inboxFull
+    ? '> messages (' + m + ') &gt; ' + limite + ' est VRAI\n> inboxFull est maintenant : <span style="color:' + consCol + ';font-weight:700">true</span>'
+    : '> messages (' + m + ') &gt; ' + limite + ' est FAUX\n> Console : <span style="color:' + consCol + ';font-weight:700">"Un nouveau message"</span>';
+  document.getElementById('msg-cons').innerHTML = consMsg;
+}
+updateMsg();
+
+/* ===== TESTEUR OPERATEURS ===== */
+function updateOp() {
+  var a = parseInt(document.getElementById('op-a').value);
+  var b = parseInt(document.getElementById('op-b').value);
+  var op = document.getElementById('op-sel').value;
+  var result;
+  if (op === '===') result = a === b;
+  else if (op === '!==') result = a !== b;
+  else if (op === '>') result = a > b;
+  else if (op === '<') result = a < b;
+  else if (op === '>=') result = a >= b;
+  else result = a <= b;
+  var col = result ? '#22c55e' : '#ef4444';
+  var sym = op.replace('<','&lt;').replace('>','&gt;');
+  document.getElementById('op-code').innerHTML =
+    '<span class="kw">let</span> <span class="vr">a</span> <span class="op">=</span> <span class="num">' + a + '</span>;\n' +
+    '<span class="kw">let</span> <span class="vr">b</span> <span class="op">=</span> <span class="num">' + b + '</span>;\n\n' +
+    '<span class="kw">let</span> <span class="vr">resultat</span> <span class="op">=</span> <span class="num">' + a + '</span> <span class="op">' + sym + '</span> <span class="num">' + b + '</span>;\n' +
+    '<span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">resultat</span>);';
+  document.getElementById('op-cons').innerHTML =
+    '> ' + a + ' ' + sym + ' ' + b + '  →  <span style="color:' + col + ';font-weight:700">' + result.toString().toUpperCase() + '</span>';
+}
+updateOp();
+
+/* ===== TESTEUR NOTES ===== */
+function updateNote() {
+  var n = parseInt(document.getElementById('note-range').value);
+  var mention, col, v1, v2, v3, v4, v5;
+  if (n >= 16)      { mention = 'Tres bien !'; col = '#22c55e'; v1='VRAI'; v2=''; v3=''; v4=''; v5=''; }
+  else if (n >= 14) { mention = 'Bien';         col = '#06b6d4'; v1='faux'; v2='VRAI'; v3=''; v4=''; v5=''; }
+  else if (n >= 12) { mention = 'Assez bien';  col = '#3b82f6'; v1='faux'; v2='faux'; v3='VRAI'; v4=''; v5=''; }
+  else if (n >= 10) { mention = 'Recu';         col = '#f59e0b'; v1='faux'; v2='faux'; v3='faux'; v4='VRAI'; v5=''; }
+  else              { mention = 'Non recu';     col = '#ef4444'; v1='faux'; v2='faux'; v3='faux'; v4='faux'; v5='VRAI'; }
+  document.getElementById('note-cons').innerHTML =
+    '> Note : <strong>' + n + '/20</strong>     Mention : <span style="color:' + col + ';font-weight:700">' + mention + '</span>';
+  var mk = function(lbl,actif) { return '<span class="cmt"> // ' + (actif ? '<span style="color:#22c55e">&#x2705; ' + lbl + '</span>' : '<span style="color:#5c6370">&times; ' + lbl + '</span>') + '</span>'; };
+  document.getElementById('note-code').innerHTML =
+    '<span class="kw">if</span> (<span class="vr">note</span> <span class="op">>=</span> <span class="num">16</span>)       {' + mk('ENTRE ICI', n>=16) + '\n' +
+    '  mention <span class="op">=</span> <span class="str">"Tres bien !"</span>;\n' +
+    '} <span class="kw">else if</span> (<span class="vr">note</span> <span class="op">>=</span> <span class="num">14</span>) {' + mk('ENTRE ICI', n>=14&&n<16) + '\n' +
+    '  mention <span class="op">=</span> <span class="str">"Bien"</span>;\n' +
+    '} <span class="kw">else if</span> (<span class="vr">note</span> <span class="op">>=</span> <span class="num">12</span>) {' + mk('ENTRE ICI', n>=12&&n<14) + '\n' +
+    '  mention <span class="op">=</span> <span class="str">"Assez bien"</span>;\n' +
+    '} <span class="kw">else if</span> (<span class="vr">note</span> <span class="op">>=</span> <span class="num">10</span>) {' + mk('ENTRE ICI', n>=10&&n<12) + '\n' +
+    '  mention <span class="op">=</span> <span class="str">"Recu"</span>;\n' +
+    '} <span class="kw">else</span> {' + mk('ENTRE ICI', n<10) + '\n' +
+    '  mention <span class="op">=</span> <span class="str">"Non recu"</span>;\n}';
+}
+updateNote();
+
+/* ===== TESTEUR BOUCLES ===== */
+function updateLoop() {
+  var start = parseInt(document.getElementById('loop-start').value);
+  var end = parseInt(document.getElementById('loop-end').value);
+  var step = parseInt(document.getElementById('loop-step').value);
+  var out = [];
+  for (var i = start; i < end; i += step) {
+    out.push(i);
+    if (out.length >= 30) { out.push('...'); break; }
+  }
+  document.getElementById('loop-code').innerHTML =
+    '<span class="kw">for</span> (<span class="kw">let</span> <span class="vr">i</span> <span class="op">=</span> <span class="num">' + start + '</span>; <span class="vr">i</span> <span class="op">&lt;</span> <span class="num">' + end + '</span>; <span class="vr">i</span> <span class="op">+=</span> <span class="num">' + step + '</span>) {\n' +
+    '  <span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">i</span>);\n}';
+  document.getElementById('loop-cons').innerHTML =
+    '> ' + (out.length ? out.join(', ') : '<span style="color:#ef4444">Boucle vide (départ &gt;= limite)</span>');
+}
+updateLoop();
+
+/* ===== TESTEUR FONCTIONS ===== */
+function updateFn() {
+  var a = parseInt(document.getElementById('fn-a').value);
+  var b = parseInt(document.getElementById('fn-b').value);
+  var op = document.getElementById('fn-op').value;
+  var names = { '+': 'additionner', '-': 'soustraire', '*': 'multiplier', '/': 'diviser', '%': 'modulo' };
+  var result;
+  if (op === '+') result = a + b;
+  else if (op === '-') result = a - b;
+  else if (op === '*') result = a * b;
+  else if (op === '/') result = b !== 0 ? (a / b).toFixed(2) : 'Erreur (division par 0)';
+  else result = b !== 0 ? a % b : 'Erreur (division par 0)';
+  var fnName = names[op];
+  var sym = op === '<' ? '&lt;' : op;
+  document.getElementById('fn-code').innerHTML =
+    '<span class="kw">function</span> <span class="fn">' + fnName + '</span>(<span class="vr">a</span>, <span class="vr">b</span>) {\n' +
+    '  <span class="kw">return</span> <span class="vr">a</span> <span class="op">' + sym + '</span> <span class="vr">b</span>;\n}\n\n' +
+    '<span class="kw">let</span> <span class="vr">resultat</span> <span class="op">=</span> <span class="fn">' + fnName + '</span>(<span class="num">' + a + '</span>, <span class="num">' + b + '</span>);\n' +
+    '<span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">resultat</span>);';
+  document.getElementById('fn-cons').innerHTML =
+    '> ' + fnName + '(' + a + ', ' + b + ')  →  <span style="color:#d19a66;font-weight:700">' + result + '</span>';
+}
+updateFn();
+
+/* ===== TESTEUR TABLEAUX ===== */
+var ARR = ['pomme', 'banane', 'cerise', 'mangue', 'kiwi', 'fraise'];
+function updateArr() {
+  var idx = parseInt(document.getElementById('arr-idx').value);
+  var disp = document.getElementById('arr-display');
+  disp.innerHTML = '';
+  for (var i = 0; i < ARR.length; i++) {
+    var el = document.createElement('div');
+    el.style.cssText = 'padding:8px 12px;border-radius:8px;font-family:Consolas,monospace;font-size:0.85rem;border:2px solid;transition:all 0.2s;';
+    if (i === idx) {
+      el.style.background = 'rgba(124,58,237,0.3)';
+      el.style.borderColor = '#7c3aed';
+      el.style.color = '#fff';
+      el.innerHTML = '[' + i + '] <strong>' + ARR[i] + '</strong>';
+    } else {
+      el.style.background = '#11131a';
+      el.style.borderColor = '#2a3347';
+      el.style.color = '#64748b';
+      el.textContent = '[' + i + '] ' + ARR[i];
+    }
+    disp.appendChild(el);
+  }
+  document.getElementById('arr-code').innerHTML =
+    '<span class="kw">const</span> <span class="vr">fruits</span> <span class="op">=</span> [<span class="str">"pomme"</span>, <span class="str">"banane"</span>, <span class="str">"cerise"</span>, <span class="str">"mangue"</span>, <span class="str">"kiwi"</span>, <span class="str">"fraise"</span>];\n\n' +
+    '<span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">fruits</span>[<span class="num">' + idx + '</span>]);';
+  document.getElementById('arr-cons').innerHTML =
+    '> fruits[' + idx + ']  →  <span style="color:#98c379;font-weight:700">"' + ARR[idx] + '"</span>';
+}
+updateArr();
+
+/* ===== TESTEUR DOM ===== */
+function updateDom() {
+  var size = document.getElementById('dom-size').value;
+  var hue = document.getElementById('dom-hue').value;
+  var txt = document.getElementById('dom-txt').value || ' ';
+  var color = 'hsl(' + hue + ', 80%, 65%)';
+  var preview = document.getElementById('dom-preview');
+  preview.textContent = txt;
+  preview.style.fontSize = size + 'px';
+  preview.style.color = color;
+  var safeColor = 'hsl(' + hue + ', 80%, 65%)';
+  document.getElementById('dom-code').innerHTML =
+    '<span class="kw">const</span> <span class="vr">el</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">getElementById</span>(<span class="str">"preview"</span>);\n\n' +
+    '<span class="vr">el</span>.<span class="fn">textContent</span>  <span class="op">=</span> <span class="str">"' + txt.replace(/"/g,'\\"').substring(0,30) + '"</span>;\n' +
+    '<span class="vr">el</span>.<span class="fn">style</span>.<span class="fn">fontSize</span> <span class="op">=</span> <span class="str">"' + size + 'px"</span>;\n' +
+    '<span class="vr">el</span>.<span class="fn">style</span>.<span class="fn">color</span>    <span class="op">=</span> <span class="str">"' + safeColor + '"</span>;';
+}
+updateDom();
+
+/* ===== PWA — SW inline ===== */
+if ('serviceWorker' in navigator) {
+  var swCode = [
+    "var C='js-ref-v1';",
+    "var F=['.','index.html'];",
+    "self.addEventListener('install',function(e){e.waitUntil(caches.open(C).then(function(c){return c.addAll(F);}));});",
+    "self.addEventListener('fetch',function(e){e.respondWith(caches.match(e.request).then(function(r){return r||fetch(e.request);}));});"
+  ].join('\n');
+  var blob = new Blob([swCode], { type: 'application/javascript' });
+  var swUrl = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swUrl).catch(function() {});
+}
+
+/* ===== MANIFEST inline ===== */
+var manifest = {
+  name: 'JS Pense-Bete',
+  short_name: 'JS Ref',
+  display: 'standalone',
+  background_color: '#0f1117',
+  theme_color: '#7c3aed',
+  start_url: '.',
+  icons: []
+};
+var mLink = document.createElement('link');
+mLink.rel = 'manifest';
+mLink.href = 'data:application/json,' + encodeURIComponent(JSON.stringify(manifest));
+document.head.appendChild(mLink);
+</script>
+</body>
+</html>
+
