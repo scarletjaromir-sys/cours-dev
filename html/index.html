@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#e34c26">
+<title>HTML Pense-Bête</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:      #0f1117;
+  --bg2:     #161b27;
+  --bg3:     #1e2535;
+  --border:  #2a3347;
+  --orange:  #e34c26;
+  --orange2: #f16529;
+  --blue:    #3b82f6;
+  --cyan:    #06b6d4;
+  --green:   #22c55e;
+  --yellow:  #f59e0b;
+  --red:     #ef4444;
+  --text:    #e2e8f0;
+  --text2:   #94a3b8;
+  --text3:   #64748b;
+  --tag:  #e06c75;
+  --attr: #d19a66;
+  --str:  #98c379;
+  --cmt:  #5c6370;
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 15px; line-height: 1.6; }
+
+/* HEADER */
+header { background: var(--bg2); border-bottom: 2px solid var(--orange); padding: 14px 20px; position: sticky; top: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.home-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--orange); color: #fff; text-decoration: none; padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; transition: all 0.2s; box-shadow: 0 2px 8px rgba(227,76,38,0.3); }
+.home-btn:hover { background: var(--orange2); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(227,76,38,0.4); }
+.logo { font-family: 'Consolas', monospace; font-size: 1.4rem; font-weight: 700; color: var(--orange2); }
+.logo span { color: var(--cyan); }
+.tabs-scroll { display: flex; gap: 6px; overflow-x: auto; flex-wrap: wrap; justify-content: center; scrollbar-width: none; -webkit-overflow-scrolling: touch; max-width: 100%; }
+.tabs-scroll::-webkit-scrollbar { display: none; }
+.tab-btn { white-space: nowrap; padding: 7px 14px; border: 1.5px solid var(--border); border-radius: 20px; background: transparent; color: var(--text2); cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: all 0.2s; flex-shrink: 0; }
+.tab-btn.active { background: var(--orange); border-color: var(--orange); color: #fff; }
+.tab-btn:hover:not(.active) { border-color: var(--orange2); color: var(--text); }
+
+/* CONTENU */
+main { max-width: 900px; margin: 0 auto; padding: 20px 16px 60px; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; animation: fadein 0.25s ease; }
+@keyframes fadein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; } }
+
+/* CARDS */
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 22px; margin-bottom: 20px; }
+h2 { font-size: 1.15rem; font-weight: 700; color: var(--orange2); margin-bottom: 16px; }
+h3 { font-size: 0.95rem; font-weight: 600; color: var(--cyan); margin: 16px 0 8px; }
+
+/* CODE */
+.code { background: #11131a; border: 1px solid var(--border); border-left: 3px solid var(--orange); border-radius: 8px; padding: 14px 16px; font-family: 'Consolas', 'Monaco', monospace; font-size: 0.9rem; line-height: 1.8; white-space: pre; overflow-x: auto; margin: 8px 0; color: #abb2bf; }
+.tag  { color: var(--tag); }
+.attr { color: var(--attr); }
+.str  { color: var(--str); }
+.cmt  { color: var(--cmt); font-style: italic; }
+code { background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; font-family: 'Consolas', monospace; font-size: 0.88em; color: var(--cyan); }
+
+/* TABLEAUX */
+.tbl { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.tbl th { background: var(--bg3); color: var(--orange2); padding: 10px 12px; text-align: left; font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.tbl td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.tbl tr:last-child td { border-bottom: none; }
+.tbl tr:hover td { background: rgba(227,76,38,0.06); }
+
+/* RACCOURCIS CLAVIER */
+.kbd { display: inline-block; background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; padding: 3px 8px; font-family: 'Consolas', monospace; font-size: 0.85em; color: var(--orange2); font-weight: 600; box-shadow: 0 2px 0 rgba(0,0,0,0.3); margin: 0 3px; }
+
+/* ALERTS */
+.alert { border-radius: 8px; padding: 12px 16px; margin: 12px 0; font-size: 0.88rem; border-left: 4px solid; display: flex; gap: 10px; align-items: flex-start; }
+.alert-icon { font-size: 1.1rem; flex-shrink: 0; }
+.alert.warn   { background: rgba(245,158,11,0.1);  border-color: var(--yellow); }
+.alert.info   { background: rgba(59,130,246,0.1);  border-color: var(--blue); }
+.alert.good   { background: rgba(34,197,94,0.1);   border-color: var(--green); }
+.alert.danger { background: rgba(239,68,68,0.1);   border-color: var(--red); }
+
+/* GRILLE */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+/* EXEMPLE VISUEL */
+.exemple-visual { background: var(--bg3); border: 2px solid var(--border); border-radius: 10px; padding: 20px; margin: 12px 0; }
+.exemple-label { font-size: 0.75rem; background: var(--orange); color: #fff; font-weight: 700; padding: 2px 8px; border-radius: 4px; display: inline-block; margin-bottom: 10px; }
+
+@media (max-width: 600px) {
+  .grid2 { grid-template-columns: 1fr; }
+}
+
+footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 40px; }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="../index.html" class="home-btn" title="Retour au menu">🏠 Accueil</a>
+  <div class="logo">&lt;HTML<span>/&gt;</span></div>
+  <div class="tabs-scroll">
+    <button class="tab-btn active" onclick="showTab('raccourcis',this)">⌨️ Raccourcis</button>
+    <button class="tab-btn" onclick="showTab('structure',this)">🏗️ Structure</button>
+    <button class="tab-btn" onclick="showTab('head',this)">📋 Head</button>
+    <button class="tab-btn" onclick="showTab('texte',this)">📝 Texte</button>
+    <button class="tab-btn" onclick="showTab('listes',this)">📊 Listes</button>
+    <button class="tab-btn" onclick="showTab('liens',this)">🔗 Liens & Images</button>
+    <button class="tab-btn" onclick="showTab('formulaires',this)">📮 Formulaires</button>
+    <button class="tab-btn" onclick="showTab('semantique',this)">🎯 Sémantique</button>
+  </div>
+</header>
+
+<main>
+
+<!-- ============================================================
+     RACCOURCIS CLAVIER
+============================================================ -->
+<div id="tab-raccourcis" class="tab-panel active">
+
+  <div class="card">
+    <h2>⌨️ Raccourcis clavier essentiels (VS Code)</h2>
+    <p style="color:var(--text2);margin-bottom:14px">Ces raccourcis te feront gagner un temps fou. Apprends-les par cœur !</p>
+    
+    <h3>✏️ Édition de code</h3>
+    <table class="tbl">
+      <thead><tr><th>Raccourci</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="kbd">Ctrl</span> + <span class="kbd">/</span></td>
+          <td>Mettre en commentaire / décommenter la ligne ou la sélection</td>
+        </tr>
+        <tr>
+          <td><span class="kbd">Shift</span> + <span class="kbd">Alt</span> + <span class="kbd">A</span></td>
+          <td>Commentaire multiligne <code>&lt;!-- ... --&gt;</code></td>
+        </tr>
+        <tr>
+          <td><span class="kbd">Ctrl</span> + <span class="kbd">D</span></td>
+          <td>Sélectionner le mot suivant identique (multi-curseur)</td>
+        </tr>
+        <tr>
+          <td><span class="kbd">Ctrl</span> + <span class="kbd">Shift</span> + <span class="kbd">K</span></td>
+          <td>Supprimer la ligne entière</td>
+        </tr>
+        <tr>
+          <td><span class="kbd">Alt</span> + <span class="kbd">↑</span> / <span class="kbd">↓</span></td>
+          <td>Déplacer la ligne vers le haut/bas</td>
+        </tr>
+        <tr>
+          <td><span class="kbd">Shift</span> + <span class="kbd">Alt</span> + <span class="kbd">↑</span> / <span class="kbd">↓</span></td>
+          <td>Dupliquer la ligne vers le haut/bas</td>
+        </tr>
+        <tr>
+          <td><span class="kbd">Ctrl</span> + <span class="kbd">Espace</span></td>
+          <td>Afficher l'auto-complétion</td>
+        </tr>
+        <tr>
+          <td><span class="kbd">Ctrl</span> + <span class="kbd">Entrée</span></td>
+          <td>Insérer une ligne en dessous</td>
+        </tr>
+        <tr>
+          <td><span class="kbd">Ctrl</span> + <span class="kbd">Shift</span> + <span class="kbd">Entrée</span></td>
+          <td>Insérer une ligne au-dessus</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>🔍 Navigation et recherche</h3>
+    <table class="tbl">
+      <thead><tr><th>Raccourci</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="kbd">Ctrl</span> + <span class="kbd">F</span></td>
+          <td>Rechercher dans le fichier</td>
+        </tr>
+        <tr>
+          <td><span class="kbd">Ctrl</span> + <span class="kbd">H</span></td>
+          <td>Rechercher et remplacer</td>
+        </tr>
+        <tr>
+          <td><span class="kbd">Ctrl</span> + <span class="kbd">P</span></td>
+          <td>Ouvrir un fichier rapidement</td>
+        </tr>
+        <tr>
+          <td><span class="kbd">Ctrl</span> + <span class="kbd">Shift</span> + <span class="kbd">F</span></td>
+          <td>Rechercher dans tous les fichiers</td>
+        </tr>
+        <tr>
+          <td><span class="kbd">Ctrl</span> + <span class="kbd">G</span></td>
+          <td>Aller à la ligne n°...</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>📂 Gestion de fichiers</h3>
+    <table class="tbl">
+      <thead><tr><th>Raccourci</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="kbd">Ctrl</span> + <span class="kbd">S</span></td>
+          <td>Sauvegarder le fichier</td>
+        </tr>
+        <tr>
+          <td><span class="kbd">Ctrl</span> + <span class="kbd">W</span></td>
+          <td>Fermer l'onglet actuel</td>
+        </tr>
+        <tr>
+          <td><span class="kbd">Ctrl</span> + <span class="kbd">Tab</span></td>
+          <td>Naviguer entre les onglets ouverts</td>
+        </tr>
+        <tr>
+          <td><span class="kbd">Ctrl</span> + <span class="kbd">B</span></td>
+          <td>Afficher/masquer la barre latérale</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>⚡ Emmet — Les raccourcis HTML ultra-rapides</h3>
+    <p style="color:var(--text2);margin-bottom:12px">Emmet est intégré dans VS Code. Tape ces codes puis appuie sur <span class="kbd">Tab</span> pour les transformer !</p>
+    
+    <table class="tbl">
+      <thead><tr><th>Tu tapes</th><th>Tu appuies sur Tab</th><th>Résultat</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>!</code></td>
+          <td><span class="kbd">Tab</span></td>
+          <td>Structure HTML complète (doctype, html, head, body...)</td>
+        </tr>
+        <tr>
+          <td><code>div.container</code></td>
+          <td><span class="kbd">Tab</span></td>
+          <td><code>&lt;div class="container"&gt;&lt;/div&gt;</code></td>
+        </tr>
+        <tr>
+          <td><code>p#intro</code></td>
+          <td><span class="kbd">Tab</span></td>
+          <td><code>&lt;p id="intro"&gt;&lt;/p&gt;</code></td>
+        </tr>
+        <tr>
+          <td><code>ul&gt;li*5</code></td>
+          <td><span class="kbd">Tab</span></td>
+          <td>Une liste <code>&lt;ul&gt;</code> avec 5 <code>&lt;li&gt;</code></td>
+        </tr>
+        <tr>
+          <td><code>a[href="#"]</code></td>
+          <td><span class="kbd">Tab</span></td>
+          <td><code>&lt;a href="#"&gt;&lt;/a&gt;</code></td>
+        </tr>
+        <tr>
+          <td><code>img</code></td>
+          <td><span class="kbd">Tab</span></td>
+          <td><code>&lt;img src="" alt=""&gt;</code></td>
+        </tr>
+        <tr>
+          <td><code>link:css</code></td>
+          <td><span class="kbd">Tab</span></td>
+          <td><code>&lt;link rel="stylesheet" href="style.css"&gt;</code></td>
+        </tr>
+        <tr>
+          <td><code>script:src</code></td>
+          <td><span class="kbd">Tab</span></td>
+          <td><code>&lt;script src=""&gt;&lt;/script&gt;</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="alert good">
+      <span class="alert-icon">🚀</span>
+      <div>
+        <strong>Exemple magique :</strong> tape <code>nav&gt;ul&gt;li*4&gt;a</code> puis <span class="kbd">Tab</span> → tu obtiens une navigation complète avec 4 liens en une seule ligne !
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🎨 Formatage et indentation</h3>
+    <table class="tbl">
+      <thead><tr><th>Raccourci</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="kbd">Shift</span> + <span class="kbd">Alt</span> + <span class="kbd">F</span></td>
+          <td>Formater tout le document (indentation automatique)</td>
+        </tr>
+        <tr>
+          <td><span class="kbd">Ctrl</span> + <span class="kbd">]</span></td>
+          <td>Indenter (décaler à droite)</td>
+        </tr>
+        <tr>
+          <td><span class="kbd">Ctrl</span> + <span class="kbd">[</span></td>
+          <td>Désindenter (décaler à gauche)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div><!-- /raccourcis -->
+
+
+<!-- ============================================================
+     STRUCTURE
+============================================================ -->
+<div id="tab-structure" class="tab-panel">
+
+  <div class="card">
+    <h2>🏗️ Structure de base d'une page HTML</h2>
+    <div class="code"><span class="cmt">&lt;!-- Tape ! puis Tab dans VS Code pour générer ça automatiquement --&gt;</span>
+<span class="cmt">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html</span> <span class="attr">lang</span>=<span class="str">"fr"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">charset</span>=<span class="str">"UTF-8"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="str">"viewport"</span> <span class="attr">content</span>=<span class="str">"width=device-width, initial-scale=1.0"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;title&gt;</span>Titre de la page<span class="tag">&lt;/title&gt;</span>
+  <span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="str">"stylesheet"</span> <span class="attr">href</span>=<span class="str">"style.css"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+  <span class="cmt">&lt;!-- Le contenu visible de ta page --&gt;</span>
+  <span class="tag">&lt;h1&gt;</span>Mon premier titre<span class="tag">&lt;/h1&gt;</span>
+  <span class="tag">&lt;p&gt;</span>Un paragraphe de texte.<span class="tag">&lt;/p&gt;</span>
+  
+  <span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="str">"script.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span></div>
+
+    <div class="alert info">
+      <span class="alert-icon">💡</span>
+      <div>
+        <strong>&lt;head&gt;</strong> contient les informations invisibles (titre de l'onglet, liens CSS, métadonnées).<br>
+        <strong>&lt;body&gt;</strong> contient tout le contenu visible de la page.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🧱 Les balises — Comment ça marche ?</h2>
+    <p style="color:var(--text2);margin-bottom:14px">Une balise HTML est comme une <strong>boîte</strong> qui entoure du contenu pour lui donner un sens.</p>
+
+    <div class="exemple-visual">
+      <div class="exemple-label">ANATOMIE D'UNE BALISE</div>
+      <div style="font-family:Consolas,monospace;font-size:0.95rem;color:#abb2bf;line-height:2;">
+        <span style="color:var(--tag)">&lt;p</span> <span style="color:var(--attr)">class</span>=<span style="color:var(--str)">"intro"</span><span style="color:var(--tag)">&gt;</span><span style="color:var(--text)">Mon texte ici</span><span style="color:var(--tag)">&lt;/p&gt;</span>
+        <div style="font-size:0.8rem;color:var(--text3);margin-top:8px;">
+          ↑ balise ouvrante &nbsp;&nbsp;&nbsp; ↑ attribut &nbsp;&nbsp;&nbsp; ↑ contenu &nbsp;&nbsp;&nbsp; ↑ balise fermante
+        </div>
+      </div>
+    </div>
+
+    <h3>Balises auto-fermantes (pas de balise fermante)</h3>
+    <div class="code"><span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="str">"photo.jpg"</span> <span class="attr">alt</span>=<span class="str">"Description"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;br&gt;</span>  <span class="cmt">&lt;!-- Retour à la ligne --&gt;</span>
+<span class="tag">&lt;hr&gt;</span>  <span class="cmt">&lt;!-- Ligne horizontale --&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"text"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;meta</span> <span class="attr">charset</span>=<span class="str">"UTF-8"</span><span class="tag">&gt;</span></div>
+  </div>
+
+  <div class="card">
+    <h2>📦 Balises de conteneur (div & span)</h2>
+    <div class="grid2">
+      <div>
+        <h3>&lt;div&gt; — Bloc</h3>
+        <div class="code"><span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"container"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;p&gt;</span>Paragraphe 1<span class="tag">&lt;/p&gt;</span>
+  <span class="tag">&lt;p&gt;</span>Paragraphe 2<span class="tag">&lt;/p&gt;</span>
+<span class="tag">&lt;/div&gt;</span></div>
+        <p style="font-size:0.85rem;color:var(--text2);margin-top:8px">Prend toute la largeur. Commence sur une nouvelle ligne.</p>
+      </div>
+      <div>
+        <h3>&lt;span&gt; — Inline</h3>
+        <div class="code"><span class="tag">&lt;p&gt;</span>Du texte avec un 
+  <span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="str">"rouge"</span><span class="tag">&gt;</span>mot rouge<span class="tag">&lt;/span&gt;</span>
+  au milieu.<span class="tag">&lt;/p&gt;</span></div>
+        <p style="font-size:0.85rem;color:var(--text2);margin-top:8px">Reste sur la même ligne. Entoure juste une partie du texte.</p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /structure -->
+
+
+<!-- ============================================================
+     HEAD
+============================================================ -->
+<div id="tab-head" class="tab-panel">
+
+  <div class="card">
+    <h2>📋 Le &lt;head&gt; — Informations invisibles de la page</h2>
+    <p style="color:var(--text2);margin-bottom:14px">Le <code>&lt;head&gt;</code> contient toutes les métadonnées : titre, liens CSS/JS, favicon, encodage, etc. Rien dans le <code>&lt;head&gt;</code> ne s'affiche directement sur la page.</p>
+    
+    <div class="code"><span class="tag">&lt;head&gt;</span>
+  <span class="cmt">&lt;!-- Encodage des caractères (toujours en premier !) --&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">charset</span>=<span class="str">"UTF-8"</span><span class="tag">&gt;</span>
+  
+  <span class="cmt">&lt;!-- Responsive design (mobile) --&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="str">"viewport"</span> <span class="attr">content</span>=<span class="str">"width=device-width, initial-scale=1.0"</span><span class="tag">&gt;</span>
+  
+  <span class="cmt">&lt;!-- Titre de la page (affiché dans l'onglet) --&gt;</span>
+  <span class="tag">&lt;title&gt;</span>Mon super site<span class="tag">&lt;/title&gt;</span>
+  
+  <span class="cmt">&lt;!-- Description pour Google --&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="str">"description"</span> <span class="attr">content</span>=<span class="str">"Description du site"</span><span class="tag">&gt;</span>
+  
+  <span class="cmt">&lt;!-- Favicon (icône dans l'onglet) --&gt;</span>
+  <span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="str">"icon"</span> <span class="attr">type</span>=<span class="str">"image/png"</span> <span class="attr">href</span>=<span class="str">"favicon.png"</span><span class="tag">&gt;</span>
+  
+  <span class="cmt">&lt;!-- Lien vers la feuille de style CSS --&gt;</span>
+  <span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="str">"stylesheet"</span> <span class="attr">href</span>=<span class="str">"style.css"</span><span class="tag">&gt;</span>
+  
+  <span class="cmt">&lt;!-- Script JavaScript (mieux à la fin du body) --&gt;</span>
+  <span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="str">"script.js"</span> <span class="attr">defer</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;/head&gt;</span></div>
+  </div>
+
+  <div class="card">
+    <h2>🖼️ Le Favicon — Icône dans l'onglet du navigateur</h2>
+    <p style="color:var(--text2);margin-bottom:12px">Le favicon est la petite icône qui s'affiche dans l'onglet du navigateur, à côté du titre.</p>
+    
+    <h3>Format recommandé</h3>
+    <div class="code"><span class="cmt">&lt;!-- PNG ou ICO, taille 32×32 ou 64×64 pixels --&gt;</span>
+<span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="str">"icon"</span> <span class="attr">type</span>=<span class="str">"image/png"</span> <span class="attr">href</span>=<span class="str">"favicon.png"</span><span class="tag">&gt;</span>
+
+<span class="cmt">&lt;!-- Ou fichier .ico --&gt;</span>
+<span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="str">"icon"</span> <span class="attr">type</span>=<span class="str">"image/x-icon"</span> <span class="attr">href</span>=<span class="str">"favicon.ico"</span><span class="tag">&gt;</span></div>
+
+    <div class="alert info">
+      <span class="alert-icon">💡</span>
+      <div>Si ton favicon s'appelle <code>favicon.ico</code> et qu'il est à la racine de ton site, pas besoin de balise <code>&lt;link&gt;</code> : les navigateurs le trouvent automatiquement !</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📂 Chemins de fichiers — Comment trouver un fichier ?</h2>
+    <p style="color:var(--text2);margin-bottom:14px">Quand tu fais référence à un fichier (CSS, JS, image...), tu dois indiquer son <strong>chemin</strong> (où il se trouve).</p>
+
+    <h3>Structure d'exemple</h3>
+    <div class="exemple-visual">
+      <div class="exemple-label">ARBORESCENCE DE DOSSIERS</div>
+      <div style="font-family:Consolas,monospace;font-size:0.85rem;color:#abb2bf;line-height:1.8;">
+📁 mon-site/<br>
+├── 📄 index.html<br>
+├── 📁 css/<br>
+│   └── 📄 style.css<br>
+├── 📁 js/<br>
+│   └── 📄 script.js<br>
+├── 📁 images/<br>
+│   ├── 📄 logo.png<br>
+│   └── 📄 favicon.ico<br>
+└── 📁 pages/<br>
+    └── 📄 contact.html
+      </div>
+    </div>
+
+    <h3>Les 3 types de chemins</h3>
+    <table class="tbl">
+      <thead><tr><th>Type</th><th>Syntaxe</th><th>Exemple</th><th>Quand l'utiliser</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Relatif simple</strong></td>
+          <td><code>fichier.ext</code></td>
+          <td><code>style.css</code></td>
+          <td>Le fichier est dans le <strong>même dossier</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Sous-dossier</strong></td>
+          <td><code>dossier/fichier.ext</code></td>
+          <td><code>css/style.css</code></td>
+          <td>Le fichier est dans un <strong>dossier enfant</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Dossier parent</strong></td>
+          <td><code>../fichier.ext</code></td>
+          <td><code>../images/logo.png</code></td>
+          <td>Remonter d'<strong>un niveau</strong> dans l'arborescence</td>
+        </tr>
+        <tr>
+          <td><strong>Absolu</strong></td>
+          <td><code>/dossier/fichier.ext</code></td>
+          <td><code>/css/style.css</code></td>
+          <td>Depuis la <strong>racine du site</strong> (serveur)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Exemples concrets depuis index.html</h3>
+    <div class="code"><span class="cmt">&lt;!-- Fichier dans le même dossier --&gt;</span>
+<span class="tag">&lt;link</span> <span class="attr">href</span>=<span class="str">"style.css"</span><span class="tag">&gt;</span>
+
+<span class="cmt">&lt;!-- Fichier dans un sous-dossier --&gt;</span>
+<span class="tag">&lt;link</span> <span class="attr">href</span>=<span class="str">"css/style.css"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="str">"images/logo.png"</span><span class="tag">&gt;</span>
+
+<span class="cmt">&lt;!-- Lien vers une autre page HTML --&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="str">"pages/contact.html"</span><span class="tag">&gt;</span>Contact<span class="tag">&lt;/a&gt;</span></div>
+
+    <h3>Exemples depuis pages/contact.html (sous-dossier)</h3>
+    <div class="code"><span class="cmt">&lt;!-- Remonter d'un niveau avec ../ --&gt;</span>
+<span class="tag">&lt;link</span> <span class="attr">href</span>=<span class="str">"../css/style.css"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="str">"../images/logo.png"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="str">"../index.html"</span><span class="tag">&gt;</span>Retour accueil<span class="tag">&lt;/a&gt;</span></div>
+
+    <div class="alert warn">
+      <span class="alert-icon">⚠️</span>
+      <div>
+        <strong>Règle d'or :</strong><br>
+        • <code>./</code> = dossier actuel (optionnel, <code>./style.css</code> = <code>style.css</code>)<br>
+        • <code>../</code> = dossier parent (remonter d'un niveau)<br>
+        • <code>../../</code> = remonter de deux niveaux<br>
+        • <code>/</code> au début = racine du site (serveur uniquement, ne fonctionne pas en local)
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🏷️ Balises &lt;meta&gt; importantes</h2>
+    <table class="tbl">
+      <thead><tr><th>Balise</th><th>Usage</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>&lt;meta charset="UTF-8"&gt;</code></td>
+          <td>Encodage des caractères (accents, émojis...)</td>
+        </tr>
+        <tr>
+          <td><code>&lt;meta name="viewport" ...&gt;</code></td>
+          <td>Responsive design (affichage mobile)</td>
+        </tr>
+        <tr>
+          <td><code>&lt;meta name="description" content="..."&gt;</code></td>
+          <td>Description pour Google (SEO)</td>
+        </tr>
+        <tr>
+          <td><code>&lt;meta name="author" content="Ton nom"&gt;</code></td>
+          <td>Auteur du site</td>
+        </tr>
+        <tr>
+          <td><code>&lt;meta name="keywords" content="mot1, mot2"&gt;</code></td>
+          <td>Mots-clés (peu utilisé aujourd'hui)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>🔗 Liens CSS et JavaScript</h2>
+    
+    <h3>Importer un fichier CSS</h3>
+    <div class="code"><span class="cmt">&lt;!-- Dans le head --&gt;</span>
+<span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="str">"stylesheet"</span> <span class="attr">href</span>=<span class="str">"css/style.css"</span><span class="tag">&gt;</span>
+
+<span class="cmt">&lt;!-- CSS externe (Google Fonts, Bootstrap...) --&gt;</span>
+<span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="str">"stylesheet"</span> <span class="attr">href</span>=<span class="str">"https://fonts.googleapis.com/..."</span><span class="tag">&gt;</span></div>
+
+    <h3>Importer un fichier JavaScript</h3>
+    <div class="code"><span class="cmt">&lt;!-- Méthode 1 : dans le head avec defer --&gt;</span>
+<span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="str">"js/script.js"</span> <span class="attr">defer</span><span class="tag">&gt;&lt;/script&gt;</span>
+
+<span class="cmt">&lt;!-- Méthode 2 : à la fin du body (avant &lt;/body&gt;) --&gt;</span>
+<span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="str">"js/script.js"</span><span class="tag">&gt;&lt;/script&gt;</span></div>
+
+    <div class="alert info">
+      <span class="alert-icon">💡</span>
+      <div>
+        <strong>defer vs à la fin du body :</strong><br>
+        • <code>defer</code> = le script se charge en parallèle et s'exécute après le chargement du HTML<br>
+        • À la fin du <code>&lt;body&gt;</code> = le HTML charge d'abord, puis le script (méthode classique)
+      </div>
+    </div>
+  </div>
+
+</div><!-- /head -->
+
+
+<!-- ============================================================
+     TEXTE
+============================================================ -->
+<div id="tab-texte" class="tab-panel">
+
+  <div class="card">
+    <h2>📝 Balises de texte essentielles</h2>
+    
+    <h3>Titres (h1 à h6)</h3>
+    <div class="code"><span class="tag">&lt;h1&gt;</span>Titre principal (1 seul par page !)<span class="tag">&lt;/h1&gt;</span>
+<span class="tag">&lt;h2&gt;</span>Sous-titre<span class="tag">&lt;/h2&gt;</span>
+<span class="tag">&lt;h3&gt;</span>Sous-sous-titre<span class="tag">&lt;/h3&gt;</span>
+<span class="cmt">&lt;!-- h4, h5, h6 existent aussi --&gt;</span></div>
+    <div class="alert warn">
+      <span class="alert-icon">⚠️</span>
+      <div>Ne saute JAMAIS de niveau : après un <code>&lt;h2&gt;</code>, utilise <code>&lt;h3&gt;</code>, pas <code>&lt;h5&gt;</code> !</div>
+    </div>
+
+    <h3>Paragraphes et sauts de ligne</h3>
+    <div class="code"><span class="tag">&lt;p&gt;</span>Un paragraphe de texte normal.<span class="tag">&lt;/p&gt;</span>
+
+<span class="tag">&lt;p&gt;</span>Première ligne<span class="tag">&lt;br&gt;</span>
+Deuxième ligne (même paragraphe)<span class="tag">&lt;/p&gt;</span></div>
+  </div>
+
+  <div class="card">
+    <h2>✨ Mise en forme du texte</h2>
+    <table class="tbl">
+      <thead><tr><th>Balise</th><th>Effet</th><th>Exemple</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>&lt;strong&gt;</code></td>
+          <td>Texte important (gras)</td>
+          <td><code>&lt;strong&gt;Important !&lt;/strong&gt;</code></td>
+        </tr>
+        <tr>
+          <td><code>&lt;em&gt;</code></td>
+          <td>Emphase (italique)</td>
+          <td><code>&lt;em&gt;Souligné&lt;/em&gt;</code></td>
+        </tr>
+        <tr>
+          <td><code>&lt;mark&gt;</code></td>
+          <td>Texte surligné</td>
+          <td><code>&lt;mark&gt;Surligné&lt;/mark&gt;</code></td>
+        </tr>
+        <tr>
+          <td><code>&lt;small&gt;</code></td>
+          <td>Texte plus petit</td>
+          <td><code>&lt;small&gt;Petites notes&lt;/small&gt;</code></td>
+        </tr>
+        <tr>
+          <td><code>&lt;del&gt;</code></td>
+          <td>Texte barré (supprimé)</td>
+          <td><code>&lt;del&gt;Anciens prix&lt;/del&gt;</code></td>
+        </tr>
+        <tr>
+          <td><code>&lt;ins&gt;</code></td>
+          <td>Texte inséré (souligné)</td>
+          <td><code>&lt;ins&gt;Nouveau !&lt;/ins&gt;</code></td>
+        </tr>
+        <tr>
+          <td><code>&lt;code&gt;</code></td>
+          <td>Code informatique</td>
+          <td><code>&lt;code&gt;let x = 10;&lt;/code&gt;</code></td>
+        </tr>
+        <tr>
+          <td><code>&lt;pre&gt;</code></td>
+          <td>Texte préformaté (espaces conservés)</td>
+          <td><code>&lt;pre&gt;Code    avec espaces&lt;/pre&gt;</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="alert info">
+      <span class="alert-icon">💡</span>
+      <div>Utilise <code>&lt;strong&gt;</code> et <code>&lt;em&gt;</code> plutôt que <code>&lt;b&gt;</code> et <code>&lt;i&gt;</code> → c'est plus sémantique (meilleur pour le SEO et l'accessibilité).</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>💬 Citations</h2>
+    <div class="grid2">
+      <div>
+        <h3>Citation courte</h3>
+        <div class="code"><span class="tag">&lt;p&gt;</span>Comme disait Einstein : 
+  <span class="tag">&lt;q&gt;</span>E=mc²<span class="tag">&lt;/q&gt;</span>
+<span class="tag">&lt;/p&gt;</span></div>
+      </div>
+      <div>
+        <h3>Citation longue</h3>
+        <div class="code"><span class="tag">&lt;blockquote&gt;</span>
+  <span class="tag">&lt;p&gt;</span>Citation longue...<span class="tag">&lt;/p&gt;</span>
+<span class="tag">&lt;/blockquote&gt;</span></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /texte -->
+
+
+<!-- ============================================================
+     LISTES
+============================================================ -->
+<div id="tab-listes" class="tab-panel">
+
+  <div class="card">
+    <h2>📋 Les trois types de listes</h2>
+    
+    <h3>1. Liste non ordonnée (puces)</h3>
+    <div class="code"><span class="tag">&lt;ul&gt;</span>
+  <span class="tag">&lt;li&gt;</span>Pomme<span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li&gt;</span>Banane<span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li&gt;</span>Cerise<span class="tag">&lt;/li&gt;</span>
+<span class="tag">&lt;/ul&gt;</span></div>
+
+    <h3>2. Liste ordonnée (numérotée)</h3>
+    <div class="code"><span class="tag">&lt;ol&gt;</span>
+  <span class="tag">&lt;li&gt;</span>Première étape<span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li&gt;</span>Deuxième étape<span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li&gt;</span>Troisième étape<span class="tag">&lt;/li&gt;</span>
+<span class="tag">&lt;/ol&gt;</span></div>
+
+    <h3>3. Liste de définitions</h3>
+    <div class="code"><span class="tag">&lt;dl&gt;</span>
+  <span class="tag">&lt;dt&gt;</span>HTML<span class="tag">&lt;/dt&gt;</span>
+  <span class="tag">&lt;dd&gt;</span>Langage de balisage pour créer des pages web<span class="tag">&lt;/dd&gt;</span>
+  
+  <span class="tag">&lt;dt&gt;</span>CSS<span class="tag">&lt;/dt&gt;</span>
+  <span class="tag">&lt;dd&gt;</span>Langage pour styliser les pages HTML<span class="tag">&lt;/dd&gt;</span>
+<span class="tag">&lt;/dl&gt;</span></div>
+  </div>
+
+  <div class="card">
+    <h2>🪆 Listes imbriquées</h2>
+    <div class="code"><span class="tag">&lt;ul&gt;</span>
+  <span class="tag">&lt;li&gt;</span>Frontend
+    <span class="tag">&lt;ul&gt;</span>
+      <span class="tag">&lt;li&gt;</span>HTML<span class="tag">&lt;/li&gt;</span>
+      <span class="tag">&lt;li&gt;</span>CSS<span class="tag">&lt;/li&gt;</span>
+      <span class="tag">&lt;li&gt;</span>JavaScript<span class="tag">&lt;/li&gt;</span>
+    <span class="tag">&lt;/ul&gt;</span>
+  <span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li&gt;</span>Backend
+    <span class="tag">&lt;ul&gt;</span>
+      <span class="tag">&lt;li&gt;</span>Node.js<span class="tag">&lt;/li&gt;</span>
+      <span class="tag">&lt;li&gt;</span>Python<span class="tag">&lt;/li&gt;</span>
+    <span class="tag">&lt;/ul&gt;</span>
+  <span class="tag">&lt;/li&gt;</span>
+<span class="tag">&lt;/ul&gt;</span></div>
+  </div>
+
+</div><!-- /listes -->
+
+
+<!-- ============================================================
+     LIENS & IMAGES
+============================================================ -->
+<div id="tab-liens" class="tab-panel">
+
+  <div class="card">
+    <h2>🔗 Les liens (balise &lt;a&gt;)</h2>
+    
+    <h3>Lien vers une autre page web</h3>
+    <div class="code"><span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="str">"https://www.google.com"</span><span class="tag">&gt;</span>Aller sur Google<span class="tag">&lt;/a&gt;</span></div>
+
+    <h3>Lien vers une autre page de ton site</h3>
+    <div class="code"><span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="str">"contact.html"</span><span class="tag">&gt;</span>Page contact<span class="tag">&lt;/a&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="str">"../index.html"</span><span class="tag">&gt;</span>Retour accueil<span class="tag">&lt;/a&gt;</span></div>
+
+    <h3>Ouvrir dans un nouvel onglet</h3>
+    <div class="code"><span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="str">"https://example.com"</span> <span class="attr">target</span>=<span class="str">"_blank"</span><span class="tag">&gt;</span>Nouvel onglet<span class="tag">&lt;/a&gt;</span></div>
+
+    <h3>Lien vers une section de la page (ancre)</h3>
+    <div class="code"><span class="cmt">&lt;!-- Le lien --&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="str">"#section2"</span><span class="tag">&gt;</span>Aller à la section 2<span class="tag">&lt;/a&gt;</span>
+
+<span class="cmt">&lt;!-- La destination --&gt;</span>
+<span class="tag">&lt;h2</span> <span class="attr">id</span>=<span class="str">"section2"</span><span class="tag">&gt;</span>Section 2<span class="tag">&lt;/h2&gt;</span></div>
+
+    <h3>Lien email et téléphone</h3>
+    <div class="code"><span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="str">"mailto:contact@exemple.fr"</span><span class="tag">&gt;</span>Envoyer un email<span class="tag">&lt;/a&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="str">"tel:+33612345678"</span><span class="tag">&gt;</span>Appeler<span class="tag">&lt;/a&gt;</span></div>
+  </div>
+
+  <div class="card">
+    <h2>🖼️ Les images (balise &lt;img&gt;)</h2>
+    
+    <h3>Image de base</h3>
+    <div class="code"><span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="str">"photo.jpg"</span> <span class="attr">alt</span>=<span class="str">"Description de l'image"</span><span class="tag">&gt;</span></div>
+    
+    <div class="alert warn">
+      <span class="alert-icon">⚠️</span>
+      <div>L'attribut <code>alt</code> est <strong>OBLIGATOIRE</strong> ! Il décrit l'image pour les personnes malvoyantes et s'affiche si l'image ne charge pas.</div>
+    </div>
+
+    <h3>Image avec dimensions</h3>
+    <div class="code"><span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="str">"logo.png"</span> <span class="attr">alt</span>=<span class="str">"Logo"</span> <span class="attr">width</span>=<span class="str">"300"</span> <span class="attr">height</span>=<span class="str">"200"</span><span class="tag">&gt;</span></div>
+
+    <h3>Image cliquable (lien)</h3>
+    <div class="code"><span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="str">"page.html"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="str">"photo.jpg"</span> <span class="attr">alt</span>=<span class="str">"Description"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/a&gt;</span></div>
+
+    <h3>Balise &lt;figure&gt; — Image avec légende</h3>
+    <div class="code"><span class="tag">&lt;figure&gt;</span>
+  <span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="str">"graphique.png"</span> <span class="attr">alt</span>=<span class="str">"Graphique des ventes"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;figcaption&gt;</span>Evolution des ventes en 2024<span class="tag">&lt;/figcaption&gt;</span>
+<span class="tag">&lt;/figure&gt;</span></div>
+  </div>
+
+</div><!-- /liens -->
+
+
+<!-- ============================================================
+     FORMULAIRES
+============================================================ -->
+<div id="tab-formulaires" class="tab-panel">
+
+  <div class="card">
+    <h2>📮 Structure d'un formulaire</h2>
+    <div class="code"><span class="tag">&lt;form</span> <span class="attr">action</span>=<span class="str">"/traitement.php"</span> <span class="attr">method</span>=<span class="str">"POST"</span><span class="tag">&gt;</span>
+  
+  <span class="cmt">&lt;!-- Champ texte --&gt;</span>
+  <span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="str">"nom"</span><span class="tag">&gt;</span>Nom :<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"text"</span> <span class="attr">id</span>=<span class="str">"nom"</span> <span class="attr">name</span>=<span class="str">"nom"</span> <span class="attr">required</span><span class="tag">&gt;</span>
+  
+  <span class="cmt">&lt;!-- Bouton d'envoi --&gt;</span>
+  <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="str">"submit"</span><span class="tag">&gt;</span>Envoyer<span class="tag">&lt;/button&gt;</span>
+  
+<span class="tag">&lt;/form&gt;</span></div>
+
+    <div class="alert info">
+      <span class="alert-icon">💡</span>
+      <div>
+        <strong>action</strong> = où envoyer les données<br>
+        <strong>method</strong> = comment les envoyer (GET ou POST)<br>
+        Chaque <code>&lt;input&gt;</code> doit avoir un attribut <code>name</code> pour que les données soient envoyées.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📝 Types d'inputs essentiels</h2>
+    <table class="tbl">
+      <thead><tr><th>Type</th><th>Usage</th><th>Exemple</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>text</code></td>
+          <td>Texte court</td>
+          <td><code>&lt;input type="text" name="prenom"&gt;</code></td>
+        </tr>
+        <tr>
+          <td><code>email</code></td>
+          <td>Adresse email (validation auto)</td>
+          <td><code>&lt;input type="email" name="email"&gt;</code></td>
+        </tr>
+        <tr>
+          <td><code>password</code></td>
+          <td>Mot de passe (masqué)</td>
+          <td><code>&lt;input type="password" name="mdp"&gt;</code></td>
+        </tr>
+        <tr>
+          <td><code>number</code></td>
+          <td>Nombre</td>
+          <td><code>&lt;input type="number" min="0" max="100"&gt;</code></td>
+        </tr>
+        <tr>
+          <td><code>date</code></td>
+          <td>Sélecteur de date</td>
+          <td><code>&lt;input type="date" name="naissance"&gt;</code></td>
+        </tr>
+        <tr>
+          <td><code>checkbox</code></td>
+          <td>Case à cocher</td>
+          <td><code>&lt;input type="checkbox" name="cgu"&gt;</code></td>
+        </tr>
+        <tr>
+          <td><code>radio</code></td>
+          <td>Choix unique (boutons radio)</td>
+          <td><code>&lt;input type="radio" name="genre" value="M"&gt;</code></td>
+        </tr>
+        <tr>
+          <td><code>file</code></td>
+          <td>Upload de fichier</td>
+          <td><code>&lt;input type="file" name="photo"&gt;</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>📋 Autres champs de formulaire</h2>
+    
+    <h3>Zone de texte multiligne</h3>
+    <div class="code"><span class="tag">&lt;textarea</span> <span class="attr">name</span>=<span class="str">"message"</span> <span class="attr">rows</span>=<span class="str">"5"</span> <span class="attr">cols</span>=<span class="str">"30"</span><span class="tag">&gt;</span>
+Texte par défaut...
+<span class="tag">&lt;/textarea&gt;</span></div>
+
+    <h3>Menu déroulant (select)</h3>
+    <div class="code"><span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="str">"pays"</span><span class="tag">&gt;</span>Pays :<span class="tag">&lt;/label&gt;</span>
+<span class="tag">&lt;select</span> <span class="attr">name</span>=<span class="str">"pays"</span> <span class="attr">id</span>=<span class="str">"pays"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="str">"fr"</span><span class="tag">&gt;</span>France<span class="tag">&lt;/option&gt;</span>
+  <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="str">"be"</span><span class="tag">&gt;</span>Belgique<span class="tag">&lt;/option&gt;</span>
+  <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="str">"ch"</span><span class="tag">&gt;</span>Suisse<span class="tag">&lt;/option&gt;</span>
+<span class="tag">&lt;/select&gt;</span></div>
+
+    <h3>Boutons radio (choix unique)</h3>
+    <div class="code"><span class="tag">&lt;p&gt;</span>Genre :<span class="tag">&lt;/p&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"radio"</span> <span class="attr">id</span>=<span class="str">"homme"</span> <span class="attr">name</span>=<span class="str">"genre"</span> <span class="attr">value</span>=<span class="str">"M"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="str">"homme"</span><span class="tag">&gt;</span>Homme<span class="tag">&lt;/label&gt;</span>
+
+<span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"radio"</span> <span class="attr">id</span>=<span class="str">"femme"</span> <span class="attr">name</span>=<span class="str">"genre"</span> <span class="attr">value</span>=<span class="str">"F"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="str">"femme"</span><span class="tag">&gt;</span>Femme<span class="tag">&lt;/label&gt;</span></div>
+
+    <div class="alert warn">
+      <span class="alert-icon">⚠️</span>
+      <div>Pour que les boutons radio fonctionnent en groupe (un seul sélectionnable), ils DOIVENT avoir le même <code>name</code> !</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>✅ Attributs de validation</h2>
+    <table class="tbl">
+      <thead><tr><th>Attribut</th><th>Effet</th></tr></thead>
+      <tbody>
+        <tr><td><code>required</code></td><td>Champ obligatoire</td></tr>
+        <tr><td><code>placeholder="..."</code></td><td>Texte indicatif dans le champ</td></tr>
+        <tr><td><code>minlength="5"</code></td><td>Minimum 5 caractères</td></tr>
+        <tr><td><code>maxlength="20"</code></td><td>Maximum 20 caractères</td></tr>
+        <tr><td><code>min="0"</code></td><td>Valeur minimale (numbers)</td></tr>
+        <tr><td><code>max="100"</code></td><td>Valeur maximale (numbers)</td></tr>
+        <tr><td><code>pattern="[0-9]{5}"</code></td><td>Format spécifique (regex)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div><!-- /formulaires -->
+
+
+<!-- ============================================================
+     SEMANTIQUE
+============================================================ -->
+<div id="tab-semantique" class="tab-panel">
+
+  <div class="card">
+    <h2>🎯 HTML Sémantique — Donner du sens à la structure</h2>
+    <p style="color:var(--text2);margin-bottom:14px">Au lieu d'utiliser des <code>&lt;div&gt;</code> partout, utilise des balises qui <strong>décrivent le contenu</strong>. C'est meilleur pour le SEO, l'accessibilité et la lisibilité du code.</p>
+
+    <div class="exemple-visual">
+      <div class="exemple-label">STRUCTURE SÉMANTIQUE TYPE</div>
+      <div class="code" style="border:none;padding:0;margin:0;background:transparent;"><span class="tag">&lt;header&gt;</span>
+  <span class="tag">&lt;nav&gt;</span>Menu de navigation<span class="tag">&lt;/nav&gt;</span>
+<span class="tag">&lt;/header&gt;</span>
+
+<span class="tag">&lt;main&gt;</span>
+  <span class="tag">&lt;article&gt;</span>
+    <span class="tag">&lt;h1&gt;</span>Titre de l'article<span class="tag">&lt;/h1&gt;</span>
+    <span class="tag">&lt;section&gt;</span>
+      <span class="tag">&lt;h2&gt;</span>Première partie<span class="tag">&lt;/h2&gt;</span>
+      <span class="tag">&lt;p&gt;</span>Contenu...<span class="tag">&lt;/p&gt;</span>
+    <span class="tag">&lt;/section&gt;</span>
+  <span class="tag">&lt;/article&gt;</span>
+  
+  <span class="tag">&lt;aside&gt;</span>
+    Barre latérale / Pub
+  <span class="tag">&lt;/aside&gt;</span>
+<span class="tag">&lt;/main&gt;</span>
+
+<span class="tag">&lt;footer&gt;</span>
+  Pied de page
+<span class="tag">&lt;/footer&gt;</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🏗️ Schéma complet — Structure d'une page HTML</h2>
+    <p style="color:var(--text2);margin-bottom:16px">Voici comment s'organisent toutes les balises sémantiques dans une page :</p>
+
+    <div style="background:#0a0c12;border:2px solid var(--border);border-radius:12px;padding:20px;font-family:Consolas,monospace;font-size:0.88rem;">
+      
+      <!-- HTML et HEAD -->
+      <div style="border:2px solid #64748b;border-radius:8px;margin-bottom:12px;overflow:hidden;">
+        <div style="background:#475569;color:#fff;padding:8px 14px;font-weight:700;">
+          &lt;html&gt;
+        </div>
+        
+        <!-- HEAD -->
+        <div style="border:2px solid #8b5cf6;border-radius:8px;margin:12px;overflow:hidden;">
+          <div style="background:#7c3aed;color:#fff;padding:10px 14px;font-weight:700;display:flex;align-items:center;gap:8px;">
+            <span>📋</span> &lt;head&gt;
+          </div>
+          <div style="padding:12px 14px;background:rgba(124,58,237,0.1);color:var(--text2);line-height:1.8;">
+            &lt;title&gt;Titre de la page&lt;/title&gt;<br>
+            &lt;meta charset="UTF-8"&gt;<br>
+            &lt;link rel="stylesheet" href="style.css"&gt;<br>
+            &lt;script src="script.js"&gt;&lt;/script&gt;
+          </div>
+          <div style="background:#7c3aed;color:#fff;padding:8px 14px;font-weight:700;">
+            &lt;/head&gt;
+          </div>
+        </div>
+
+        <!-- BODY -->
+        <div style="border:2px solid #64748b;border-radius:8px;margin:12px;overflow:hidden;">
+          <div style="background:#475569;color:#fff;padding:10px 14px;font-weight:700;display:flex;align-items:center;gap:8px;">
+            <span>📄</span> &lt;body&gt;
+          </div>
+          <div style="padding:14px;background:#11131a;">
+
+            <!-- HEADER -->
+            <div style="border:2px solid #06b6d4;border-radius:8px;margin-bottom:12px;overflow:hidden;">
+              <div style="background:#0e7490;color:#fff;padding:10px 14px;font-weight:700;display:flex;align-items:center;gap:8px;">
+                <span>🎯</span> &lt;header&gt; <span style="font-size:0.75rem;opacity:0.8;margin-left:8px;">En-tête de page</span>
+              </div>
+              <div style="padding:12px;background:rgba(6,182,212,0.1);">
+                <div style="border:1.5px solid #0891b2;border-radius:6px;padding:10px;background:rgba(8,145,178,0.1);">
+                  <div style="color:#22d3ee;font-weight:600;">&lt;nav&gt;</div>
+                  <div style="color:var(--text3);font-size:0.82rem;margin:4px 0 4px 16px;">Menu de navigation</div>
+                  <div style="color:#22d3ee;font-weight:600;">&lt;/nav&gt;</div>
+                </div>
+              </div>
+              <div style="background:#0e7490;color:#fff;padding:8px 14px;font-weight:700;">
+                &lt;/header&gt;
+              </div>
+            </div>
+
+            <!-- MAIN -->
+            <div style="border:3px solid #f59e0b;border-radius:8px;margin-bottom:12px;overflow:hidden;">
+              <div style="background:#d97706;color:#fff;padding:12px 14px;font-weight:700;display:flex;align-items:center;gap:8px;font-size:0.95rem;">
+                <span>⭐</span> &lt;main&gt; <span style="font-size:0.75rem;opacity:0.9;margin-left:8px;">Contenu principal (1 seul par page !)</span>
+              </div>
+              <div style="padding:14px;background:rgba(245,158,11,0.08);">
+
+                <!-- ARTICLE -->
+                <div style="border:2px solid #3b82f6;border-radius:8px;margin-bottom:12px;overflow:hidden;">
+                  <div style="background:#2563eb;color:#fff;padding:10px 14px;font-weight:700;display:flex;align-items:center;gap:8px;">
+                    <span>📄</span> &lt;article&gt; <span style="font-size:0.75rem;opacity:0.8;margin-left:8px;">Contenu autonome</span>
+                  </div>
+                  <div style="padding:12px;background:rgba(59,130,246,0.1);">
+                    <div style="color:#60a5fa;margin-bottom:8px;">&lt;h1&gt;Titre de l'article&lt;/h1&gt;</div>
+                    
+                    <!-- SECTION 1 -->
+                    <div style="border:1.5px solid #22c55e;border-radius:6px;padding:10px;background:rgba(34,197,94,0.1);margin-bottom:8px;">
+                      <div style="color:#4ade80;font-weight:600;">&lt;section&gt; <span style="font-size:0.72rem;opacity:0.8;">Regroupement thématique</span></div>
+                      <div style="color:var(--text3);font-size:0.82rem;margin:6px 0 6px 16px;">
+                        &lt;h2&gt;Sous-titre&lt;/h2&gt;<br>
+                        &lt;p&gt;Paragraphe...&lt;/p&gt;
+                      </div>
+                      <div style="color:#4ade80;font-weight:600;">&lt;/section&gt;</div>
+                    </div>
+
+                    <!-- SECTION 2 -->
+                    <div style="border:1.5px solid #22c55e;border-radius:6px;padding:10px;background:rgba(34,197,94,0.1);">
+                      <div style="color:#4ade80;font-weight:600;">&lt;section&gt;</div>
+                      <div style="color:var(--text3);font-size:0.82rem;margin:6px 0 6px 16px;">
+                        &lt;h2&gt;Autre partie&lt;/h2&gt;<br>
+                        &lt;p&gt;Contenu...&lt;/p&gt;
+                      </div>
+                      <div style="color:#4ade80;font-weight:600;">&lt;/section&gt;</div>
+                    </div>
+
+                  </div>
+                  <div style="background:#2563eb;color:#fff;padding:8px 14px;font-weight:700;">
+                    &lt;/article&gt;
+                  </div>
+                </div>
+
+                <!-- ASIDE -->
+                <div style="border:2px solid #a855f7;border-radius:8px;margin-bottom:12px;overflow:hidden;">
+                  <div style="background:#9333ea;color:#fff;padding:10px 14px;font-weight:700;display:flex;align-items:center;gap:8px;">
+                    <span>📌</span> &lt;aside&gt; <span style="font-size:0.75rem;opacity:0.8;margin-left:8px;">Contenu connexe</span>
+                  </div>
+                  <div style="padding:12px;background:rgba(168,85,247,0.1);color:var(--text3);font-size:0.82rem;">
+                    Barre latérale, bio d'auteur,<br>
+                    liens connexes, publicités...
+                  </div>
+                  <div style="background:#9333ea;color:#fff;padding:8px 14px;font-weight:700;">
+                    &lt;/aside&gt;
+                  </div>
+                </div>
+
+                <!-- DIV EXEMPLE -->
+                <div style="border:2px dashed #64748b;border-radius:8px;overflow:hidden;">
+                  <div style="background:#475569;color:#fff;padding:10px 14px;font-weight:700;display:flex;align-items:center;gap:8px;">
+                    <span>📦</span> &lt;div class="grille-produits"&gt; <span style="font-size:0.75rem;opacity:0.8;margin-left:8px;">Conteneur générique</span>
+                  </div>
+                  <div style="padding:12px;background:rgba(100,116,139,0.08);color:var(--text3);font-size:0.82rem;">
+                    &lt;!-- Pas de sens sémantique --&gt;<br>
+                    Juste pour la mise en page CSS
+                  </div>
+                  <div style="background:#475569;color:#fff;padding:8px 14px;font-weight:700;">
+                    &lt;/div&gt;
+                  </div>
+                </div>
+
+              </div>
+              <div style="background:#d97706;color:#fff;padding:10px 14px;font-weight:700;">
+                &lt;/main&gt;
+              </div>
+            </div>
+
+            <!-- FOOTER -->
+            <div style="border:2px solid #ec4899;border-radius:8px;overflow:hidden;">
+              <div style="background:#db2777;color:#fff;padding:10px 14px;font-weight:700;display:flex;align-items:center;gap:8px;">
+                <span>📍</span> &lt;footer&gt; <span style="font-size:0.75rem;opacity:0.8;margin-left:8px;">Pied de page</span>
+              </div>
+              <div style="padding:12px;background:rgba(236,72,153,0.1);color:var(--text3);font-size:0.82rem;">
+                Mentions légales, copyright,<br>
+                liens réseaux sociaux...
+              </div>
+              <div style="background:#db2777;color:#fff;padding:8px 14px;font-weight:700;">
+                &lt;/footer&gt;
+              </div>
+            </div>
+
+          </div>
+          <div style="background:#475569;color:#fff;padding:10px 14px;font-weight:700;">
+            &lt;/body&gt;
+          </div>
+        </div>
+
+        <div style="background:#475569;color:#fff;padding:8px 14px;font-weight:700;">
+          &lt;/html&gt;
+        </div>
+      </div>
+
+    </div>
+
+    <div class="alert info" style="margin-top:16px;">
+      <span class="alert-icon">💡</span>
+      <div>
+        <strong>Hiérarchie visuelle :</strong><br>
+        📋 <code>&lt;head&gt;</code> = métadonnées (invisible)<br>
+        📄 <code>&lt;body&gt;</code> = tout le contenu visible<br>
+        ├─ 🎯 <code>&lt;header&gt;</code> = en-tête de page<br>
+        ├─ ⭐ <code>&lt;main&gt;</code> = contenu principal<br>
+        │&nbsp;&nbsp; ├─ 📄 <code>&lt;article&gt;</code> = contenu autonome<br>
+        │&nbsp;&nbsp; │&nbsp;&nbsp; └─ 📑 <code>&lt;section&gt;</code> = parties thématiques<br>
+        │&nbsp;&nbsp; ├─ 📌 <code>&lt;aside&gt;</code> = contenu connexe<br>
+        │&nbsp;&nbsp; └─ 📦 <code>&lt;div&gt;</code> = conteneur générique<br>
+        └─ 📍 <code>&lt;footer&gt;</code> = pied de page
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🗺️ Guide de décision — Quelle balise utiliser dans &lt;main&gt; ?</h2>
+    <p style="color:var(--text2);margin-bottom:16px">Pose-toi ces questions <strong>dans l'ordre</strong> pour choisir la bonne balise :</p>
+
+    <div style="background:#1a1d28;border:2px solid var(--border);border-radius:12px;padding:24px;margin:16px 0;">
+      
+      <!-- Question 1 : ARTICLE -->
+      <div style="background:rgba(59,130,246,0.1);border:2px solid #3b82f6;border-radius:10px;padding:18px;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+          <div style="background:#3b82f6;color:#fff;font-size:1.4rem;width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">📄</div>
+          <div>
+            <div style="color:#60a5fa;font-weight:700;font-size:0.95rem;">QUESTION 1</div>
+            <div style="color:var(--text);font-weight:600;font-size:1.05rem;">Le contenu peut-il être autonome ?</div>
+            <div style="color:var(--text3);font-size:0.85rem;">(Indépendant, partageable seul)</div>
+          </div>
+        </div>
+        <div style="border-left:3px solid #3b82f6;padding-left:14px;margin-top:12px;">
+          <div style="color:#22c55e;font-weight:700;margin-bottom:6px;">✅ OUI → Utilise <code style="background:#1e293b;color:#60a5fa;padding:2px 8px;border-radius:4px;">&lt;article&gt;</code></div>
+          <div style="color:var(--text2);font-size:0.88rem;">
+            <strong>Exemples :</strong> Article de blog, fiche produit, carte d'événement, commentaire, post sur réseau social
+          </div>
+        </div>
+        <div style="margin-top:12px;padding:10px 14px;background:rgba(239,68,68,0.08);border-left:3px solid #ef4444;border-radius:6px;">
+          <div style="color:#ef4444;font-weight:700;font-size:0.9rem;">❌ NON → Passe à la question suivante</div>
+        </div>
+      </div>
+
+      <!-- Question 2 : SECTION -->
+      <div style="background:rgba(34,197,94,0.1);border:2px solid #22c55e;border-radius:10px;padding:18px;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+          <div style="background:#22c55e;color:#000;font-size:1.4rem;width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">📑</div>
+          <div>
+            <div style="color:#4ade80;font-weight:700;font-size:0.95rem;">QUESTION 2</div>
+            <div style="color:var(--text);font-weight:600;font-size:1.05rem;">Est-ce un regroupement thématique clair ?</div>
+            <div style="color:var(--text3);font-size:0.85rem;">(Avec son propre titre H2/H3)</div>
+          </div>
+        </div>
+        <div style="border-left:3px solid #22c55e;padding-left:14px;margin-top:12px;">
+          <div style="color:#22c55e;font-weight:700;margin-bottom:6px;">✅ OUI → Utilise <code style="background:#1e293b;color:#4ade80;padding:2px 8px;border-radius:4px;">&lt;section&gt;</code></div>
+          <div style="color:var(--text2);font-size:0.88rem;">
+            <strong>Exemples :</strong> Chapitre d'un article, section "Caractéristiques" d'un produit, partie thématique d'une page
+          </div>
+          <div style="margin-top:8px;padding:8px;background:rgba(245,158,11,0.1);border-radius:6px;border:1px solid rgba(245,158,11,0.3);">
+            <div style="color:#f59e0b;font-size:0.82rem;font-weight:600;">⚠️ RÈGLE : Une <code>&lt;section&gt;</code> a TOUJOURS un titre (h2, h3...)</div>
+          </div>
+        </div>
+        <div style="margin-top:12px;padding:10px 14px;background:rgba(239,68,68,0.08);border-left:3px solid #ef4444;border-radius:6px;">
+          <div style="color:#ef4444;font-weight:700;font-size:0.9rem;">❌ NON → Passe à la question suivante</div>
+        </div>
+      </div>
+
+      <!-- Question 3 : ASIDE -->
+      <div style="background:rgba(168,85,247,0.1);border:2px solid #a855f7;border-radius:10px;padding:18px;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+          <div style="background:#a855f7;color:#fff;font-size:1.4rem;width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">📌</div>
+          <div>
+            <div style="color:#c084fc;font-weight:700;font-size:0.95rem;">QUESTION 3</div>
+            <div style="color:var(--text);font-weight:600;font-size:1.05rem;">Est-ce un contenu tangentiel / connexe ?</div>
+            <div style="color:var(--text3);font-size:0.85rem;">(Lien indirect avec le sujet principal)</div>
+          </div>
+        </div>
+        <div style="border-left:3px solid #a855f7;padding-left:14px;margin-top:12px;">
+          <div style="color:#c084fc;font-weight:700;margin-bottom:6px;">✅ OUI → Utilise <code style="background:#1e293b;color:#c084fc;padding:2px 8px;border-radius:4px;">&lt;aside&gt;</code></div>
+          <div style="color:var(--text2);font-size:0.88rem;">
+            <strong>Exemples :</strong> Barre latérale, bio d'auteur, liens connexes, publicités, "Le saviez-vous ?", widget météo
+          </div>
+        </div>
+        <div style="margin-top:12px;padding:10px 14px;background:rgba(239,68,68,0.08);border-left:3px solid #ef4444;border-radius:6px;">
+          <div style="color:#ef4444;font-weight:700;font-size:0.9rem;">❌ NON → Passe à la question suivante</div>
+        </div>
+      </div>
+
+      <!-- Question 4 : DIV -->
+      <div style="background:rgba(245,158,11,0.1);border:2px solid #f59e0b;border-radius:10px;padding:18px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+          <div style="background:#f59e0b;color:#000;font-size:1.4rem;width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">📦</div>
+          <div>
+            <div style="color:#fbbf24;font-weight:700;font-size:0.95rem;">QUESTION 4</div>
+            <div style="color:var(--text);font-weight:600;font-size:1.05rem;">Est-ce uniquement pour la mise en page / le style ?</div>
+            <div style="color:var(--text3);font-size:0.85rem;">(Pas de sens sémantique)</div>
+          </div>
+        </div>
+        <div style="border-left:3px solid #f59e0b;padding-left:14px;margin-top:12px;">
+          <div style="color:#fbbf24;font-weight:700;margin-bottom:6px;">✅ OUI → Utilise <code style="background:#1e293b;color:#fbbf24;padding:2px 8px;border-radius:4px;">&lt;div&gt;</code></div>
+          <div style="color:var(--text2);font-size:0.88rem;">
+            <strong>Exemples :</strong> Conteneur générique, grille CSS, wrapper de mise en page, emballage pour flexbox/grid
+          </div>
+          <div style="margin-top:8px;padding:8px;background:rgba(59,130,246,0.1);border-radius:6px;border:1px solid rgba(59,130,246,0.3);">
+            <div style="color:#60a5fa;font-size:0.82rem;">💡 Le <code>&lt;div&gt;</code> n'a AUCUN sens sémantique. C'est une boîte vide pour organiser visuellement.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flèche finale -->
+      <div style="margin-top:20px;padding:16px;background:rgba(100,116,139,0.1);border-radius:10px;text-align:center;">
+        <div style="color:var(--text3);font-size:0.9rem;font-weight:600;">👇 Si rien ne correspond, reconsidère les balises sémantiques ci-dessus</div>
+      </div>
+
+    </div>
+
+    <div class="alert good" style="margin-top:20px;">
+      <span class="alert-icon">🎯</span>
+      <div>
+        <strong>En résumé :</strong><br>
+        <code>&lt;article&gt;</code> = contenu autonome (article, produit, post)<br>
+        <code>&lt;section&gt;</code> = regroupement thématique avec titre<br>
+        <code>&lt;aside&gt;</code> = contenu périphérique (sidebar, bio, liens)<br>
+        <code>&lt;div&gt;</code> = conteneur générique sans sens (pure mise en page)
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🏷️ Les balises sémantiques principales</h2>
+    <table class="tbl">
+      <thead><tr><th>Balise</th><th>Usage</th></tr></thead>
+      <tbody>
+        <tr><td><code>&lt;header&gt;</code></td><td>En-tête de page ou de section (logo, titre, menu...)</td></tr>
+        <tr><td><code>&lt;nav&gt;</code></td><td>Zone de navigation (menu principal)</td></tr>
+        <tr><td><code>&lt;main&gt;</code></td><td>Contenu principal de la page (un seul par page !)</td></tr>
+        <tr><td><code>&lt;article&gt;</code></td><td>Contenu autonome (article de blog, carte produit...)</td></tr>
+        <tr><td><code>&lt;section&gt;</code></td><td>Section thématique (chapitre, partie d'article...)</td></tr>
+        <tr><td><code>&lt;aside&gt;</code></td><td>Contenu secondaire (barre latérale, publicités...)</td></tr>
+        <tr><td><code>&lt;footer&gt;</code></td><td>Pied de page (mentions légales, réseaux sociaux...)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>❌ Mauvais vs ✅ Bon</h2>
+    <div class="grid2">
+      <div>
+        <h3 style="color:var(--red)">❌ Pas sémantique</h3>
+        <div class="code"><span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"header"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"menu"</span><span class="tag">&gt;</span>...<span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"content"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"post"</span><span class="tag">&gt;</span>...<span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"footer"</span><span class="tag">&gt;</span>...<span class="tag">&lt;/div&gt;</span></div>
+      </div>
+      <div>
+        <h3 style="color:var(--green)">✅ Sémantique</h3>
+        <div class="code"><span class="tag">&lt;header&gt;</span>
+  <span class="tag">&lt;nav&gt;</span>...<span class="tag">&lt;/nav&gt;</span>
+<span class="tag">&lt;/header&gt;</span>
+<span class="tag">&lt;main&gt;</span>
+  <span class="tag">&lt;article&gt;</span>...<span class="tag">&lt;/article&gt;</span>
+<span class="tag">&lt;/main&gt;</span>
+<span class="tag">&lt;footer&gt;</span>...<span class="tag">&lt;/footer&gt;</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>♿ Accessibilité — Balises importantes</h2>
+    <table class="tbl">
+      <thead><tr><th>Balise/Attribut</th><th>Usage</th></tr></thead>
+      <tbody>
+        <tr><td><code>alt="..."</code></td><td>Description des images (lecteurs d'écran)</td></tr>
+        <tr><td><code>&lt;label for="..."&gt;</code></td><td>Associer un label à un champ de formulaire</td></tr>
+        <tr><td><code>aria-label="..."</code></td><td>Label pour éléments sans texte visible</td></tr>
+        <tr><td><code>role="..."</code></td><td>Préciser le rôle d'un élément</td></tr>
+        <tr><td><code>tabindex="0"</code></td><td>Rendre un élément navigable au clavier</td></tr>
+      </tbody>
+    </table>
+
+    <div class="alert good">
+      <span class="alert-icon">♿</span>
+      <div>
+        <strong>Pourquoi c'est important ?</strong> Les personnes malvoyantes utilisent des lecteurs d'écran. Un HTML bien structuré leur permet de naviguer facilement sur ton site. En bonus, Google aussi adore le HTML sémantique (meilleur référencement) !
+      </div>
+    </div>
+  </div>
+
+</div><!-- /semantique -->
+
+</main>
+
+<footer>HTML Pense-Bête · Pour Noah · Cours personnalisé</footer>
+
+<script>
+/* ===== NAVIGATION ===== */
+function showTab(id, btn) {
+  var panels = document.querySelectorAll('.tab-panel');
+  var btns = document.querySelectorAll('.tab-btn');
+  for (var i = 0; i < panels.length; i++) panels[i].classList.remove('active');
+  for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+/* ===== PWA — SW inline ===== */
+if ('serviceWorker' in navigator) {
+  var swCode = [
+    "var C='html-ref-v1';",
+    "var F=['.','index.html'];",
+    "self.addEventListener('install',function(e){e.waitUntil(caches.open(C).then(function(c){return c.addAll(F);}));});",
+    "self.addEventListener('fetch',function(e){e.respondWith(caches.match(e.request).then(function(r){return r||fetch(e.request);}));});"
+  ].join('\n');
+  var blob = new Blob([swCode], { type: 'application/javascript' });
+  var swUrl = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swUrl).catch(function() {});
+}
+
+/* ===== MANIFEST inline ===== */
+var manifest = {
+  name: 'HTML Pense-Bete',
+  short_name: 'HTML Ref',
+  display: 'standalone',
+  background_color: '#0f1117',
+  theme_color: '#e34c26',
+  start_url: '.',
+  icons: []
+};
+var mLink = document.createElement('link');
+mLink.rel = 'manifest';
+mLink.href = 'data:application/json,' + encodeURIComponent(JSON.stringify(manifest));
+document.head.appendChild(mLink);
+</script>
+</body>
+</html>
