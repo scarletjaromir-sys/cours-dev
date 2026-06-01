@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#2563eb">
+<title>CSS Pense-Bête</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:      #0a0e1a;
+  --bg2:     #111827;
+  --bg3:     #1a2236;
+  --border:  #1e2d45;
+  --blue:    #2563eb;
+  --blue2:   #3b82f6;
+  --cyan:    #06b6d4;
+  --green:   #10b981;
+  --yellow:  #f59e0b;
+  --orange:  #f97316;
+  --red:     #ef4444;
+  --pink:    #ec4899;
+  --text:    #e2e8f0;
+  --text2:   #94a3b8;
+  --text3:   #475569;
+  --prop:    #7dd3fc;
+  --val:     #86efac;
+  --sel:     #fca5a5;
+  --num:     #fcd34d;
+  --cmt:     #4b6384;
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 15px; line-height: 1.6; }
+
+/* HEADER */
+header { background: var(--bg2); border-bottom: 2px solid var(--blue); padding: 14px 20px; position: sticky; top: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.home-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--blue); color: #fff; text-decoration: none; padding: 7px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; transition: all 0.2s; box-shadow: 0 2px 8px rgba(37,99,235,0.35); }
+.home-btn:hover { background: var(--blue2); transform: translateY(-2px); box-shadow: 0 4px 14px rgba(37,99,235,0.45); }
+.logo { font-family: 'Consolas', monospace; font-size: 1.3rem; font-weight: 700; color: var(--blue2); }
+.logo span { color: var(--cyan); }
+.tabs-scroll { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+.tab-btn { white-space: nowrap; padding: 6px 14px; border: 1.5px solid var(--border); border-radius: 20px; background: transparent; color: var(--text2); cursor: pointer; font-size: 0.82rem; font-weight: 500; transition: all 0.2s; }
+.tab-btn.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+.tab-btn:hover:not(.active) { border-color: var(--blue2); color: var(--text); }
+
+/* CONTENU */
+main { max-width: 960px; margin: 0 auto; padding: 20px 16px 60px; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; animation: fadein 0.25s ease; }
+@keyframes fadein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; } }
+
+/* CARDS */
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 22px; margin-bottom: 18px; }
+h2 { font-size: 1.1rem; font-weight: 700; color: var(--blue2); margin-bottom: 14px; }
+h3 { font-size: 0.92rem; font-weight: 600; color: var(--cyan); margin: 14px 0 8px; }
+
+/* CODE */
+.code { background: #070a12; border: 1px solid var(--border); border-left: 3px solid var(--blue); border-radius: 8px; padding: 14px 16px; font-family: 'Consolas', 'Monaco', monospace; font-size: 0.88rem; line-height: 1.9; white-space: pre; overflow-x: auto; margin: 8px 0; color: #abb2bf; }
+.prop { color: var(--prop); }
+.val  { color: var(--val); }
+.sel  { color: var(--sel); }
+.num  { color: var(--num); }
+.cmt  { color: var(--cmt); font-style: italic; }
+code { background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; font-family: 'Consolas', monospace; font-size: 0.86em; color: var(--cyan); }
+
+/* TABLEAUX */
+.tbl { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+.tbl th { background: var(--bg3); color: var(--blue2); padding: 9px 12px; text-align: left; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.tbl td { padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.tbl tr:last-child td { border-bottom: none; }
+.tbl tr:hover td { background: rgba(37,99,235,0.05); }
+
+/* ALERTS */
+.alert { border-radius: 8px; padding: 11px 15px; margin: 10px 0; font-size: 0.86rem; border-left: 4px solid; display: flex; gap: 9px; align-items: flex-start; }
+.alert-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+.alert.warn   { background: rgba(245,158,11,0.1);  border-color: var(--yellow); }
+.alert.info   { background: rgba(6,182,212,0.1);   border-color: var(--cyan); }
+.alert.good   { background: rgba(16,185,129,0.1);  border-color: var(--green); }
+.alert.danger { background: rgba(239,68,68,0.1);   border-color: var(--red); }
+
+/* GRILLE */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 600px) { .grid2 { grid-template-columns: 1fr; } }
+
+/* BOX MODEL SCHEMA */
+.box-model { display: flex; flex-direction: column; align-items: center; gap: 0; font-family: 'Consolas', monospace; font-size: 0.82rem; }
+.bm-margin  { background: rgba(245,158,11,0.15); border: 2px dashed var(--yellow); border-radius: 8px; padding: 16px; width: 100%; display: flex; justify-content: center; position: relative; }
+.bm-margin-label { position: absolute; top: 4px; left: 8px; color: var(--yellow); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; }
+.bm-border  { background: rgba(239,68,68,0.15); border: 3px solid var(--red); border-radius: 6px; padding: 16px; width: 100%; display: flex; justify-content: center; position: relative; }
+.bm-border-label { position: absolute; top: 4px; left: 8px; color: var(--red); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; }
+.bm-padding { background: rgba(16,185,129,0.15); border: 2px dashed var(--green); border-radius: 4px; padding: 16px; width: 100%; display: flex; justify-content: center; position: relative; }
+.bm-padding-label { position: absolute; top: 4px; left: 8px; color: var(--green); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; }
+.bm-content { background: rgba(37,99,235,0.2); border: 2px solid var(--blue); border-radius: 4px; padding: 18px 30px; color: var(--blue2); font-weight: 700; font-size: 0.9rem; text-align: center; }
+
+/* =============================================
+   SIMULATEUR FLEXBOX
+============================================= */
+.sim-wrapper { background: var(--bg3); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+
+/* Panneau de contrôle */
+.sim-controls { padding: 18px; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+.ctrl-group { display: flex; flex-direction: column; gap: 6px; }
+.ctrl-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--cyan); }
+.ctrl-prop  { font-family: 'Consolas', monospace; font-size: 0.78rem; color: var(--text3); margin-bottom: 2px; }
+
+/* Boutons de propriété */
+.btn-group { display: flex; flex-wrap: wrap; gap: 5px; }
+.prop-btn {
+  padding: 5px 10px;
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-family: 'Consolas', monospace;
+  font-weight: 500;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.prop-btn:hover { border-color: var(--blue2); color: var(--text); }
+.prop-btn.active { background: var(--blue); border-color: var(--blue); color: #fff; font-weight: 700; }
+
+/* Zone de prévisualisation */
+.sim-preview-area { padding: 18px; }
+.sim-preview-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text3); margin-bottom: 10px; }
+
+.flex-container {
+  display: flex;
+  background: rgba(37,99,235,0.06);
+  border: 2px dashed rgba(37,99,235,0.4);
+  border-radius: 10px;
+  min-height: 200px;
+  padding: 10px;
+  transition: all 0.3s ease;
+  gap: 8px;
+  position: relative;
+}
+
+.flex-item {
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Consolas', monospace;
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+  position: relative;
+  min-width: 50px;
+  min-height: 50px;
+}
+
+.flex-item:nth-child(1) { background: rgba(37,99,235,0.25); border: 2px solid #2563eb; color: #93c5fd; }
+.flex-item:nth-child(2) { background: rgba(16,185,129,0.25); border: 2px solid #10b981; color: #6ee7b7; }
+.flex-item:nth-child(3) { background: rgba(245,158,11,0.25); border: 2px solid #f59e0b; color: #fcd34d; }
+.flex-item:nth-child(4) { background: rgba(236,72,153,0.25); border: 2px solid #ec4899; color: #f9a8d4; }
+.flex-item:nth-child(5) { background: rgba(168,85,247,0.25); border: 2px solid #a855f7; color: #d8b4fe; }
+
+/* Tailles des items */
+.flex-item.sm { width: 60px; height: 60px; }
+.flex-item.md { width: 80px; height: 80px; }
+.flex-item.lg { width: 60px; height: 100px; }
+.flex-item.xl { width: 100px; height: 60px; }
+
+/* Code généré */
+.sim-code-block { background: #070a12; border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; font-family: 'Consolas', monospace; font-size: 0.85rem; line-height: 1.8; margin-top: 14px; white-space: pre; overflow-x: auto; color: #abb2bf; }
+
+/* Badge de valeur active */
+.active-val { display: inline-block; background: var(--blue); color: #fff; font-family: 'Consolas', monospace; font-size: 0.78rem; font-weight: 700; padding: 2px 8px; border-radius: 4px; margin-left: 6px; }
+
+/* Légende des items */
+.sim-legend { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.78rem; color: var(--text3); }
+.legend-dot { width: 10px; height: 10px; border-radius: 3px; }
+
+/* Contrôle des items */
+.item-controls { display: flex; align-items: center; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.item-ctrl-btn { padding: 5px 12px; border: 1.5px solid var(--border); border-radius: 6px; background: var(--bg2); color: var(--text2); cursor: pointer; font-size: 0.8rem; font-weight: 600; transition: all 0.15s; }
+.item-ctrl-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+.item-count-display { font-family: 'Consolas', monospace; color: var(--cyan); font-size: 0.9rem; font-weight: 700; background: var(--bg3); padding: 4px 12px; border-radius: 6px; border: 1px solid var(--border); }
+
+/* Contrôle taille items */
+.size-select { background: var(--bg2); border: 1.5px solid var(--border); border-radius: 6px; color: var(--text); padding: 5px 8px; font-size: 0.8rem; font-family: inherit; }
+
+/* Tabs pour item vs container */
+.sim-tabs { display: flex; gap: 6px; margin-bottom: 14px; padding: 14px 18px 0; }
+.sim-tab { padding: 7px 16px; border: 1.5px solid var(--border); border-radius: 8px 8px 0 0; background: transparent; color: var(--text3); cursor: pointer; font-size: 0.82rem; font-weight: 600; transition: all 0.2s; border-bottom: none; }
+.sim-tab.active { background: var(--bg3); border-color: var(--border); color: var(--blue2); border-bottom: 2px solid var(--bg3); }
+.sim-panel { display: none; }
+.sim-panel.active { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+
+/* Highlight axes */
+.axis-hint { font-size: 0.75rem; color: var(--text3); margin-top: 6px; }
+
+footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 40px; }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="../index.html" class="home-btn">🏠 Accueil</a>
+  <div class="logo">CSS<span>{}</span></div>
+  <div class="tabs-scroll">
+    <button class="tab-btn active" onclick="showTab('bases',this)">🎨 Bases</button>
+    <button class="tab-btn" onclick="showTab('selecteurs',this)">🎯 Sélecteurs</button>
+    <button class="tab-btn" onclick="showTab('boxmodel',this)">📦 Box Model</button>
+    <button class="tab-btn" onclick="showTab('flexbox',this)">↔️ Flexbox</button>
+    <button class="tab-btn" onclick="showTab('simulateur',this)">🧪 Simulateur</button>
+    <button class="tab-btn" onclick="showTab('texte',this)">✏️ Texte</button>
+    <button class="tab-btn" onclick="showTab('responsive',this)">📱 Responsive</button>
+  </div>
+</header>
+
+<main>
+
+<!-- ============================================================ BASES -->
+<div id="tab-bases" class="tab-panel active">
+
+  <div class="card">
+    <h2>🎨 Comment CSS fonctionne</h2>
+    <div class="code"><span class="sel">h1</span> {                          <span class="cmt">/* sélecteur — qui on cible */</span>
+  <span class="prop">color</span>: <span class="val">red</span>;              <span class="cmt">/* propriété : valeur */</span>
+  <span class="prop">font-size</span>: <span class="num">24px</span>;         <span class="cmt">/* taille en pixels */</span>
+  <span class="prop">background-color</span>: <span class="val">#fff</span>;  <span class="cmt">/* couleur de fond */</span>
+}</div>
+    <div class="alert info"><span class="alert-icon">💡</span><div>Chaque règle CSS = un sélecteur + des propriétés entre accolades. La propriété et la valeur sont séparées par <code>:</code> et chaque ligne se termine par <code>;</code>.</div></div>
+  </div>
+
+  <div class="card">
+    <h2>🌈 Les couleurs en CSS</h2>
+    <div class="code"><span class="cmt">/* Nom de couleur */</span>
+<span class="prop">color</span>: <span class="val">red</span>;
+<span class="prop">color</span>: <span class="val">cornflowerblue</span>;
+
+<span class="cmt">/* Hexadécimal — le plus courant */</span>
+<span class="prop">color</span>: <span class="num">#e34c26</span>;          <span class="cmt">/* rouge orangé */</span>
+<span class="prop">color</span>: <span class="num">#fff</span>;             <span class="cmt">/* blanc (raccourci) */</span>
+<span class="prop">color</span>: <span class="num">#000</span>;             <span class="cmt">/* noir */</span>
+
+<span class="cmt">/* RGB — rouge, vert, bleu (0 à 255) */</span>
+<span class="prop">color</span>: <span class="val">rgb</span>(<span class="num">227</span>, <span class="num">76</span>, <span class="num">38</span>);
+
+<span class="cmt">/* RGBA — avec transparence (0 à 1) */</span>
+<span class="prop">color</span>: <span class="val">rgba</span>(<span class="num">227</span>, <span class="num">76</span>, <span class="num">38</span>, <span class="num">0.5</span>);
+
+<span class="cmt">/* HSL — teinte, saturation, luminosité */</span>
+<span class="prop">color</span>: <span class="val">hsl</span>(<span class="num">14</span>, <span class="num">75%</span>, <span class="num">52%</span>);</div>
+  </div>
+
+  <div class="card">
+    <h2>📏 Les unités CSS</h2>
+    <table class="tbl">
+      <thead><tr><th>Unité</th><th>Type</th><th>Utilisation</th><th>Exemple</th></tr></thead>
+      <tbody>
+        <tr><td><code>px</code></td><td>Fixe</td><td>Tailles précises, borders</td><td><code>width: 300px</code></td></tr>
+        <tr><td><code>%</code></td><td>Relatif au parent</td><td>Largeurs fluides</td><td><code>width: 50%</code></td></tr>
+        <tr><td><code>em</code></td><td>Relatif à la font du parent</td><td>Espacements typographiques</td><td><code>padding: 1.5em</code></td></tr>
+        <tr><td><code>rem</code></td><td>Relatif à la font de &lt;html&gt;</td><td>Tailles de texte cohérentes</td><td><code>font-size: 1.2rem</code></td></tr>
+        <tr><td><code>vw</code></td><td>% de la largeur d'écran</td><td>Sections pleine largeur</td><td><code>width: 100vw</code></td></tr>
+        <tr><td><code>vh</code></td><td>% de la hauteur d'écran</td><td>Sections pleine hauteur</td><td><code>height: 100vh</code></td></tr>
+      </tbody>
+    </table>
+    <div class="alert info"><span class="alert-icon">💡</span><div>Préfère <code>rem</code> pour les tailles de texte et <code>%</code> ou <code>vw</code> pour les largeurs. Garde <code>px</code> pour les petits détails (bordures, ombres).</div></div>
+  </div>
+
+  <div class="card">
+    <h2>⚙️ Variables CSS (Custom Properties)</h2>
+    <div class="code"><span class="cmt">/* Déclaration dans :root (disponible partout) */</span>
+<span class="sel">:root</span> {
+  <span class="prop">--couleur-principale</span>: <span class="num">#2563eb</span>;
+  <span class="prop">--taille-titre</span>: <span class="num">2rem</span>;
+  <span class="prop">--espace</span>: <span class="num">16px</span>;
+}
+
+<span class="cmt">/* Utilisation avec var() */</span>
+<span class="sel">h1</span> {
+  <span class="prop">color</span>: <span class="val">var</span>(<span class="prop">--couleur-principale</span>);
+  <span class="prop">font-size</span>: <span class="val">var</span>(<span class="prop">--taille-titre</span>);
+  <span class="prop">margin-bottom</span>: <span class="val">var</span>(<span class="prop">--espace</span>);
+}</div>
+    <div class="alert good"><span class="alert-icon">✅</span><div>Les variables CSS te permettent de changer une couleur ou une taille en un seul endroit pour tout le site. C'est indispensable sur un vrai projet !</div></div>
+  </div>
+
+</div><!-- /bases -->
+
+
+<!-- ============================================================ SÉLECTEURS -->
+<div id="tab-selecteurs" class="tab-panel">
+
+  <div class="card">
+    <h2>🎯 Les sélecteurs de base</h2>
+    <table class="tbl">
+      <thead><tr><th>Sélecteur</th><th>Cible</th><th>Exemple HTML</th></tr></thead>
+      <tbody>
+        <tr><td><code>p</code></td><td>Tous les paragraphes</td><td><code>&lt;p&gt;Texte&lt;/p&gt;</code></td></tr>
+        <tr><td><code>.maClasse</code></td><td>Éléments avec cette classe</td><td><code>&lt;div class="maClasse"&gt;</code></td></tr>
+        <tr><td><code>#monId</code></td><td>L'élément avec cet id</td><td><code>&lt;div id="monId"&gt;</code></td></tr>
+        <tr><td><code>*</code></td><td>Tous les éléments</td><td>Universel</td></tr>
+        <tr><td><code>h1, h2, p</code></td><td>Ces 3 éléments à la fois</td><td>Multiple (virgule)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>🔗 Sélecteurs de relation</h2>
+    <div class="code"><span class="sel">div p</span> {<span class="cmt"> /* tous les &lt;p&gt; DESCENDANTS de &lt;div&gt; */</span>}
+
+<span class="sel">div > p</span> {<span class="cmt"> /* les &lt;p&gt; ENFANTS DIRECTS de &lt;div&gt; seulement */</span>}
+
+<span class="sel">h2 + p</span> {<span class="cmt"> /* le &lt;p&gt; qui suit IMMÉDIATEMENT un &lt;h2&gt; */</span>}
+
+<span class="sel">h2 ~ p</span> {<span class="cmt"> /* tous les &lt;p&gt; frères qui suivent un &lt;h2&gt; */</span>}</div>
+  </div>
+
+  <div class="card">
+    <h2>🔮 Pseudo-classes et pseudo-éléments</h2>
+    <div class="grid2">
+      <div>
+        <h3>Pseudo-classes (:)</h3>
+        <div class="code"><span class="sel">a:hover</span>    { } <span class="cmt">/* survol */</span>
+<span class="sel">a:visited</span>  { } <span class="cmt">/* déjà visité */</span>
+<span class="sel">a:focus</span>    { } <span class="cmt">/* focus clavier */</span>
+<span class="sel">li:first-child</span> { }
+<span class="sel">li:last-child</span>  { }
+<span class="sel">li:nth-child(2)</span>{ }
+<span class="sel">p:not(.actif)</span> { }</div>
+      </div>
+      <div>
+        <h3>Pseudo-éléments (::)</h3>
+        <div class="code"><span class="sel">p::before</span> {
+  <span class="prop">content</span>: <span class="val">"→ "</span>;
+}
+<span class="sel">p::after</span>  {
+  <span class="prop">content</span>: <span class="val">" ←"</span>;
+}
+<span class="sel">p::first-line</span>   { }
+<span class="sel">p::first-letter</span> { }</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>⚖️ Spécificité — Qui gagne quand deux règles s'affrontent ?</h2>
+    <table class="tbl">
+      <thead><tr><th>Sélecteur</th><th>Poids</th><th>Exemple</th></tr></thead>
+      <tbody>
+        <tr><td>Élément (<code>p</code>, <code>div</code>...)</td><td style="color:var(--text3)">1</td><td><code>p { color: red; }</code></td></tr>
+        <tr><td>Classe (<code>.rouge</code>)</td><td style="color:var(--cyan)">10</td><td><code>.rouge { color: red; }</code></td></tr>
+        <tr><td>Id (<code>#titre</code>)</td><td style="color:var(--yellow)">100</td><td><code>#titre { color: red; }</code></td></tr>
+        <tr><td>Style inline</td><td style="color:var(--orange)">1000</td><td><code>&lt;p style="color:red"&gt;</code></td></tr>
+        <tr><td><code>!important</code></td><td style="color:var(--red)">∞</td><td><code>color: red !important;</code></td></tr>
+      </tbody>
+    </table>
+    <div class="alert warn"><span class="alert-icon">⚠️</span><div>Évite <code>!important</code> autant que possible — ça crée des conflits impossibles à gérer. Augmente plutôt la spécificité du sélecteur.</div></div>
+  </div>
+
+</div><!-- /selecteurs -->
+
+
+<!-- ============================================================ BOX MODEL -->
+<div id="tab-boxmodel" class="tab-panel">
+
+  <div class="card">
+    <h2>📦 Le modèle de boîte (Box Model)</h2>
+    <p style="color:var(--text2);margin-bottom:16px">Chaque élément HTML est une boîte avec 4 couches :</p>
+
+    <div class="box-model">
+      <div class="bm-margin">
+        <span class="bm-margin-label">margin — espace EXTÉRIEUR</span>
+        <div class="bm-border">
+          <span class="bm-border-label">border — la bordure</span>
+          <div class="bm-padding">
+            <span class="bm-padding-label">padding — espace INTÉRIEUR</span>
+            <div class="bm-content">CONTENU</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="code" style="margin-top:16px;"><span class="sel">.boite</span> {
+  <span class="prop">margin</span>: <span class="num">20px</span>;          <span class="cmt">/* espace extérieur (autour de la boîte) */</span>
+  <span class="prop">border</span>: <span class="num">2px</span> <span class="val">solid</span> <span class="num">#333</span>; <span class="cmt">/* bordure visible */</span>
+  <span class="prop">padding</span>: <span class="num">16px</span>;         <span class="cmt">/* espace intérieur (entre bordure et contenu) */</span>
+  <span class="prop">width</span>: <span class="num">300px</span>;          <span class="cmt">/* largeur du contenu */</span>
+}</div>
+  </div>
+
+  <div class="card">
+    <h2>🔧 box-sizing: border-box</h2>
+    <div class="grid2">
+      <div>
+        <h3 style="color:var(--red)">❌ Par défaut (content-box)</h3>
+        <div class="code"><span class="prop">width</span>: <span class="num">300px</span>;
+<span class="prop">padding</span>: <span class="num">20px</span>;
+<span class="cmt">/* Largeur réelle = 340px !! */</span>
+<span class="cmt">/* 300 + 20 + 20 */</span></div>
+      </div>
+      <div>
+        <h3 style="color:var(--green)">✅ Recommandé (border-box)</h3>
+        <div class="code"><span class="prop">box-sizing</span>: <span class="val">border-box</span>;
+<span class="prop">width</span>: <span class="num">300px</span>;
+<span class="prop">padding</span>: <span class="num">20px</span>;
+<span class="cmt">/* Largeur réelle = 300px ✅ */</span></div>
+      </div>
+    </div>
+    <div class="code" style="margin-top:12px;"><span class="cmt">/* À mettre au tout début de TOUT projet */</span>
+<span class="sel">*, *::before, *::after</span> {
+  <span class="prop">box-sizing</span>: <span class="val">border-box</span>;
+}</div>
+  </div>
+
+  <div class="card">
+    <h2>↔️ Display — Comment l'élément s'affiche</h2>
+    <table class="tbl">
+      <thead><tr><th>Valeur</th><th>Comportement</th><th>Exemples natifs</th></tr></thead>
+      <tbody>
+        <tr><td><code>block</code></td><td>Prend toute la largeur, se met sur une nouvelle ligne</td><td><code>div, p, h1, section</code></td></tr>
+        <tr><td><code>inline</code></td><td>S'intègre dans le texte, pas de largeur/hauteur</td><td><code>span, a, strong, em</code></td></tr>
+        <tr><td><code>inline-block</code></td><td>Inline mais accepte largeur/hauteur</td><td>Boutons personnalisés</td></tr>
+        <tr><td><code>flex</code></td><td>Active Flexbox sur les enfants</td><td>Mise en page moderne</td></tr>
+        <tr><td><code>grid</code></td><td>Active CSS Grid sur les enfants</td><td>Mise en page 2D</td></tr>
+        <tr><td><code>none</code></td><td>Masque l'élément (n'occupe plus d'espace)</td><td>Menus cachés</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>📐 Margin — Les raccourcis</h2>
+    <div class="code"><span class="prop">margin</span>: <span class="num">20px</span>;                  <span class="cmt">/* 4 côtés identiques */</span>
+<span class="prop">margin</span>: <span class="num">10px</span> <span class="num">20px</span>;           <span class="cmt">/* haut/bas  gauche/droite */</span>
+<span class="prop">margin</span>: <span class="num">10px</span> <span class="num">20px</span> <span class="num">30px</span>;      <span class="cmt">/* haut  gauche/droite  bas */</span>
+<span class="prop">margin</span>: <span class="num">10px</span> <span class="num">20px</span> <span class="num">30px</span> <span class="num">40px</span>; <span class="cmt">/* haut droite bas gauche (sens horaire) */</span>
+
+<span class="cmt">/* Centrer un block horizontalement */</span>
+<span class="prop">margin</span>: <span class="num">0</span> <span class="val">auto</span>;
+
+<span class="cmt">/* Côtés individuels */</span>
+<span class="prop">margin-top</span>: <span class="num">20px</span>;
+<span class="prop">margin-right</span>: <span class="num">10px</span>;
+<span class="prop">margin-bottom</span>: <span class="num">20px</span>;
+<span class="prop">margin-left</span>: <span class="num">10px</span>;</div>
+    <div class="alert info"><span class="alert-icon">💡</span><div>La même logique s'applique à <code>padding</code> et <code>border-radius</code> !</div></div>
+  </div>
+
+</div><!-- /boxmodel -->
+
+
+<!-- ============================================================ FLEXBOX (COURS) -->
+<div id="tab-flexbox" class="tab-panel">
+
+  <div class="card">
+    <h2>↔️ Flexbox — La mise en page flexible</h2>
+    <p style="color:var(--text2);margin-bottom:12px">Flexbox organise les éléments sur <strong>un axe</strong> (horizontal ou vertical). Il y a deux acteurs :</p>
+    <div class="grid2">
+      <div style="background:rgba(37,99,235,0.1);border:1.5px solid var(--blue);border-radius:8px;padding:14px;">
+        <div style="color:var(--blue2);font-weight:700;margin-bottom:6px;">📦 Le conteneur</div>
+        <div style="color:var(--text2);font-size:0.88rem;">L'élément sur lequel on met <code>display: flex</code>. Il contrôle comment ses enfants sont organisés.</div>
+      </div>
+      <div style="background:rgba(16,185,129,0.1);border:1.5px solid var(--green);border-radius:8px;padding:14px;">
+        <div style="color:var(--green);font-weight:700;margin-bottom:6px;">🧩 Les items</div>
+        <div style="color:var(--text2);font-size:0.88rem;">Les enfants directs du conteneur. Ils répondent aux règles flexbox du parent.</div>
+      </div>
+    </div>
+
+    <div class="code" style="margin-top:14px;"><span class="sel">.conteneur</span> {
+  <span class="prop">display</span>: <span class="val">flex</span>;  <span class="cmt">/* ← active flexbox sur les enfants */</span>
+}</div>
+  </div>
+
+  <div class="card">
+    <h2>🔀 Les axes Flexbox</h2>
+    <div style="background:var(--bg3);border-radius:10px;padding:18px;margin-bottom:14px;">
+      <div style="display:flex;gap:10px;margin-bottom:10px;align-items:center;font-size:0.88rem;color:var(--text2);">
+        <span style="color:var(--blue2);font-weight:700;">flex-direction: row</span>
+        <span>(par défaut)</span>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;padding:10px;background:rgba(37,99,235,0.08);border-radius:8px;border:1px dashed rgba(37,99,235,0.3);">
+        <div style="background:rgba(37,99,235,0.3);border:2px solid var(--blue);border-radius:6px;padding:10px 18px;color:#93c5fd;font-family:monospace;font-weight:700;">1</div>
+        <div style="background:rgba(16,185,129,0.3);border:2px solid var(--green);border-radius:6px;padding:10px 18px;color:#6ee7b7;font-family:monospace;font-weight:700;">2</div>
+        <div style="background:rgba(245,158,11,0.3);border:2px solid var(--yellow);border-radius:6px;padding:10px 18px;color:#fcd34d;font-family:monospace;font-weight:700;">3</div>
+        <div style="flex:1;border-top:2px dashed var(--blue2);display:flex;align-items:center;justify-content:flex-end;color:var(--blue2);font-size:0.75rem;padding-right:4px;">→ axe principal</div>
+      </div>
+      <div style="display:flex;gap:10px;margin:14px 0 10px;align-items:center;font-size:0.88rem;color:var(--text2);">
+        <span style="color:var(--blue2);font-weight:700;">flex-direction: column</span>
+      </div>
+      <div style="display:flex;gap:6px;flex-direction:column;padding:10px;background:rgba(37,99,235,0.08);border-radius:8px;border:1px dashed rgba(37,99,235,0.3);max-width:120px;">
+        <div style="background:rgba(37,99,235,0.3);border:2px solid var(--blue);border-radius:6px;padding:8px;text-align:center;color:#93c5fd;font-family:monospace;font-weight:700;">1</div>
+        <div style="background:rgba(16,185,129,0.3);border:2px solid var(--green);border-radius:6px;padding:8px;text-align:center;color:#6ee7b7;font-family:monospace;font-weight:700;">2</div>
+        <div style="background:rgba(245,158,11,0.3);border:2px solid var(--yellow);border-radius:6px;padding:8px;text-align:center;color:#fcd34d;font-family:monospace;font-weight:700;">3</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🎛️ Propriétés du CONTENEUR</h2>
+    <table class="tbl">
+      <thead><tr><th>Propriété</th><th>Valeurs principales</th><th>Rôle</th></tr></thead>
+      <tbody>
+        <tr><td><code>flex-direction</code></td><td><code>row</code> · <code>column</code> · <code>row-reverse</code> · <code>column-reverse</code></td><td>Direction de l'axe principal</td></tr>
+        <tr><td><code>justify-content</code></td><td><code>flex-start</code> · <code>flex-end</code> · <code>center</code> · <code>space-between</code> · <code>space-around</code> · <code>space-evenly</code></td><td>Alignement sur l'axe principal ↔️</td></tr>
+        <tr><td><code>align-items</code></td><td><code>stretch</code> · <code>flex-start</code> · <code>flex-end</code> · <code>center</code> · <code>baseline</code></td><td>Alignement sur l'axe secondaire ↕️</td></tr>
+        <tr><td><code>flex-wrap</code></td><td><code>nowrap</code> · <code>wrap</code> · <code>wrap-reverse</code></td><td>Retour à la ligne si débordement</td></tr>
+        <tr><td><code>gap</code></td><td><code>10px</code> · <code>1rem</code></td><td>Espace entre les items</td></tr>
+        <tr><td><code>align-content</code></td><td>Mêmes valeurs que justify-content</td><td>Alignement des lignes (si wrap)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>🧩 Propriétés des ITEMS</h2>
+    <table class="tbl">
+      <thead><tr><th>Propriété</th><th>Valeurs</th><th>Rôle</th></tr></thead>
+      <tbody>
+        <tr><td><code>flex-grow</code></td><td><code>0</code> (défaut) · <code>1</code> · <code>2</code>...</td><td>Prend l'espace disponible en proportion</td></tr>
+        <tr><td><code>flex-shrink</code></td><td><code>1</code> (défaut) · <code>0</code>...</td><td>Rétrécit si pas assez de place</td></tr>
+        <tr><td><code>flex-basis</code></td><td><code>auto</code> · <code>200px</code> · <code>30%</code></td><td>Taille de base de l'item</td></tr>
+        <tr><td><code>flex</code></td><td><code>1</code> = grow:1 shrink:1 basis:0</td><td>Raccourci des 3 au-dessus</td></tr>
+        <tr><td><code>align-self</code></td><td>Mêmes valeurs que align-items</td><td>Surcharge align-items pour cet item</td></tr>
+        <tr><td><code>order</code></td><td><code>0</code> (défaut) · <code>1</code> · <code>-1</code>...</td><td>Change l'ordre d'affichage</td></tr>
+      </tbody>
+    </table>
+    <div class="code" style="margin-top:12px;"><span class="cmt">/* Exemple concret : 3 colonnes égales */</span>
+<span class="sel">.conteneur</span> {
+  <span class="prop">display</span>: <span class="val">flex</span>;
+  <span class="prop">gap</span>: <span class="num">16px</span>;
+}
+<span class="sel">.colonne</span> {
+  <span class="prop">flex</span>: <span class="num">1</span>; <span class="cmt">/* chaque colonne prend 1/3 de l'espace */</span>
+}</div>
+  </div>
+
+</div><!-- /flexbox -->
+
+
+<!-- ============================================================ SIMULATEUR -->
+<div id="tab-simulateur" class="tab-panel">
+
+  <div class="card" style="padding:0;overflow:hidden;">
+    <div style="padding:18px 22px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+      <h2 style="margin:0;">🧪 Simulateur Flexbox</h2>
+      <span style="color:var(--text3);font-size:0.85rem;">Manipule les propriétés et vois le résultat en direct</span>
+    </div>
+
+    <!-- TABS conteneur / items -->
+    <div class="sim-tabs">
+      <button class="sim-tab active" onclick="switchSimTab('container', this)">📦 Conteneur</button>
+      <button class="sim-tab" onclick="switchSimTab('items', this)">🧩 Items</button>
+    </div>
+
+    <div style="padding:0 18px 18px;">
+
+      <!-- Panel CONTENEUR -->
+      <div id="sim-panel-container" class="sim-panel active">
+
+        <div class="ctrl-group">
+          <div class="ctrl-label">flex-direction</div>
+          <div class="ctrl-prop">Direction de l'axe principal</div>
+          <div class="btn-group" id="ctrl-direction">
+            <button class="prop-btn active" data-prop="direction" data-val="row" onclick="setProp(this)">row</button>
+            <button class="prop-btn" data-prop="direction" data-val="column" onclick="setProp(this)">column</button>
+            <button class="prop-btn" data-prop="direction" data-val="row-reverse" onclick="setProp(this)">row-reverse</button>
+            <button class="prop-btn" data-prop="direction" data-val="column-reverse" onclick="setProp(this)">column-reverse</button>
+          </div>
+        </div>
+
+        <div class="ctrl-group">
+          <div class="ctrl-label">justify-content</div>
+          <div class="ctrl-prop">Axe principal ↔️</div>
+          <div class="btn-group" id="ctrl-justify">
+            <button class="prop-btn active" data-prop="justify" data-val="flex-start" onclick="setProp(this)">flex-start</button>
+            <button class="prop-btn" data-prop="justify" data-val="flex-end" onclick="setProp(this)">flex-end</button>
+            <button class="prop-btn" data-prop="justify" data-val="center" onclick="setProp(this)">center</button>
+            <button class="prop-btn" data-prop="justify" data-val="space-between" onclick="setProp(this)">space-between</button>
+            <button class="prop-btn" data-prop="justify" data-val="space-around" onclick="setProp(this)">space-around</button>
+            <button class="prop-btn" data-prop="justify" data-val="space-evenly" onclick="setProp(this)">space-evenly</button>
+          </div>
+        </div>
+
+        <div class="ctrl-group">
+          <div class="ctrl-label">align-items</div>
+          <div class="ctrl-prop">Axe secondaire ↕️</div>
+          <div class="btn-group" id="ctrl-align">
+            <button class="prop-btn active" data-prop="align" data-val="stretch" onclick="setProp(this)">stretch</button>
+            <button class="prop-btn" data-prop="align" data-val="flex-start" onclick="setProp(this)">flex-start</button>
+            <button class="prop-btn" data-prop="align" data-val="flex-end" onclick="setProp(this)">flex-end</button>
+            <button class="prop-btn" data-prop="align" data-val="center" onclick="setProp(this)">center</button>
+            <button class="prop-btn" data-prop="align" data-val="baseline" onclick="setProp(this)">baseline</button>
+          </div>
+        </div>
+
+        <div class="ctrl-group">
+          <div class="ctrl-label">flex-wrap</div>
+          <div class="ctrl-prop">Retour à la ligne</div>
+          <div class="btn-group" id="ctrl-wrap">
+            <button class="prop-btn active" data-prop="wrap" data-val="nowrap" onclick="setProp(this)">nowrap</button>
+            <button class="prop-btn" data-prop="wrap" data-val="wrap" onclick="setProp(this)">wrap</button>
+            <button class="prop-btn" data-prop="wrap" data-val="wrap-reverse" onclick="setProp(this)">wrap-reverse</button>
+          </div>
+        </div>
+
+        <div class="ctrl-group">
+          <div class="ctrl-label">gap</div>
+          <div class="ctrl-prop">Espace entre les items</div>
+          <div class="btn-group" id="ctrl-gap">
+            <button class="prop-btn" data-prop="gap" data-val="0px" onclick="setProp(this)">0</button>
+            <button class="prop-btn active" data-prop="gap" data-val="8px" onclick="setProp(this)">8px</button>
+            <button class="prop-btn" data-prop="gap" data-val="16px" onclick="setProp(this)">16px</button>
+            <button class="prop-btn" data-prop="gap" data-val="24px" onclick="setProp(this)">24px</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Panel ITEMS -->
+      <div id="sim-panel-items" class="sim-panel">
+
+        <div class="ctrl-group">
+          <div class="ctrl-label">Nombre d'items</div>
+          <div class="item-controls">
+            <button class="item-ctrl-btn" onclick="removeItem()">− Retirer</button>
+            <span class="item-count-display" id="item-count">4</span>
+            <button class="item-ctrl-btn" onclick="addItem()">+ Ajouter</button>
+          </div>
+        </div>
+
+        <div class="ctrl-group">
+          <div class="ctrl-label">Tailles variées</div>
+          <div class="ctrl-prop">Simule des items de tailles différentes</div>
+          <div class="btn-group" id="ctrl-sizes">
+            <button class="prop-btn active" data-prop="sizes" data-val="equal" onclick="setProp(this)">Égales</button>
+            <button class="prop-btn" data-prop="sizes" data-val="varied" onclick="setProp(this)">Variées</button>
+          </div>
+        </div>
+
+        <div class="ctrl-group">
+          <div class="ctrl-label">flex-grow des items</div>
+          <div class="ctrl-prop">Comment les items grandissent</div>
+          <div class="btn-group" id="ctrl-grow">
+            <button class="prop-btn active" data-prop="grow" data-val="0" onclick="setProp(this)">0 (fixe)</button>
+            <button class="prop-btn" data-prop="grow" data-val="1" onclick="setProp(this)">1 (égal)</button>
+          </div>
+        </div>
+
+        <div class="ctrl-group">
+          <div class="ctrl-label">align-self item 1 (bleu)</div>
+          <div class="ctrl-prop">Surcharge align-items pour l'item 1</div>
+          <div class="btn-group" id="ctrl-self">
+            <button class="prop-btn active" data-prop="self" data-val="auto" onclick="setProp(this)">auto</button>
+            <button class="prop-btn" data-prop="self" data-val="flex-start" onclick="setProp(this)">flex-start</button>
+            <button class="prop-btn" data-prop="self" data-val="flex-end" onclick="setProp(this)">flex-end</button>
+            <button class="prop-btn" data-prop="self" data-val="center" onclick="setProp(this)">center</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div><!-- /padding wrapper -->
+
+    <!-- Zone de prévisualisation -->
+    <div class="sim-preview-area" style="border-top:1px solid var(--border);background:var(--bg);">
+      <div class="sim-preview-label">Résultat en direct</div>
+      <div class="flex-container" id="flex-preview">
+        <div class="flex-item md">1</div>
+        <div class="flex-item md">2</div>
+        <div class="flex-item md">3</div>
+        <div class="flex-item md">4</div>
+      </div>
+
+      <!-- Légende -->
+      <div class="sim-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#2563eb;"></div> Item 1</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#10b981;"></div> Item 2</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#f59e0b;"></div> Item 3</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#ec4899;"></div> Item 4</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#a855f7;"></div> Item 5</div>
+      </div>
+
+      <!-- Code généré -->
+      <div class="sim-code-block" id="sim-code"></div>
+    </div>
+
+  </div>
+
+</div><!-- /simulateur -->
+
+
+<!-- ============================================================ TEXTE -->
+<div id="tab-texte" class="tab-panel">
+
+  <div class="card">
+    <h2>✏️ Propriétés typographiques essentielles</h2>
+    <div class="code"><span class="sel">p</span> {
+  <span class="prop">font-family</span>: <span class="val">'Segoe UI'</span>, <span class="val">sans-serif</span>;
+  <span class="prop">font-size</span>: <span class="num">1rem</span>;         <span class="cmt">/* taille */</span>
+  <span class="prop">font-weight</span>: <span class="num">400</span>;         <span class="cmt">/* épaisseur : 100 à 900 */</span>
+  <span class="prop">font-style</span>: <span class="val">italic</span>;      <span class="cmt">/* italique */</span>
+  <span class="prop">line-height</span>: <span class="num">1.6</span>;         <span class="cmt">/* interligne (sans unité = recommandé) */</span>
+  <span class="prop">letter-spacing</span>: <span class="num">0.05em</span>;  <span class="cmt">/* espacement des lettres */</span>
+  <span class="prop">text-align</span>: <span class="val">left</span>;        <span class="cmt">/* left | center | right | justify */</span>
+  <span class="prop">text-decoration</span>: <span class="val">none</span>;   <span class="cmt">/* none | underline | line-through */</span>
+  <span class="prop">text-transform</span>: <span class="val">uppercase</span>;<span class="cmt">/* uppercase | lowercase | capitalize */</span>
+}</div>
+  </div>
+
+  <div class="card">
+    <h2>🌐 Importer une police Google Fonts</h2>
+    <div class="code"><span class="cmt">&lt;!-- Dans le &lt;head&gt; HTML --&gt;</span>
+&lt;link href="https://fonts.googleapis.com/css2?
+  family=Roboto:wght@400;700&display=swap"
+  rel="stylesheet"&gt;
+
+<span class="cmt">/* Dans le CSS */</span>
+<span class="sel">body</span> {
+  <span class="prop">font-family</span>: <span class="val">'Roboto'</span>, <span class="val">sans-serif</span>;
+}</div>
+  </div>
+
+  <div class="card">
+    <h2>✨ Effets de texte</h2>
+    <div class="code"><span class="sel">.ombre</span>    { <span class="prop">text-shadow</span>: <span class="num">2px</span> <span class="num">2px</span> <span class="num">4px</span> <span class="val">rgba</span>(<span class="num">0</span>,<span class="num">0</span>,<span class="num">0</span>,<span class="num">0.3</span>); }
+<span class="sel">.coupe</span>    { <span class="prop">white-space</span>: <span class="val">nowrap</span>; <span class="prop">overflow</span>: <span class="val">hidden</span>; <span class="prop">text-overflow</span>: <span class="val">ellipsis</span>; }
+<span class="sel">.degrade</span>  {
+  <span class="prop">background</span>: <span class="val">linear-gradient</span>(<span class="num">90deg</span>, <span class="num">#3b82f6</span>, <span class="num">#ec4899</span>);
+  <span class="prop">-webkit-background-clip</span>: <span class="val">text</span>;
+  <span class="prop">-webkit-text-fill-color</span>: <span class="val">transparent</span>;
+}</div>
+  </div>
+
+</div><!-- /texte -->
+
+
+<!-- ============================================================ RESPONSIVE -->
+<div id="tab-responsive" class="tab-panel">
+
+  <div class="card">
+    <h2>📱 Media Queries — S'adapter à l'écran</h2>
+    <div class="code"><span class="cmt">/* Mobile first — on commence par le mobile */</span>
+<span class="sel">.grille</span> {
+  <span class="prop">display</span>: <span class="val">flex</span>;
+  <span class="prop">flex-direction</span>: <span class="val">column</span>; <span class="cmt">/* 1 colonne sur mobile */</span>
+}
+
+<span class="cmt">/* Tablette — à partir de 768px */</span>
+<span class="sel">@media</span> (<span class="prop">min-width</span>: <span class="num">768px</span>) {
+  <span class="sel">.grille</span> {
+    <span class="prop">flex-direction</span>: <span class="val">row</span>; <span class="cmt">/* 2 colonnes sur tablette */</span>
+  }
+}
+
+<span class="cmt">/* Desktop — à partir de 1024px */</span>
+<span class="sel">@media</span> (<span class="prop">min-width</span>: <span class="num">1024px</span>) {
+  <span class="sel">.grille</span> {
+    <span class="prop">gap</span>: <span class="num">32px</span>;
+  }
+}</div>
+  </div>
+
+  <div class="card">
+    <h2>📐 Breakpoints courants</h2>
+    <table class="tbl">
+      <thead><tr><th>Taille</th><th>min-width</th><th>Appareils</th></tr></thead>
+      <tbody>
+        <tr><td>Mobile</td><td>—</td><td>Smartphones (base)</td></tr>
+        <tr><td>Petit</td><td><code>480px</code></td><td>Grands smartphones</td></tr>
+        <tr><td>Tablette</td><td><code>768px</code></td><td>Tablettes portrait</td></tr>
+        <tr><td>Desktop</td><td><code>1024px</code></td><td>Ordinateurs portables</td></tr>
+        <tr><td>Large</td><td><code>1280px</code></td><td>Grands écrans</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>🖼️ Images responsives</h2>
+    <div class="code"><span class="cmt">/* Image qui ne dépasse jamais son conteneur */</span>
+<span class="sel">img</span> {
+  <span class="prop">max-width</span>: <span class="num">100%</span>;
+  <span class="prop">height</span>: <span class="val">auto</span>;
+}
+
+<span class="cmt">/* Image de fond responsive */</span>
+<span class="sel">.hero</span> {
+  <span class="prop">background-image</span>: <span class="val">url</span>(<span class="val">'image.jpg'</span>);
+  <span class="prop">background-size</span>: <span class="val">cover</span>;
+  <span class="prop">background-position</span>: <span class="val">center</span>;
+}</div>
+  </div>
+
+</div><!-- /responsive -->
+
+</main>
+
+<footer>CSS Pense-Bête · Cours personnalisé</footer>
+
+<script>
+/* ===== NAVIGATION TABS ===== */
+function showTab(id, btn) {
+  var panels = document.querySelectorAll('.tab-panel');
+  var btns = document.querySelectorAll('.tab-btn');
+  for (var i = 0; i < panels.length; i++) panels[i].classList.remove('active');
+  for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+/* ===== SIMULATEUR FLEXBOX ===== */
+var state = {
+  direction: 'row',
+  justify:   'flex-start',
+  align:     'stretch',
+  wrap:      'nowrap',
+  gap:       '8px',
+  sizes:     'equal',
+  grow:      '0',
+  self:      'auto'
+};
+
+var itemCount = 4;
+var sizeClasses = ['sm', 'md', 'lg', 'xl', 'md'];
+
+function switchSimTab(tab, btn) {
+  var panels = document.querySelectorAll('.sim-panel');
+  var tabs = document.querySelectorAll('.sim-tab');
+  for (var i = 0; i < panels.length; i++) panels[i].classList.remove('active');
+  for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
+  document.getElementById('sim-panel-' + tab).classList.add('active');
+  btn.classList.add('active');
+}
+
+function setProp(btn) {
+  var prop = btn.dataset.prop;
+  var val  = btn.dataset.val;
+  // Désactive les autres boutons du même groupe
+  var siblings = btn.parentElement.querySelectorAll('.prop-btn');
+  for (var i = 0; i < siblings.length; i++) siblings[i].classList.remove('active');
+  btn.classList.add('active');
+  state[prop] = val;
+  applyState();
+}
+
+function applyState() {
+  var c = document.getElementById('flex-preview');
+  c.style.flexDirection   = state.direction;
+  c.style.justifyContent  = state.justify;
+  c.style.alignItems      = state.align;
+  c.style.flexWrap        = state.wrap;
+  c.style.gap             = state.gap;
+
+  // Appliquer aux items
+  var items = c.children;
+  for (var i = 0; i < items.length; i++) {
+    // Taille
+    items[i].className = 'flex-item';
+    if (state.sizes === 'varied') {
+      items[i].classList.add(sizeClasses[i % sizeClasses.length]);
+    } else {
+      items[i].classList.add('md');
+    }
+    // grow
+    items[i].style.flexGrow = state.grow;
+    // align-self pour le premier
+    items[i].style.alignSelf = (i === 0) ? state.self : 'auto';
+  }
+
+  updateCode();
+}
+
+function updateCode() {
+  var lines = ['.conteneur {'];
+  lines.push('  display: flex;');
+  if (state.direction !== 'row')       lines.push('  flex-direction: ' + state.direction + ';');
+  if (state.justify !== 'flex-start')  lines.push('  justify-content: ' + state.justify + ';');
+  if (state.align !== 'stretch')       lines.push('  align-items: ' + state.align + ';');
+  if (state.wrap !== 'nowrap')         lines.push('  flex-wrap: ' + state.wrap + ';');
+  if (state.gap !== '0px')             lines.push('  gap: ' + state.gap + ';');
+  lines.push('}');
+
+  var itemLines = [];
+  if (state.grow !== '0') {
+    itemLines.push('');
+    itemLines.push('.item {');
+    itemLines.push('  flex-grow: ' + state.grow + ';');
+    itemLines.push('}');
+  }
+  if (state.self !== 'auto') {
+    if (itemLines.length === 0) itemLines.push('');
+    itemLines.push('');
+    itemLines.push('.item-1 {');
+    itemLines.push('  align-self: ' + state.self + ';');
+    itemLines.push('}');
+  }
+
+  var allLines = lines.concat(itemLines);
+  // Coloriser simplement
+  var colorized = allLines.map(function(l) {
+    return l
+      .replace(/(display|flex-direction|justify-content|align-items|flex-wrap|gap|flex-grow|align-self)/g,
+        '<span style="color:#7dd3fc">$1</span>')
+      .replace(/:\s([^;{]+)/g, function(m, v) {
+        return ': <span style="color:#86efac">' + v + '</span>';
+      })
+      .replace(/\.conteneur|\.item[^-]|\.item-1/g, '<span style="color:#fca5a5">$&</span>')
+      .replace(/\{/g, '{').replace(/\}/g, '}');
+  });
+
+  document.getElementById('sim-code').innerHTML = colorized.join('\n');
+}
+
+function addItem() {
+  if (itemCount >= 5) return;
+  itemCount++;
+  document.getElementById('item-count').textContent = itemCount;
+  var c = document.getElementById('flex-preview');
+  var item = document.createElement('div');
+  item.className = 'flex-item md';
+  item.textContent = itemCount;
+  item.style.flexGrow = state.grow;
+  c.appendChild(item);
+  applyState();
+}
+
+function removeItem() {
+  if (itemCount <= 1) return;
+  itemCount--;
+  document.getElementById('item-count').textContent = itemCount;
+  var c = document.getElementById('flex-preview');
+  c.removeChild(c.lastElementChild);
+  applyState();
+}
+
+// Init
+applyState();
+
+/* ===== PWA ===== */
+if ('serviceWorker' in navigator) {
+  var swCode = [
+    "var C='css-ref-v1';",
+    "var F=['.','index.html'];",
+    "self.addEventListener('install',function(e){e.waitUntil(caches.open(C).then(function(c){return c.addAll(F);}));});",
+    "self.addEventListener('fetch',function(e){e.respondWith(caches.match(e.request).then(function(r){return r||fetch(e.request);}));});"
+  ].join('\n');
+  var blob = new Blob([swCode], {type:'application/javascript'});
+  navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(function(){});
+}
+
+var manifest = {
+  name: 'CSS Pense-Bete', short_name: 'CSS Ref',
+  display: 'standalone', background_color: '#0a0e1a', theme_color: '#2563eb',
+  start_url: '.', icons: []
+};
+var ml = document.createElement('link');
+ml.rel = 'manifest';
+ml.href = 'data:application/json,' + encodeURIComponent(JSON.stringify(manifest));
+document.head.appendChild(ml);
+</script>
+</body>
+</html>
