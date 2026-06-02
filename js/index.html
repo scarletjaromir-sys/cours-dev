@@ -1259,156 +1259,237 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
 <div id="tab-outils" class="tab-panel">
 
   <div class="card">
-    <h2>🔧 Méthodes vs Propriétés — la différence clé</h2>
-    <p style="color:var(--text2);margin-bottom:16px">En JS, les outils qu'on utilise sur les éléments HTML sont soit des <strong style="color:var(--cyan)">méthodes</strong> (des actions), soit des <strong style="color:var(--yellow)">propriétés</strong> (des caractéristiques). La différence se voit au premier coup d'œil.</p>
-    <div class="vs-grid">
-      <div class="vs-box" style="background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.3);">
-        <div class="vs-label" style="color:var(--cyan)">🔵 Méthodes — des ACTIONS</div>
-        <p style="font-size:0.88rem;color:var(--text2);margin-bottom:10px">Elles <strong>font quelque chose</strong>. On les reconnaît aux <strong style="color:var(--cyan)">parenthèses ()</strong> au bout.</p>
-        <div class="code"><span class="vr">el</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, ...);
-<span class="vr">el</span>.<span class="fn">querySelector</span>(<span class="str">".btn"</span>);
-<span class="vr">el</span>.<span class="fn">classList</span>.<span class="fn">add</span>(<span class="str">"actif"</span>);
-<span class="vr">el</span>.<span class="fn">appendChild</span>(<span class="vr">enfant</span>);
-<span class="fn">document</span>.<span class="fn">createElement</span>(<span class="str">"div"</span>);</div>
+    <h2>🎯 Je veux attraper un élément HTML</h2>
+    <div class="autopsy">
+      <div class="autoline">
+        <div class="autoline-code"><span class="fn">document</span>.<span class="fn">querySelector</span>(<span class="str">"#monId"</span>)
+<span class="fn">document</span>.<span class="fn">querySelector</span>(<span class="str">".maClasse"</span>)
+<span class="fn">document</span>.<span class="fn">querySelector</span>(<span class="str">"h3"</span>)</div>
+        <div class="autoline-desc"><span class="badge">méthode</span> <span class="badge">étape 1</span> Retourne <strong>le premier</strong> élément qui correspond au sélecteur CSS.<br><span style="color:var(--text3)"><code>#</code> pour un id · <code>.</code> pour une classe · nom seul pour une balise</span></div>
       </div>
-      <div class="vs-box" style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.3);">
-        <div class="vs-label" style="color:var(--yellow)">🟡 Propriétés — des CARACTÉRISTIQUES</div>
-        <p style="font-size:0.88rem;color:var(--text2);margin-bottom:10px">Elles <strong>représentent un état</strong>. Pas de parenthèses. On utilise <code>=</code> pour les modifier.</p>
-        <div class="code"><span class="vr">el</span>.<span class="fn">textContent</span> <span class="op">=</span> <span class="str">"Bonjour"</span>;
-<span class="vr">el</span>.<span class="fn">innerHTML</span> <span class="op">=</span> <span class="str">"&lt;b&gt;Gras&lt;/b&gt;"</span>;
-<span class="vr">el</span>.<span class="fn">style</span>.<span class="fn">color</span> <span class="op">=</span> <span class="str">"red"</span>;
-<span class="vr">input</span>.<span class="fn">value</span>
-<span class="vr">tableau</span>.<span class="fn">length</span></div>
+      <div class="autoline">
+        <div class="autoline-code"><span class="fn">document</span>.<span class="fn">querySelectorAll</span>(<span class="str">".box"</span>)</div>
+        <div class="autoline-desc"><span class="badge">méthode</span> <span class="badge">étape 1</span> Retourne <strong>tous</strong> les éléments correspondants. Utilise <code>.forEach()</code> pour les parcourir un par un.</div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span class="fn">document</span>.<span class="fn">getElementById</span>(<span class="str">"monId"</span>)</div>
+        <div class="autoline-desc"><span class="badge">méthode</span> <span class="badge">étape 1</span> Variante ancienne — cible un élément par son <code>id</code> sans le <code>#</code>. Même résultat que <code>querySelector("#monId")</code>.</div>
       </div>
     </div>
   </div>
 
   <div class="card">
-    <h2>📘 Les méthodes essentielles</h2>
-
-    <h3>Sélectionner des éléments</h3>
+    <h2>✏️ Je veux changer le texte ou le HTML affiché</h2>
     <div class="autopsy">
       <div class="autoline">
-        <div class="autoline-code"><span class="fn">document</span>.<span class="fn">querySelector</span>(<span class="str">"#btn"</span>)</div>
-        <div class="autoline-desc"><span class="badge">méthode</span> Retourne <strong>le premier</strong> élément correspondant au sélecteur CSS. Retourne <code>null</code> si rien trouvé.<br><span style="color:var(--text3)">→ Étape 1 de la méthode universelle</span></div>
+        <div class="autoline-code"><span class="vr">el</span>.<span class="fn">textContent</span> <span class="op">=</span> <span class="vr">maVariable</span>
+<span class="vr">el</span>.<span class="fn">textContent</span> <span class="op">=</span> <span class="str">"du texte"</span></div>
+        <div class="autoline-desc"><span class="badge">propriété</span> <span class="badge">étape 3</span> Remplace le texte brut de l'élément.<br><span style="color:var(--red);font-size:0.85em">❌ <code>el.textContent = "count"</code> → affiche le mot<br>✅ <code>el.textContent = count</code> → affiche la valeur</span></div>
       </div>
       <div class="autoline">
-        <div class="autoline-code"><span class="fn">document</span>.<span class="fn">querySelectorAll</span>(<span class="str">".carte"</span>)</div>
-        <div class="autoline-desc"><span class="badge">méthode</span> Retourne <strong>tous</strong> les éléments correspondants, sous forme de liste. Utilise <code>forEach</code> pour les parcourir.</div>
+        <div class="autoline-code"><span class="vr">el</span>.<span class="fn">innerHTML</span> <span class="op">=</span> <span class="str">"&lt;b&gt;Texte&lt;/b&gt;"</span>
+<span class="vr">el</span>.<span class="fn">innerHTML</span> <span class="op">+=</span> <span class="str">`&lt;h3&gt;Nouveau&lt;/h3&gt;`</span></div>
+        <div class="autoline-desc"><span class="badge">propriété</span> <span class="badge">étape 3</span> Injecte du HTML à l'intérieur de l'élément. Le <code>+=</code> <strong>ajoute</strong> sans effacer le contenu existant.</div>
       </div>
     </div>
+  </div>
 
-    <h3 style="margin-top:16px">Écouter les interactions</h3>
+  <div class="card">
+    <h2>🎨 Je veux changer le style CSS</h2>
     <div class="autopsy">
       <div class="autoline">
-        <div class="autoline-code"><span class="vr">el</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, () <span class="op">=></span> { })</div>
-        <div class="autoline-desc"><span class="badge">méthode</span> Met une oreille sur l'élément. Quand l'événement se produit, la fonction fléchée s'exécute.<br><span style="color:var(--text3)">→ Étape 4 de la méthode universelle</span></div>
+        <div class="autoline-code"><span class="vr">el</span>.<span class="fn">style</span>.<span class="fn">color</span> <span class="op">=</span> <span class="str">"red"</span>
+<span class="vr">el</span>.<span class="fn">style</span>.<span class="fn">background</span> <span class="op">=</span> <span class="str">"pink"</span>
+<span class="vr">el</span>.<span class="fn">style</span>.<span class="fn">border</span> <span class="op">=</span> <span class="str">"2px solid teal"</span></div>
+        <div class="autoline-desc"><span class="badge">propriété</span> <span class="badge">étape 3</span> Modifie un style CSS en ligne. La valeur est toujours une <strong>string entre guillemets</strong>.</div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span class="vr">el</span>.<span class="fn">style</span>.<span class="fn">width</span> <span class="op">=</span> <span class="vr">valeur</span> <span class="op">+</span> <span class="str">"px"</span>
+<span class="vr">el</span>.<span class="fn">style</span>.<span class="fn">top</span> <span class="op">=</span> <span class="vr">e</span>.<span class="fn">pageY</span> <span class="op">+</span> <span class="str">"px"</span>
+<span class="vr">el</span>.<span class="fn">style</span>.<span class="fn">left</span> <span class="op">=</span> <span class="vr">e</span>.<span class="fn">pageX</span> <span class="op">+</span> <span class="str">"px"</span></div>
+        <div class="autoline-desc"><span class="badge">propriété</span> <span class="badge">étape 3</span> Pour les dimensions et positions : le nombre vient d'une variable (sans guillemets) et on lui colle l'unité <code>"px"</code> avec <code>+</code>.</div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span class="vr">el</span>.<span class="fn">style</span>.<span class="fn">transform</span> <span class="op">=</span> <span class="str">"scale(2)"</span>
+<span class="vr">el</span>.<span class="fn">style</span>.<span class="fn">transform</span> <span class="op">=</span> <span class="str">"rotate(2deg)"</span>
+<span class="vr">el</span>.<span class="fn">style</span>.<span class="fn">borderRadius</span> <span class="op">=</span> <span class="str">"50%"</span></div>
+        <div class="autoline-desc"><span class="badge">propriété</span> <span class="badge">étape 3</span> Les propriétés CSS composées (avec tiret) s'écrivent en camelCase en JS : <code>border-radius</code> → <code>borderRadius</code>, <code>font-size</code> → <code>fontSize</code>.</div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span class="vr">el</span>.<span class="fn">style</span>.<span class="fn">setProperty</span>(<span class="str">"--x"</span>, <span class="vr">e</span>.<span class="fn">layerX</span> <span class="op">+</span> <span class="str">"px"</span>)</div>
+        <div class="autoline-desc"><span class="badge">méthode</span> <span class="badge">étape 3</span> Modifie une <strong>variable CSS custom</strong> (<code>--x</code>, <code>--couleur</code>...). Plus puissant que <code>style.color</code> car ça peut affecter tous les enfants qui utilisent cette variable.</div>
       </div>
     </div>
+  </div>
 
-    <h3 style="margin-top:16px">Modifier les classes CSS</h3>
+  <div class="card">
+    <h2>🏷️ Je veux ajouter / retirer / basculer une classe CSS</h2>
     <div class="autopsy">
       <div class="autoline">
         <div class="autoline-code"><span class="vr">el</span>.<span class="fn">classList</span>.<span class="fn">add</span>(<span class="str">"actif"</span>)</div>
-        <div class="autoline-desc"><span class="badge">méthode</span> Ajoute la classe CSS <code>"actif"</code> à l'élément. Ne remplace pas les classes existantes.</div>
+        <div class="autoline-desc"><span class="badge">méthode</span> <span class="badge">étape 3</span> Ajoute la classe. Ne touche pas aux classes déjà présentes.</div>
       </div>
       <div class="autoline">
         <div class="autoline-code"><span class="vr">el</span>.<span class="fn">classList</span>.<span class="fn">remove</span>(<span class="str">"actif"</span>)</div>
-        <div class="autoline-desc"><span class="badge">méthode</span> Retire la classe <code>"actif"</code>.</div>
+        <div class="autoline-desc"><span class="badge">méthode</span> <span class="badge">étape 3</span> Retire la classe.</div>
       </div>
       <div class="autoline">
         <div class="autoline-code"><span class="vr">el</span>.<span class="fn">classList</span>.<span class="fn">toggle</span>(<span class="str">"dark"</span>)</div>
-        <div class="autoline-desc"><span class="badge">méthode</span> Si la classe est là → la retire. Si elle n'est pas là → l'ajoute. Parfait pour les toggles thème sombre.</div>
-      </div>
-    </div>
-
-    <h3 style="margin-top:16px">Créer et insérer des éléments</h3>
-    <div class="autopsy">
-      <div class="autoline">
-        <div class="autoline-code"><span class="fn">document</span>.<span class="fn">createElement</span>(<span class="str">"div"</span>)</div>
-        <div class="autoline-desc"><span class="badge">méthode</span> Crée une nouvelle balise HTML <strong>en mémoire</strong> — elle n'est pas encore visible dans la page. Il faut ensuite la configurer et l'insérer.</div>
+        <div class="autoline-desc"><span class="badge">méthode</span> <span class="badge">étape 3</span> Si la classe est là → la retire. Si elle n'est pas là → l'ajoute. <strong>Parfait pour les boutons on/off.</strong></div>
       </div>
       <div class="autoline">
-        <div class="autoline-code"><span class="vr">parent</span>.<span class="fn">appendChild</span>(<span class="vr">enfant</span>)</div>
-        <div class="autoline-desc"><span class="badge">méthode</span> Insère <code>enfant</code> à la fin de <code>parent</code>. C'est seulement là que l'élément apparaît dans la page.</div>
+        <div class="autoline-code"><span class="vr">el</span>.<span class="fn">classList</span>.<span class="fn">contains</span>(<span class="str">"actif"</span>)</div>
+        <div class="autoline-desc"><span class="badge">méthode</span> Retourne <code>true</code> ou <code>false</code> — utile dans un <code>if</code> pour savoir si la classe est déjà présente.</div>
       </div>
     </div>
   </div>
 
   <div class="card">
-    <h2>📙 Les propriétés essentielles</h2>
-
-    <h3>Modifier le contenu</h3>
+    <h2>👂 Je veux réagir à une action utilisateur</h2>
     <div class="autopsy">
       <div class="autoline">
-        <div class="autoline-code"><span class="vr">el</span>.<span class="fn">textContent</span> <span class="op">=</span> <span class="vr">maVariable</span></div>
-        <div class="autoline-desc"><span class="badge">propriété</span> Remplace le texte affiché dans l'élément. <strong>Pas de guillemets</strong> autour d'une variable — sinon tu affiches le nom de la variable, pas sa valeur.<br><span style="color:var(--red);font-size:0.85em">❌ <code>el.textContent = "count"</code> → affiche le mot "count"<br>✅ <code>el.textContent = count</code> → affiche la valeur</span></div>
+        <div class="autoline-code"><span class="vr">el</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, () <span class="op">=></span> { })</div>
+        <div class="autoline-desc"><span class="badge">méthode</span> <span class="badge">étape 4</span> Met une oreille sur l'élément. Quand l'événement se produit, la fonction s'exécute.<br><span style="color:var(--text3)">Voir l'onglet ⚡ Événements pour la liste complète des événements disponibles.</span></div>
       </div>
       <div class="autoline">
-        <div class="autoline-code"><span class="vr">el</span>.<span class="fn">innerHTML</span> <span class="op">=</span> <span class="str">"&lt;b&gt;Texte&lt;/b&gt;"</span></div>
-        <div class="autoline-desc"><span class="badge">propriété</span> Injecte du HTML à l'intérieur de l'élément. Utilise des guillemets car c'est du texte HTML littéral.</div>
+        <div class="autoline-code"><span class="vr">boxes</span>.<span class="fn">forEach</span>((<span class="vr">box</span>) <span class="op">=></span> {
+  <span class="vr">box</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, () <span class="op">=></span> { });
+});</div>
+        <div class="autoline-desc"><span class="badge">méthode</span> <span class="badge">étape 4</span> Pour brancher le même événement sur <strong>plusieurs éléments</strong> : <code>querySelectorAll</code> + <code>forEach</code>.</div>
       </div>
     </div>
+  </div>
 
-    <h3 style="margin-top:16px">Modifier le style</h3>
+  <div class="card">
+    <h2>📦 Ce que contient l'objet <code>e</code></h2>
+    <p style="color:var(--text2);margin-bottom:14px">Quand tu ajoutes <code>(e)</code> dans ta fonction fléchée, JS te passe automatiquement toutes les infos sur l'action qui vient de se produire.</p>
     <div class="autopsy">
-      <div class="autoline">
-        <div class="autoline-code"><span class="vr">el</span>.<span class="fn">style</span>.<span class="fn">color</span> <span class="op">=</span> <span class="str">"red"</span></div>
-        <div class="autoline-desc"><span class="badge">propriété</span> Modifie une propriété CSS en ligne. La valeur est toujours une <strong>string</strong> → guillemets obligatoires.<br><span style="color:var(--text3)">Autres exemples : <code>style.fontSize</code> <code>style.width</code> <code>style.background</code></span></div>
-      </div>
-      <div class="autoline">
-        <div class="autoline-code"><span class="vr">el</span>.<span class="fn">style</span>.<span class="fn">width</span> <span class="op">=</span> <span class="vr">valeur</span> <span class="op">+</span> <span class="str">"px"</span></div>
-        <div class="autoline-desc"><span class="badge">propriété</span> Pour les dimensions, le nombre vient d'une variable (sans guillemets) et on lui colle l'unité <code>"px"</code> avec un <code>+</code>.</div>
-      </div>
-    </div>
-
-    <h3 style="margin-top:16px">Lire des données</h3>
-    <div class="autopsy">
-      <div class="autoline">
-        <div class="autoline-code"><span class="vr">input</span>.<span class="fn">value</span></div>
-        <div class="autoline-desc"><span class="badge">propriété</span> Contient ce que l'utilisateur a tapé dans un champ <code>&lt;input&gt;</code> ou la valeur d'un <code>&lt;input type="range"&gt;</code>.<br><span style="color:var(--text3)">Dans un événement : <code>e.target.value</code></span></div>
-      </div>
       <div class="autoline">
         <div class="autoline-code"><span class="vr">e</span>.<span class="fn">target</span></div>
-        <div class="autoline-desc"><span class="badge">propriété</span> Dans un événement, <code>e.target</code> est l'élément précisément sur lequel l'action s'est passée.</div>
+        <div class="autoline-desc"><span class="badge">propriété</span> <span class="badge">étape 4</span> L'élément précisément sur lequel l'action s'est passée.<br><span style="color:var(--text3)"><code>e.target.remove()</code> → supprime l'élément cliqué</span></div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span class="vr">e</span>.<span class="fn">target</span>.<span class="fn">value</span></div>
+        <div class="autoline-desc"><span class="badge">propriété</span> <span class="badge">étape 4</span> Texte tapé dans un <code>&lt;input&gt;</code> ou valeur d'un <code>&lt;select&gt;</code>. Utilisé avec les événements <code>"input"</code> et <code>"change"</code>.</div>
       </div>
       <div class="autoline">
         <div class="autoline-code"><span class="vr">e</span>.<span class="fn">key</span></div>
-        <div class="autoline-desc"><span class="badge">propriété</span> Dans un événement clavier, contient la touche pressée sous forme de string : <code>"a"</code>, <code>"Enter"</code>, <code>"ArrowLeft"</code>...</div>
+        <div class="autoline-desc"><span class="badge">propriété</span> <span class="badge">étape 4</span> La touche pressée : <code>"a"</code>, <code>"Enter"</code>, <code>"ArrowLeft"</code>... Utilisé avec <code>"keydown"</code> et <code>"keypress"</code>.</div>
       </div>
       <div class="autoline">
         <div class="autoline-code"><span class="vr">e</span>.<span class="fn">pageX</span> / <span class="vr">e</span>.<span class="fn">pageY</span></div>
-        <div class="autoline-desc"><span class="badge">propriété</span> Dans un événement souris (<code>click</code>, <code>mousemove</code>...), contient les coordonnées X et Y de la souris en pixels.</div>
+        <div class="autoline-desc"><span class="badge">propriété</span> <span class="badge">étape 4</span> Position de la souris en pixels depuis le coin haut-gauche de la page. Utilisé avec <code>"click"</code> et <code>"mousemove"</code>.</div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span class="vr">e</span>.<span class="fn">layerX</span> / <span class="vr">e</span>.<span class="fn">layerY</span></div>
+        <div class="autoline-desc"><span class="badge">propriété</span> <span class="badge">étape 4</span> Position de la souris <strong>dans l'élément parent</strong>. Utilisé pour <code>setProperty</code> avec des variables CSS.</div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span class="vr">e</span>.<span class="fn">preventDefault</span>()</div>
+        <div class="autoline-desc"><span class="badge">méthode</span> <span class="badge">étape 4</span> Bloque le comportement par défaut du navigateur. Indispensable sur <code>"submit"</code> pour éviter que la page se recharge.</div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span class="vr">e</span>.<span class="fn">stopPropagation</span>()</div>
+        <div class="autoline-desc"><span class="badge">méthode</span> Empêche l'événement de "remonter" vers les éléments parents. Si tu cliques sur un enfant, le parent ne reçoit pas le clic.</div>
       </div>
     </div>
   </div>
 
   <div class="card">
-    <h2>📊 Tableau récapitulatif complet</h2>
-    <table class="tbl">
-      <thead><tr><th>Outil</th><th>Type</th><th>Ce qu'il fait</th><th>Étape universelle</th></tr></thead>
-      <tbody>
-        <tr><td><code>document.querySelector()</code></td><td style="color:var(--cyan)">Méthode</td><td>Attrape un élément HTML</td><td>1 — Sélection</td></tr>
-        <tr><td><code>document.querySelectorAll()</code></td><td style="color:var(--cyan)">Méthode</td><td>Attrape tous les éléments correspondants</td><td>1 — Sélection</td></tr>
-        <tr><td><code>addEventListener()</code></td><td style="color:var(--cyan)">Méthode</td><td>Écoute un événement sur un élément</td><td>4 — Événement</td></tr>
-        <tr><td><code>classList.add()</code></td><td style="color:var(--cyan)">Méthode</td><td>Ajoute une classe CSS</td><td>3 — Affichage</td></tr>
-        <tr><td><code>classList.remove()</code></td><td style="color:var(--cyan)">Méthode</td><td>Retire une classe CSS</td><td>3 — Affichage</td></tr>
-        <tr><td><code>classList.toggle()</code></td><td style="color:var(--cyan)">Méthode</td><td>Bascule une classe CSS (ajoute/retire)</td><td>3 — Affichage</td></tr>
-        <tr><td><code>createElement()</code></td><td style="color:var(--cyan)">Méthode</td><td>Crée une balise HTML en mémoire</td><td>3 — Affichage</td></tr>
-        <tr><td><code>appendChild()</code></td><td style="color:var(--cyan)">Méthode</td><td>Insère un élément dans la page</td><td>3 — Affichage</td></tr>
-        <tr><td><code>e.preventDefault()</code></td><td style="color:var(--cyan)">Méthode</td><td>Bloque le comportement par défaut du navigateur</td><td>4 — Événement</td></tr>
-        <tr><td><code>textContent</code></td><td style="color:var(--yellow)">Propriété</td><td>Texte affiché dans l'élément (lecture/écriture)</td><td>3 — Affichage</td></tr>
-        <tr><td><code>innerHTML</code></td><td style="color:var(--yellow)">Propriété</td><td>HTML à l'intérieur de l'élément (lecture/écriture)</td><td>3 — Affichage</td></tr>
-        <tr><td><code>style.propriété</code></td><td style="color:var(--yellow)">Propriété</td><td>CSS inline de l'élément (width, color, fontSize...)</td><td>3 — Affichage</td></tr>
-        <tr><td><code>value</code></td><td style="color:var(--yellow)">Propriété</td><td>Valeur d'un input (texte tapé ou position curseur)</td><td>4 — Événement</td></tr>
-        <tr><td><code>e.target</code></td><td style="color:var(--yellow)">Propriété</td><td>L'élément précisément sur lequel l'action s'est passée</td><td>4 — Événement</td></tr>
-        <tr><td><code>e.key</code></td><td style="color:var(--yellow)">Propriété</td><td>Touche clavier pressée ("a", "Enter"...)</td><td>4 — Événement</td></tr>
-        <tr><td><code>e.pageX / e.pageY</code></td><td style="color:var(--yellow)">Propriété</td><td>Coordonnées de la souris au moment de l'événement</td><td>4 — Événement</td></tr>
-      </tbody>
-    </table>
+    <h2>🏗️ Je veux créer ou supprimer un élément HTML</h2>
+    <div class="autopsy">
+      <div class="autoline">
+        <div class="autoline-code"><span class="kw">const</span> <span class="vr">el</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">createElement</span>(<span class="str">"div"</span>)</div>
+        <div class="autoline-desc"><span class="badge">méthode</span> <span class="badge">étape 3</span> Crée une balise HTML <strong>en mémoire</strong> — pas encore visible. Il faut ensuite la configurer et l'insérer avec <code>appendChild</code>.</div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span class="vr">parent</span>.<span class="fn">appendChild</span>(<span class="vr">el</span>)</div>
+        <div class="autoline-desc"><span class="badge">méthode</span> <span class="badge">étape 3</span> Insère <code>el</code> à la fin de <code>parent</code>. C'est seulement là que l'élément apparaît dans la page.</div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span class="vr">el</span>.<span class="fn">remove</span>()
+<span class="vr">e</span>.<span class="fn">target</span>.<span class="fn">remove</span>()</div>
+        <div class="autoline-desc"><span class="badge">méthode</span> Supprime l'élément de la page. <code>e.target.remove()</code> supprime précisément l'élément sur lequel on a cliqué.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>⏱️ Je veux déclencher quelque chose dans le temps</h2>
+    <div class="autopsy">
+      <div class="autoline">
+        <div class="autoline-code"><span class="fn">setTimeout</span>(() <span class="op">=></span> { ... }, <span class="num">2000</span>)</div>
+        <div class="autoline-desc"><span class="badge">méthode</span> Exécute la fonction <strong>une seule fois</strong> après le délai en millisecondes (<code>2000</code> = 2 secondes).</div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span class="kw">const</span> <span class="vr">id</span> <span class="op">=</span> <span class="fn">setInterval</span>(() <span class="op">=></span> { ... }, <span class="num">1000</span>)
+<span class="fn">clearInterval</span>(<span class="vr">id</span>)</div>
+        <div class="autoline-desc"><span class="badge">méthode</span> Exécute la fonction <strong>en boucle</strong> toutes les X ms. Stocker le résultat dans une variable permet de l'arrêter avec <code>clearInterval</code>.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🪟 Je veux interagir avec la fenêtre et le navigateur</h2>
+    <div class="autopsy">
+      <div class="autoline">
+        <div class="autoline-code"><span class="fn">alert</span>(<span class="str">"Message"</span>)
+<span class="fn">confirm</span>(<span class="str">"Supprimer ?"</span>)
+<span class="fn">prompt</span>(<span class="str">"Ton nom ?"</span>)</div>
+        <div class="autoline-desc"><span class="badge">méthode</span> Dialogues natifs du navigateur. <code>confirm</code> retourne <code>true</code>/<code>false</code>, <code>prompt</code> retourne le texte saisi.</div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span class="vr">window</span>.<span class="fn">scrollY</span>
+<span class="vr">window</span>.<span class="fn">innerHeight</span></div>
+        <div class="autoline-desc"><span class="badge">propriété</span> Infos sur la fenêtre. <code>scrollY</code> = pixels scrollés depuis le haut. <code>innerHeight</code> = hauteur visible de la fenêtre.</div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span class="vr">location</span>.<span class="fn">href</span>
+<span class="vr">location</span>.<span class="fn">host</span>
+<span class="vr">location</span>.<span class="fn">pathname</span>
+<span class="vr">location</span>.<span class="fn">replace</span>(<span class="str">"url"</span>)</div>
+        <div class="autoline-desc"><span class="badge">propriété/méthode</span> Infos sur l'URL actuelle. <code>replace()</code> redirige vers une autre page.</div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span class="vr">navigator</span>.<span class="fn">userAgent</span></div>
+        <div class="autoline-desc"><span class="badge">propriété</span> Retourne une chaîne décrivant le navigateur et l'OS de l'utilisateur.</div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span class="vr">history</span>.<span class="fn">back</span>()
+<span class="vr">history</span>.<span class="fn">go</span>(<span class="op">-</span><span class="num">2</span>)</div>
+        <div class="autoline-desc"><span class="badge">méthode</span> Navigation dans l'historique du navigateur. <code>back()</code> = page précédente, <code>go(-2)</code> = deux pages en arrière.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🔢 Je veux récupérer la valeur d'un champ</h2>
+    <div class="autopsy">
+      <div class="autoline">
+        <div class="autoline-code"><span class="vr">input</span>.<span class="fn">value</span></div>
+        <div class="autoline-desc"><span class="badge">propriété</span> <span class="badge">étape 4</span> Texte tapé dans un <code>&lt;input type="text"&gt;</code> ou valeur d'un <code>&lt;input type="range"&gt;</code>. Toujours une <strong>string</strong> — utilise <code>parseInt()</code> si tu as besoin d'un nombre.</div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span class="vr">checkbox</span>.<span class="fn">checked</span></div>
+        <div class="autoline-desc"><span class="badge">propriété</span> <span class="badge">étape 4</span> Retourne <code>true</code> si la case est cochée, <code>false</code> sinon. Utilisé pour valider les CGV dans un formulaire.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🔊 Je veux jouer un son</h2>
+    <div class="autopsy">
+      <div class="autoline">
+        <div class="autoline-code"><span class="kw">const</span> <span class="vr">audio</span> <span class="op">=</span> <span class="kw">new</span> <span class="fn">Audio</span>();
+<span class="vr">audio</span>.<span class="fn">src</span> <span class="op">=</span> <span class="str">"son.mp3"</span>;
+<span class="vr">audio</span>.<span class="fn">play</span>();</div>
+        <div class="autoline-desc"><span class="badge">méthode</span> Crée un lecteur audio en mémoire, lui donne un fichier source, puis le lance. <code>play()</code> est la méthode qui déclenche la lecture.</div>
+      </div>
+    </div>
   </div>
 
 </div><!-- /outils -->
+
 
 
 <!-- ============================================================
