@@ -1122,6 +1122,51 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
     <div class="alert warn"><span class="alert-icon">⚠️</span><div><code>querySelector</code> renvoie <strong>le premier</strong> élément trouvé. Pour tous les récupérer, utilise <code>querySelectorAll</code> — qui renvoie une liste sur laquelle tu peux faire un <code>forEach</code>.</div></div>
   </div>
 
+
+  <div class="card">
+    <h2>🏗️ Créer du HTML en JS — Deux méthodes</h2>
+    <p style="color:var(--text2);margin-bottom:14px">Quand tu veux ajouter un élément dans la page depuis JS, tu as deux approches. Les deux fonctionnent, mais pas dans les mêmes situations.</p>
+
+    <div class="vs-grid">
+      <div class="vs-box" style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.3);">
+        <div class="vs-label" style="color:var(--blue)">École 1 — innerHTML (dans ton cours)</div>
+        <div class="code"><span class="vr">document</span>.<span class="fn">body</span>.<span class="fn">innerHTML</span> <span class="op">+=</span> <span class="str">`
+  &lt;div class='box'&gt;
+    &lt;h2&gt;Nouvelle Boite !&lt;/h2&gt;
+  &lt;/div&gt;
+`</span>;</div>
+        <p style="font-size:0.85rem;color:var(--text2);margin-top:10px">Tu écris du HTML sous forme de texte. Le navigateur le lit et l'injecte.<br><strong style="color:var(--yellow)">Avantage :</strong> facile à écrire, ressemble à du HTML normal.<br><strong style="color:var(--red)">Limite :</strong> le navigateur recharge tout le bloc à chaque fois.</p>
+      </div>
+      <div class="vs-box" style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.3);">
+        <div class="vs-label" style="color:var(--green)">École 2 — createElement (méthode propre)</div>
+        <div class="code"><span class="kw">const</span> <span class="vr">div</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">createElement</span>(<span class="str">"div"</span>);
+<span class="vr">div</span>.<span class="fn">style</span>.<span class="fn">background</span> <span class="op">=</span> <span class="str">"red"</span>;
+<span class="vr">div</span>.<span class="fn">style</span>.<span class="fn">width</span> <span class="op">=</span> <span class="str">"50px"</span>;
+<span class="vr">document</span>.<span class="fn">body</span>.<span class="fn">appendChild</span>(<span class="vr">div</span>);</div>
+        <p style="font-size:0.85rem;color:var(--text2);margin-top:10px">JS fabrique une vraie balise en mémoire, tu lui appliques des propriétés, puis tu l'insères.<br><strong style="color:var(--green)">Avantage :</strong> plus rapide pour la machine, propre, contrôle total.<br><strong style="color:var(--yellow)">Quand l'utiliser :</strong> éléments dynamiques, cercles, cartes générées à la volée.</p>
+      </div>
+    </div>
+
+    <h3>Le schéma mental de createElement</h3>
+    <div class="autopsy">
+      <div class="autoline">
+        <div class="autoline-code"><span class="kw">const</span> <span class="vr">el</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">createElement</span>(<span class="str">"div"</span>);</div>
+        <div class="autoline-desc"><span class="badge">1. Fabriquer</span> JS crée une <code>&lt;div&gt;</code> en mémoire. Elle n'est pas encore dans la page — elle n'existe que dans la variable <code>el</code>.</div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span class="vr">el</span>.<span class="fn">style</span>.<span class="fn">color</span> <span class="op">=</span> <span class="str">"red"</span>;
+<span class="vr">el</span>.<span class="fn">textContent</span> <span class="op">=</span> <span class="str">"Salut"</span>;</div>
+        <div class="autoline-desc"><span class="badge">2. Configurer</span> Tu lui appliques tout ce que tu veux — style, texte, classes, événements — avant de l'insérer.</div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span class="fn">document</span>.<span class="fn">body</span>.<span class="fn">appendChild</span>(<span class="vr">el</span>);</div>
+        <div class="autoline-desc"><span class="badge">3. Insérer</span> Seulement là, l'élément apparaît dans la page. <code>appendChild</code> l'ajoute à la fin du parent choisi.</div>
+      </div>
+    </div>
+
+    <div class="alert info"><span class="alert-icon">💡</span><div>Pour des projets simples, <code>innerHTML</code> suffit amplement. Utilise <code>createElement</code> quand tu génères beaucoup d'éléments à la volée ou quand tu veux attacher des événements à chaque élément créé.</div></div>
+  </div>
+
 </div><!-- /raisonnement -->
 
 </main>
