@@ -994,8 +994,8 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
       <div class="autoline">
         <div class="autoline-code"><span style="color:var(--purple2);font-weight:700;">1.</span> SÉLECTIONS</div>
         <div class="autoline-desc">
-          <div class="code"><span class="kw">const</span> <span class="vr">elements</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">querySelectorAll</span>(<span class="str">".maClasse"</span>);</div>
-          <code>querySelectorAll</code> au lieu de <code>querySelector</code> — retourne une liste.
+          <div class="code"><span class="kw">const</span> <span class="vr">elements</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">querySelectorAll</span>(<span class="str">".classeSelectionnee"</span>);</div>
+          <code>querySelectorAll</code> retourne une liste de tous les éléments correspondants.
         </div>
       </div>
       <div class="autoline">
@@ -1006,9 +1006,9 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
         <div class="autoline-code"><span style="color:var(--purple2);font-weight:700;">3.</span> AFFICHAGE</div>
         <div class="autoline-desc">
           <div class="code"><span class="kw">const</span> <span class="fn">updateDisplay</span> <span class="op">=</span> (<span class="vr">element</span>) <span class="op">=></span> {
-  <span class="vr">element</span>.<span class="fn">classList</span>.<span class="fn">toggle</span>(<span class="str">"maClasse"</span>);
+  <span class="vr">element</span>.<span class="fn">classList</span>.<span class="fn">toggle</span>(<span class="str">"classeAjouter"</span>);
 };</div>
-          La fonction reçoit l'élément en paramètre et agit sur lui.
+          La fonction reçoit l'élément en <strong>paramètre</strong> — elle agit sur celui qui a été cliqué, pas sur tous.
         </div>
       </div>
       <div class="autoline">
@@ -1019,7 +1019,7 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
     <span class="fn">updateDisplay</span>(<span class="vr">element</span>);
   });
 });</div>
-          <code>forEach</code> boucle sur tous les éléments et branche un événement sur chacun.
+          <code>forEach</code> parcourt chaque élément et lui branche son propre <code>addEventListener</code>.
         </div>
       </div>
     </div>
