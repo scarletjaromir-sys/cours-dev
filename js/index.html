@@ -741,57 +741,7 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
 <div id="tab-evenements" class="tab-panel">
 
   <div class="card">
-    <h2>🗺️ Carte des événements — Je veux… j'utilise…</h2>
-    <p style="color:var(--text2);margin-bottom:16px">Cherche ce que tu veux faire à gauche. L'événement à utiliser est à droite.</p>
-
-    <h3>🖱️ Souris</h3>
-    <table class="tbl">
-      <thead><tr><th>Je veux réagir quand…</th><th>J'utilise…</th><th>Infos dispo dans <code>e</code></th></tr></thead>
-      <tbody>
-        <tr><td>L'utilisateur <strong>clique</strong></td><td><code>"click"</code></td><td>—</td></tr>
-        <tr><td>La souris <strong>bouge</strong></td><td><code>"mousemove"</code></td><td><code>e.pageX</code> <code>e.pageY</code> → position</td></tr>
-        <tr><td>Le bouton souris est <strong>enfoncé</strong></td><td><code>"mousedown"</code></td><td>—</td></tr>
-        <tr><td>Le bouton souris est <strong>relâché</strong></td><td><code>"mouseup"</code></td><td>—</td></tr>
-        <tr><td>La souris <strong>entre</strong> dans un élément</td><td><code>"mouseenter"</code></td><td>— (ne se propage pas aux enfants)</td></tr>
-        <tr><td>La souris <strong>sort</strong> d'un élément</td><td><code>"mouseout"</code></td><td>—</td></tr>
-        <tr><td>La souris passe <strong>au-dessus</strong></td><td><code>"mouseover"</code></td><td>— (se propage aux enfants)</td></tr>
-      </tbody>
-    </table>
-
-    <h3>⌨️ Clavier</h3>
-    <table class="tbl">
-      <thead><tr><th>Je veux réagir quand…</th><th>J'utilise…</th><th>Infos dispo dans <code>e</code></th></tr></thead>
-      <tbody>
-        <tr><td>Une touche est <strong>pressée</strong></td><td><code>"keydown"</code></td><td><code>e.key</code> → nom de la touche (<code>"a"</code>, <code>"Enter"</code>...)</td></tr>
-        <tr><td>Une touche est <strong>relâchée</strong></td><td><code>"keyup"</code></td><td><code>e.key</code> → nom de la touche</td></tr>
-        <tr><td>Un caractère est <strong>tapé</strong> (lettres/chiffres)</td><td><code>"keypress"</code></td><td><code>e.key</code> → le caractère tapé</td></tr>
-      </tbody>
-    </table>
-
-    <h3>📝 Formulaires et champs</h3>
-    <table class="tbl">
-      <thead><tr><th>Je veux réagir quand…</th><th>J'utilise…</th><th>Infos dispo dans <code>e</code></th></tr></thead>
-      <tbody>
-        <tr><td>L'utilisateur <strong>tape dans un champ</strong></td><td><code>"input"</code></td><td><code>e.target.value</code> → texte saisi en temps réel</td></tr>
-        <tr><td>L'utilisateur <strong>soumet un formulaire</strong></td><td><code>"submit"</code></td><td>Utiliser <code>e.preventDefault()</code> pour bloquer le rechargement</td></tr>
-        <tr><td>Un <strong>select change</strong> de valeur</td><td><code>"input"</code> ou <code>"change"</code></td><td><code>e.target.value</code> → option sélectionnée</td></tr>
-      </tbody>
-    </table>
-
-    <h3>📜 Page et fenêtre</h3>
-    <table class="tbl">
-      <thead><tr><th>Je veux réagir quand…</th><th>J'utilise…</th><th>Infos dispo</th></tr></thead>
-      <tbody>
-        <tr><td>L'utilisateur <strong>scrolle</strong></td><td><code>"scroll"</code> sur <code>window</code></td><td><code>window.scrollY</code> → pixels scrollés depuis le haut</td></tr>
-        <tr><td>La page est <strong>chargée</strong></td><td><code>"load"</code> sur <code>window</code></td><td>—</td></tr>
-        <tr><td>Un élément est <strong>cliqué n'importe où</strong></td><td><code>"click"</code> sur <code>document.body</code></td><td><code>e.target</code> → l'élément précisément cliqué</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="card">
-    <h2>📐 Sur quoi je branche l'événement ?</h2>
-    <p style="color:var(--text2);margin-bottom:14px">Le choix du <strong>récepteur</strong> change tout :</p>
+    <h2>📐 Sur quoi brancher l'événement ?</h2>
     <div class="autopsy">
       <div class="autoline">
         <div class="autoline-code"><span class="vr">unElement</span>.<span class="fn">addEventListener</span>(...)</div>
@@ -799,177 +749,188 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
       </div>
       <div class="autoline">
         <div class="autoline-code"><span class="vr">document</span>.<span class="fn">addEventListener</span>(...)</div>
-        <div class="autoline-desc">Réagit quand l'action se passe <strong>n'importe où dans la page</strong>.<br><span style="color:var(--text3)">Ex : keydown/keypress — peu importe où on clique</span></div>
+        <div class="autoline-desc">Réagit quand l'action se passe <strong>n'importe où dans la page</strong>.<br><span style="color:var(--text3)">Ex : keydown, keypress — peu importe où l'utilisateur est</span></div>
       </div>
       <div class="autoline">
         <div class="autoline-code"><span class="vr">window</span>.<span class="fn">addEventListener</span>(...)</div>
         <div class="autoline-desc">Réagit sur des événements <strong>globaux de la fenêtre</strong>.<br><span style="color:var(--text3)">Ex : scroll, mousemove, load, resize</span></div>
       </div>
     </div>
-    <div class="alert info"><span class="alert-icon">💡</span><div><strong>Règle simple :</strong> si l'événement concerne un élément précis → branche sur l'élément. Si ça peut se passer n'importe où (clavier, scroll, chargement) → branche sur <code>document</code> ou <code>window</code>.</div></div>
   </div>
 
   <div class="card">
-    <h2>📦 L'objet événement <code>e</code> — ce qu'il contient</h2>
-    <p style="color:var(--text2);margin-bottom:14px">Quand tu mets <code>(e)</code> dans ta fonction fléchée, JS te passe automatiquement un objet avec des infos sur ce qui vient de se passer.</p>
+    <h2>🖱️ Souris — click</h2>
+    <p style="color:var(--text2);margin-bottom:10px">Se déclenche <strong>une fois</strong> par clic (enfoncer + relâcher).</p>
+    <div class="code"><span class="vr">btn</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, () <span class="op">=></span> {
+  <span class="cmt">// action au clic</span>
+});
+
+<span class="cmt">// Avec la position du clic :</span>
+<span class="vr">body</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, (<span class="vr">e</span>) <span class="op">=></span> {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">e</span>.<span class="fn">pageX</span>, <span class="vr">e</span>.<span class="fn">pageY</span>); <span class="cmt">// position du clic</span>
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">e</span>.<span class="fn">target</span>);            <span class="cmt">// élément précisément cliqué</span>
+});</div>
+    <div class="alert info"><span class="alert-icon">💡</span><div><code>e.pageX</code> et <code>e.pageY</code> existent aussi bien dans <code>"click"</code> que dans <code>"mousemove"</code>.</div></div>
+  </div>
+
+  <div class="card">
+    <h2>🖱️ Souris — mousemove</h2>
+    <p style="color:var(--text2);margin-bottom:10px">Se déclenche <strong>en continu</strong> à chaque pixel que la souris parcourt. Utilise-le pour suivre la souris en temps réel.</p>
     <div class="code"><span class="vr">window</span>.<span class="fn">addEventListener</span>(<span class="str">"mousemove"</span>, (<span class="vr">e</span>) <span class="op">=></span> {
-  <span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">e</span>.<span class="fn">pageX</span>);   <span class="cmt">// position X de la souris</span>
-  <span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">e</span>.<span class="fn">pageY</span>);   <span class="cmt">// position Y de la souris</span>
-});
+  <span class="cmt">// Déplacer un élément avec la souris :</span>
+  <span class="vr">curseur</span>.<span class="fn">style</span>.<span class="fn">left</span> <span class="op">=</span> <span class="vr">e</span>.<span class="fn">pageX</span> <span class="op">+</span> <span class="str">"px"</span>;
+  <span class="vr">curseur</span>.<span class="fn">style</span>.<span class="fn">top</span>  <span class="op">=</span> <span class="vr">e</span>.<span class="fn">pageY</span> <span class="op">+</span> <span class="str">"px"</span>;
 
-<span class="vr">document</span>.<span class="fn">addEventListener</span>(<span class="str">"keydown"</span>, (<span class="vr">e</span>) <span class="op">=></span> {
-  <span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">e</span>.<span class="fn">key</span>);     <span class="cmt">// touche pressée : "a", "Enter", "ArrowLeft"...</span>
-});
-
-<span class="vr">input</span>.<span class="fn">addEventListener</span>(<span class="str">"input"</span>, (<span class="vr">e</span>) <span class="op">=></span> {
-  <span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">e</span>.<span class="fn">target</span>.<span class="fn">value</span>); <span class="cmt">// texte tapé dans le champ</span>
-});
-
-<span class="vr">form</span>.<span class="fn">addEventListener</span>(<span class="str">"submit"</span>, (<span class="vr">e</span>) <span class="op">=></span> {
-  <span class="vr">e</span>.<span class="fn">preventDefault</span>();     <span class="cmt">// bloque le rechargement de la page</span>
-});
-
-<span class="vr">document</span>.<span class="fn">body</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, (<span class="vr">e</span>) <span class="op">=></span> {
-  <span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">e</span>.<span class="fn">target</span>);   <span class="cmt">// l'élément précisément cliqué</span>
+  <span class="cmt">// Modifier une variable CSS :</span>
+  <span class="vr">nav</span>.<span class="fn">style</span>.<span class="fn">setProperty</span>(<span class="str">"--x"</span>, <span class="vr">e</span>.<span class="fn">layerX</span> <span class="op">+</span> <span class="str">"px"</span>);
+  <span class="vr">nav</span>.<span class="fn">style</span>.<span class="fn">setProperty</span>(<span class="str">"--y"</span>, <span class="vr">e</span>.<span class="fn">layerY</span> <span class="op">+</span> <span class="str">"px"</span>);
 });</div>
-    <div class="alert warn"><span class="alert-icon">⚠️</span><div>Le <code>e</code> n'est disponible que si tu le mets dans les parenthèses : <code>(e) =></code>. Sans lui, tu n'as pas accès à la position de la souris, la touche pressée, etc.</div></div>
+    <div class="alert warn"><span class="alert-icon">⚠️</span><div>Ne jamais créer d'élément dans <code>"mousemove"</code> — ça créerait des milliers d'éléments par seconde. Pour créer à la position de la souris, utilise <code>"click"</code>.</div></div>
   </div>
 
   <div class="card">
-    <h2>🎯 click vs mousemove — Choisir le bon événement</h2>
-    <p style="color:var(--text2);margin-bottom:14px">Les deux donnent accès à la position de la souris via <code>e.pageX</code> et <code>e.pageY</code>. Mais ils ne se déclenchent pas de la même façon.</p>
-    <div class="vs-grid">
-      <div class="vs-box vs-bad">
-        <div class="vs-label" style="color:var(--yellow)">mousemove — En continu</div>
-        <div class="code"><span class="vr">window</span>.<span class="fn">addEventListener</span>(<span class="str">"mousemove"</span>, (<span class="vr">e</span>) <span class="op">=></span> {
-  <span class="cmt">// Se déclenche des MILLIERS de fois</span>
-  <span class="cmt">// à chaque pixel que la souris parcourt</span>
-  <span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">e</span>.<span class="fn">pageX</span>);
-});</div>
-        <p style="font-size:0.85rem;color:var(--text2);margin-top:8px">→ Utilisé pour suivre la souris en temps réel (curseur custom, effet parallaxe...)</p>
-      </div>
-      <div class="vs-box vs-good">
-        <div class="vs-label" style="color:var(--green)">click — Une seule fois par clic</div>
-        <div class="code"><span class="vr">body</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, (<span class="vr">e</span>) <span class="op">=></span> {
-  <span class="cmt">// Se déclenche UNE fois par clic</span>
-  <span class="cmt">// e.pageX donne la position AU MOMENT du clic</span>
-  <span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">e</span>.<span class="fn">pageX</span>);
-});</div>
-        <p style="font-size:0.85rem;color:var(--text2);margin-top:8px">→ Utilisé pour créer quelque chose à l'endroit du clic (cercle, marker...)</p>
-      </div>
-    </div>
-    <div class="alert warn"><span class="alert-icon">⚠️</span><div><code>e.pageX</code> et <code>e.pageY</code> existent dans les deux événements. Ce n'est pas l'outil qui change, c'est <strong>quand il se déclenche</strong>. Avec <code>mousemove</code>, tu créerais une traînée de milliers d'éléments. Avec <code>click</code>, un seul élément par clic.</div></div>
+    <h2>🖱️ Souris — mousedown / mouseup</h2>
+    <p style="color:var(--text2);margin-bottom:10px"><code>"mousedown"</code> = bouton enfoncé · <code>"mouseup"</code> = bouton relâché.</p>
+    <div class="code"><span class="vr">window</span>.<span class="fn">addEventListener</span>(<span class="str">"mousedown"</span>, () <span class="op">=></span> {
+  <span class="vr">el</span>.<span class="fn">style</span>.<span class="fn">transform</span> <span class="op">=</span> <span class="str">"scale(2) translate(-25%, -25%)"</span>;
+});
 
-    <h3>Ce que contient <code>e</code> selon l'événement</h3>
-    <table class="tbl">
-      <thead><tr><th>Événement</th><th>Ce que <code>e</code> contient d'utile</th><th>Exemple</th></tr></thead>
+<span class="vr">window</span>.<span class="fn">addEventListener</span>(<span class="str">"mouseup"</span>, () <span class="op">=></span> {
+  <span class="vr">el</span>.<span class="fn">style</span>.<span class="fn">transform</span> <span class="op">=</span> <span class="str">"scale(1) translate(-50%, -50%)"</span>;
+  <span class="vr">el</span>.<span class="fn">style</span>.<span class="fn">border</span> <span class="op">=</span> <span class="str">"2px solid teal"</span>;
+});</div>
+  </div>
+
+  <div class="card">
+    <h2>🖱️ Souris — mouseenter / mouseout / mouseover</h2>
+    <p style="color:var(--text2);margin-bottom:10px">Les trois réagissent quand la souris entre ou sort d'un élément. La différence est subtile.</p>
+    <div class="code"><span class="cmt">// mouseenter : souris ENTRE dans l'élément (ne se propage pas aux enfants)</span>
+<span class="vr">div</span>.<span class="fn">addEventListener</span>(<span class="str">"mouseenter"</span>, () <span class="op">=></span> {
+  <span class="vr">div</span>.<span class="fn">style</span>.<span class="fn">background</span> <span class="op">=</span> <span class="str">"rgba(0,0,0,0.6)"</span>;
+});
+
+<span class="cmt">// mouseout : souris SORT de l'élément OU d'un de ses enfants</span>
+<span class="vr">div</span>.<span class="fn">addEventListener</span>(<span class="str">"mouseout"</span>, () <span class="op">=></span> {
+  <span class="vr">div</span>.<span class="fn">style</span>.<span class="fn">background</span> <span class="op">=</span> <span class="str">"pink"</span>;
+});
+
+<span class="cmt">// mouseover : souris passe AU-DESSUS (se propage aux enfants)</span>
+<span class="vr">p</span>.<span class="fn">addEventListener</span>(<span class="str">"mouseover"</span>, () <span class="op">=></span> {
+  <span class="vr">p</span>.<span class="fn">style</span>.<span class="fn">transform</span> <span class="op">=</span> <span class="str">"rotate(2deg)"</span>;
+});</div>
+    <table class="tbl" style="margin-top:12px">
+      <thead><tr><th>Événement</th><th>Se déclenche quand…</th><th>Enfants inclus ?</th></tr></thead>
       <tbody>
-        <tr><td><code>"click"</code></td><td>Position du clic</td><td><code>e.pageX</code> <code>e.pageY</code> <code>e.target</code></td></tr>
-        <tr><td><code>"mousemove"</code></td><td>Position en temps réel</td><td><code>e.pageX</code> <code>e.pageY</code> <code>e.layerX</code></td></tr>
-        <tr><td><code>"keydown"</code></td><td>La touche pressée</td><td><code>e.key</code> → <code>"a"</code>, <code>"Enter"</code>, <code>"ArrowLeft"</code></td></tr>
-        <tr><td><code>"input"</code></td><td>La valeur du champ</td><td><code>e.target.value</code> → texte saisi</td></tr>
-        <tr><td><code>"submit"</code></td><td>Bloquer le rechargement</td><td><code>e.preventDefault()</code></td></tr>
+        <tr><td><code>"mouseenter"</code></td><td>La souris entre dans l'élément</td><td>❌ Non</td></tr>
+        <tr><td><code>"mouseleave"</code></td><td>La souris sort de l'élément</td><td>❌ Non</td></tr>
+        <tr><td><code>"mouseover"</code></td><td>La souris passe au-dessus</td><td>✅ Oui</td></tr>
+        <tr><td><code>"mouseout"</code></td><td>La souris sort</td><td>✅ Oui</td></tr>
+      </tbody>
+    </table>
+    <div class="alert info"><span class="alert-icon">💡</span><div>En pratique : utilise <code>"mouseenter"</code> + <code>"mouseleave"</code> dans la plupart des cas — ils ne se déclenchent pas sur les éléments enfants, ce qui évite les comportements inattendus.</div></div>
+  </div>
+
+  <div class="card">
+    <h2>⌨️ Clavier — keydown / keypress</h2>
+    <p style="color:var(--text2);margin-bottom:10px">Toujours sur <code>document</code> — peu importe où l'utilisateur est sur la page.</p>
+    <div class="code"><span class="vr">document</span>.<span class="fn">addEventListener</span>(<span class="str">"keydown"</span>, (<span class="vr">e</span>) <span class="op">=></span> {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="vr">e</span>.<span class="fn">key</span>); <span class="cmt">// "a", "Enter", "ArrowLeft", " " (espace)...</span>
+
+  <span class="cmt">// Tester une touche précise :</span>
+  <span class="kw">if</span> (<span class="vr">e</span>.<span class="fn">key</span> <span class="op">===</span> <span class="str">"j"</span>) {
+    <span class="vr">div</span>.<span class="fn">style</span>.<span class="fn">background</span> <span class="op">=</span> <span class="str">"pink"</span>;
+  } <span class="kw">else if</span> (<span class="vr">e</span>.<span class="fn">key</span> <span class="op">===</span> <span class="str">"h"</span>) {
+    <span class="vr">div</span>.<span class="fn">style</span>.<span class="fn">background</span> <span class="op">=</span> <span class="str">"teal"</span>;
+  }
+
+  <span class="cmt">// Afficher la touche dans un élément :</span>
+  <span class="vr">keyDisplay</span>.<span class="fn">textContent</span> <span class="op">=</span> <span class="vr">e</span>.<span class="fn">key</span>;
+});</div>
+    <table class="tbl" style="margin-top:12px">
+      <thead><tr><th>Événement</th><th>Différence</th></tr></thead>
+      <tbody>
+        <tr><td><code>"keydown"</code></td><td>Déclenché dès que la touche est <strong>enfoncée</strong>. Capture tout (flèches, Shift, Ctrl...)</td></tr>
+        <tr><td><code>"keyup"</code></td><td>Déclenché quand la touche est <strong>relâchée</strong>.</td></tr>
+        <tr><td><code>"keypress"</code></td><td>Déclenché pour les caractères tapés (lettres, chiffres). Ne capture pas Shift, Ctrl, flèches...</td></tr>
       </tbody>
     </table>
   </div>
 
   <div class="card">
-    <h2>🔁 forEach — Appliquer un événement à plusieurs éléments</h2>
-    <p style="color:var(--text2);margin-bottom:14px">Quand tu as <strong>plusieurs éléments du même type</strong> et que tu veux le même comportement sur chacun.</p>
-    <div class="vs-grid">
-      <div class="vs-box vs-bad">
-        <div class="vs-label">❌ Sans forEach — répétitif</div>
-        <div class="code"><span class="kw">const</span> <span class="vr">box1</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">querySelector</span>(<span class="str">"#b1"</span>);
-<span class="kw">const</span> <span class="vr">box2</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">querySelector</span>(<span class="str">"#b2"</span>);
-<span class="kw">const</span> <span class="vr">box3</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">querySelector</span>(<span class="str">"#b3"</span>);
-<span class="vr">box1</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, ...);
-<span class="vr">box2</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, ...);
-<span class="vr">box3</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, ...);</div>
-      </div>
-      <div class="vs-box vs-good">
-        <div class="vs-label">✅ Avec forEach — propre</div>
-        <div class="code"><span class="kw">const</span> <span class="vr">boxes</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">querySelectorAll</span>(<span class="str">".box"</span>);
+    <h2>📝 Formulaires — input / change / submit</h2>
+    <div class="code"><span class="cmt">// "input" : se déclenche à chaque caractère tapé (temps réel)</span>
+<span class="vr">champTexte</span>.<span class="fn">addEventListener</span>(<span class="str">"input"</span>, (<span class="vr">e</span>) <span class="op">=></span> {
+  <span class="vr">pseudo</span> <span class="op">=</span> <span class="vr">e</span>.<span class="fn">target</span>.<span class="fn">value</span>; <span class="cmt">// texte tapé en temps réel</span>
+});
 
-<span class="vr">boxes</span>.<span class="fn">forEach</span>((<span class="vr">box</span>) <span class="op">=></span> {
-  <span class="vr">box</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, () <span class="op">=></span> {
-    <span class="vr">box</span>.<span class="fn">style</span>.<span class="fn">transform</span> <span class="op">=</span> <span class="str">"scale(0.7)"</span>;
-  });
+<span class="cmt">// "input" sur un select : récupère l'option choisie</span>
+<span class="vr">selectLangage</span>.<span class="fn">addEventListener</span>(<span class="str">"input"</span>, (<span class="vr">e</span>) <span class="op">=></span> {
+  <span class="vr">language</span> <span class="op">=</span> <span class="vr">e</span>.<span class="fn">target</span>.<span class="fn">value</span>;
+});
+
+<span class="cmt">// "submit" : formulaire envoyé — TOUJOURS utiliser preventDefault</span>
+<span class="vr">form</span>.<span class="fn">addEventListener</span>(<span class="str">"submit"</span>, (<span class="vr">e</span>) <span class="op">=></span> {
+  <span class="vr">e</span>.<span class="fn">preventDefault</span>(); <span class="cmt">// empêche le rechargement de la page</span>
+
+  <span class="kw">if</span> (<span class="vr">cgv</span>.<span class="fn">checked</span>) {      <span class="cmt">// cgv = querySelector("#cgv")</span>
+    <span class="vr">div</span>.<span class="fn">innerHTML</span> <span class="op">=</span> <span class="str">`&lt;h3&gt;Pseudo : <span class="op">${</span><span class="vr">pseudo</span><span class="op">}</span>&lt;/h3&gt;`</span>;
+  } <span class="kw">else</span> {
+    <span class="fn">alert</span>(<span class="str">"Veuillez accepter les CGV"</span>);
+  }
 });</div>
-      </div>
-    </div>
-    <div class="alert info"><span class="alert-icon">💡</span><div><strong>Règle :</strong> si tu cibles <strong>un seul élément</strong> → <code>querySelector</code>. Si tu cibles <strong>plusieurs éléments</strong> → <code>querySelectorAll</code> + <code>forEach</code>.</div></div>
   </div>
 
   <div class="card">
-    <h2>⏱️ Timers — Déclencher dans le temps</h2>
-    <div class="grid2">
-      <div>
-        <h3>setTimeout — Une seule fois après un délai</h3>
-        <div class="code"><span class="fn">setTimeout</span>(() <span class="op">=></span> {
-  <span class="cmt">// s'exécute UNE FOIS</span>
-  <span class="cmt">// après 2000ms (2 secondes)</span>
-  <span class="vr">div</span>.<span class="fn">style</span>.<span class="fn">opacity</span> <span class="op">=</span> <span class="str">"0"</span>;
-}, <span class="num">2000</span>);</div>
-      </div>
-      <div>
-        <h3>setInterval — En boucle toutes les X ms</h3>
-        <div class="code"><span class="kw">const</span> <span class="vr">interval</span> <span class="op">=</span> <span class="fn">setInterval</span>(() <span class="op">=></span> {
-  <span class="cmt">// s'exécute TOUTES les 1000ms</span>
+    <h2>📜 Page — scroll</h2>
+    <p style="color:var(--text2);margin-bottom:10px">Se déclenche à chaque mouvement de scroll. Toujours sur <code>window</code>.</p>
+    <div class="code"><span class="vr">window</span>.<span class="fn">addEventListener</span>(<span class="str">"scroll"</span>, () <span class="op">=></span> {
+  <span class="kw">if</span> (<span class="vr">window</span>.<span class="fn">scrollY</span> <span class="op">></span> <span class="num">120</span>) {  <span class="cmt">// scrollY = pixels depuis le haut</span>
+    <span class="vr">nav</span>.<span class="fn">style</span>.<span class="fn">top</span> <span class="op">=</span> <span class="str">"0"</span>;
+  } <span class="kw">else</span> {
+    <span class="vr">nav</span>.<span class="fn">style</span>.<span class="fn">top</span> <span class="op">=</span> <span class="str">"-50px"</span>;
+  }
+});</div>
+  </div>
+
+  <div class="card">
+    <h2>⏱️ Timers — setTimeout / setInterval</h2>
+    <div class="code"><span class="cmt">// setTimeout : exécuté UNE FOIS après le délai (ms)</span>
+<span class="fn">setTimeout</span>(() <span class="op">=></span> {
+  <span class="vr">div</span>.<span class="fn">style</span>.<span class="fn">borderRadius</span> <span class="op">=</span> <span class="str">"300px"</span>;
+}, <span class="num">2000</span>); <span class="cmt">// 2000ms = 2 secondes</span>
+
+<span class="cmt">// setInterval : exécuté EN BOUCLE toutes les X ms</span>
+<span class="kw">const</span> <span class="vr">interval</span> <span class="op">=</span> <span class="fn">setInterval</span>(() <span class="op">=></span> {
   <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"tic"</span>);
 }, <span class="num">1000</span>);
 
-<span class="cmt">// Pour l'arrêter :</span>
+<span class="cmt">// Arrêter le setInterval :</span>
 <span class="fn">clearInterval</span>(<span class="vr">interval</span>);</div>
-      </div>
-    </div>
   </div>
 
   <div class="card">
-    <h2>🪟 BOM — Dialogues et infos de la fenêtre</h2>
-    <div class="grid2">
-      <div>
-        <h3>Dialogues natifs</h3>
-        <div class="code"><span class="cmt">// Message simple</span>
-<span class="fn">alert</span>(<span class="str">"Attention !"</span>);
-
-<span class="cmt">// Oui / Non → retourne true/false</span>
-<span class="kw">const</span> <span class="vr">ok</span> <span class="op">=</span> <span class="fn">confirm</span>(<span class="str">"Supprimer ?"</span>);
-
-<span class="cmt">// Saisie utilisateur → retourne le texte</span>
-<span class="kw">const</span> <span class="vr">nom</span> <span class="op">=</span> <span class="fn">prompt</span>(<span class="str">"Ton nom ?"</span>);</div>
-      </div>
-      <div>
-        <h3>Infos de la fenêtre</h3>
-        <div class="code"><span class="cmt">// Position du scroll</span>
-<span class="vr">window</span>.<span class="fn">scrollY</span>
-
-<span class="cmt">// Hauteur de la fenêtre</span>
-<span class="vr">window</span>.<span class="fn">innerHeight</span>
-
-<span class="cmt">// URL actuelle</span>
-<span class="vr">location</span>.<span class="fn">href</span>
-
-<span class="cmt">// Navigateur utilisé</span>
-<span class="vr">navigator</span>.<span class="fn">userAgent</span></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>💡 CSS dynamique avec setProperty</h2>
-    <p style="color:var(--text2);margin-bottom:12px">Pour modifier une <strong>variable CSS</strong> depuis JS — utile pour des effets liés à la position de la souris.</p>
-    <div class="code"><span class="cmt">/* Dans le CSS : */</span>
-<span class="cmt">/* nav { --x: 0px; --y: 0px; } */</span>
-
-<span class="cmt">// Dans le JS :</span>
-<span class="vr">window</span>.<span class="fn">addEventListener</span>(<span class="str">"mousemove"</span>, (<span class="vr">e</span>) <span class="op">=></span> {
-  <span class="vr">nav</span>.<span class="fn">style</span>.<span class="fn">setProperty</span>(<span class="str">"--x"</span>, <span class="vr">e</span>.<span class="fn">layerX</span> <span class="op">+</span> <span class="str">"px"</span>);
-  <span class="vr">nav</span>.<span class="fn">style</span>.<span class="fn">setProperty</span>(<span class="str">"--y"</span>, <span class="vr">e</span>.<span class="fn">layerY</span> <span class="op">+</span> <span class="str">"px"</span>);
+    <h2>🎯 click vs mousemove — ne pas confondre</h2>
+    <div class="vs-grid">
+      <div class="vs-box" style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.3);">
+        <div class="vs-label" style="color:var(--blue)">mousemove — suivi en continu</div>
+        <div class="code"><span class="vr">window</span>.<span class="fn">addEventListener</span>(<span class="str">"mousemove"</span>, (<span class="vr">e</span>) <span class="op">=></span> {
+  <span class="cmt">// Des milliers de fois par seconde</span>
+  <span class="cmt">// → suivre la position, effets visuels</span>
 });</div>
-    <div class="alert info"><span class="alert-icon">💡</span><div><code>element.style.setProperty("--mavar", valeur)</code> modifie une variable CSS custom. C'est plus puissant que <code>element.style.color</code> car ça peut affecter tous les éléments qui utilisent cette variable.</div></div>
+      </div>
+      <div class="vs-box" style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.3);">
+        <div class="vs-label" style="color:var(--green)">click — une seule fois par clic</div>
+        <div class="code"><span class="vr">body</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, (<span class="vr">e</span>) <span class="op">=></span> {
+  <span class="cmt">// Une seule fois par clic</span>
+  <span class="cmt">// → créer un élément, déclencher une action</span>
+});</div>
+      </div>
+    </div>
+    <div class="alert warn"><span class="alert-icon">⚠️</span><div>Les deux donnent accès à <code>e.pageX</code> et <code>e.pageY</code>. Ce n'est pas l'outil qui change — c'est <strong>quand</strong> il se déclenche. Ne jamais créer d'élément dans <code>"mousemove"</code>.</div></div>
   </div>
 
 </div><!-- /evenements -->
+
 
 
 <!-- ============================================================
@@ -979,24 +940,87 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
 
   <div class="card">
     <h2>🧠 La méthode universelle en 4 étapes</h2>
-    <p style="color:var(--text2);margin-bottom:6px">Cette méthode sépare strictement ce que l'application <strong style="color:var(--text)">sait</strong> (les données) de ce que l'utilisateur <strong style="color:var(--text)">voit</strong> (l'affichage). C'est l'architecture utilisée par tous les développeurs modernes.</p>
-    <div class="alert info" style="margin-bottom:16px"><span class="alert-icon">📌</span><div>Le JS ne regarde jamais l'écran pour savoir ce qui se passe — il regarde ses <strong>variables</strong>. L'écran n'est qu'un reflet des données.</div></div>
+    <p style="color:var(--text2);margin-bottom:14px">Cette méthode sépare ce que l'app <strong style="color:var(--text)">sait</strong> (les données) de ce que l'utilisateur <strong style="color:var(--text)">voit</strong> (l'affichage). Le JS ne regarde jamais l'écran — il regarde ses variables.</p>
+
     <div class="autopsy">
       <div class="autoline">
-        <div class="autoline-code"><span style="color:var(--purple2);font-weight:700;">1.</span> LES SÉLECTIONS<br><span style="color:var(--text3);font-size:0.8rem">Le matériel</span></div>
-        <div class="autoline-desc">On attrape tous les éléments HTML dont on aura besoin.<br><br><span class="badge">outil</span> <code>document.querySelector()</code><br><span class="badge">règle</span> Toujours dans des <code>const</code> — ces références ne changent pas.</div>
+        <div class="autoline-code"><span style="color:var(--purple2);font-weight:700;">1.</span> SÉLECTIONS
+<span style="color:var(--text3);font-size:0.8rem">Attraper les éléments</span></div>
+        <div class="autoline-desc">
+          <div class="code"><span class="kw">const</span> <span class="vr">element</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">querySelector</span>(<span class="str">".maClasse"</span>);</div>
+          Toujours en <code>const</code> — ces références ne changent jamais.
+        </div>
       </div>
       <div class="autoline">
-        <div class="autoline-code"><span style="color:var(--purple2);font-weight:700;">2.</span> L'ÉTAT<br><span style="color:var(--text3);font-size:0.8rem">Le cerveau</span></div>
-        <div class="autoline-desc">Les variables qui contiennent la "vérité" de l'application à l'instant T.<br><br><span class="badge">outil</span> <code>let</code> — car ces valeurs vont changer<br><span class="badge">ex</span> <code>let score = 0</code> &nbsp;·&nbsp; <code>let isDarkMode = false</code> &nbsp;·&nbsp; <code>let posX = 0</code></div>
+        <div class="autoline-code"><span style="color:var(--purple2);font-weight:700;">2.</span> DONNÉES
+<span style="color:var(--text3);font-size:0.8rem">L'état de l'app</span></div>
+        <div class="autoline-desc">
+          <div class="code"><span class="kw">let</span> <span class="vr">maDonnee</span> <span class="op">=</span> <span class="str">""</span>; <span class="cmt">// ou 0, ou false</span></div>
+          En <code>let</code> car ces valeurs vont changer. C'est la mémoire de l'application.
+        </div>
       </div>
       <div class="autoline">
-        <div class="autoline-code"><span style="color:var(--purple2);font-weight:700;">3.</span> updateDisplay<br><span style="color:var(--text3);font-size:0.8rem">L'affichage</span></div>
-        <div class="autoline-desc">Une fonction unique dont le seul boulot est de synchroniser le HTML/CSS avec les variables de l'étape 2. Elle ne décide de rien, elle obéit à l'état.<br><br><span class="badge">outil</span> <code>const updateDisplay = () => { ... }</code><br><span class="badge">règle</span> Se place <strong>avant</strong> les événements dans le fichier.<br><br><div style="background:#11131a;border-left:3px solid var(--purple);border-radius:6px;padding:8px 12px;margin:6px 0;font-family:Consolas,monospace;font-size:0.85rem;color:#abb2bf;"><span class="vr">element_html</span>.<span class="fn">propriété</span> <span class="op">=</span> <span class="vr">variable_étape_2</span> <span class="cmt">// ex: cercle.style.left = posX + "px"</span></div><br><br><span style="color:var(--text3);font-size:0.85em">⚠️ <code>updateDisplay</code> n'est pas un mot-clé JS — c'est un nom choisi. Tu peux l'appeler <code>render()</code>, <code>afficher()</code>, ce que tu veux.<br>Et cette étape n'est pas toujours nécessaire : pour une action simple comme <code>body.classList.toggle("dark")</code>, tu peux mettre l'action directement dans l'événement. La fonction séparée devient obligatoire dès que <strong>plusieurs événements déclenchent la même mise à jour</strong>, ou que la logique d'affichage est complexe.</span></div>
+        <div class="autoline-code"><span style="color:var(--purple2);font-weight:700;">3.</span> AFFICHAGE
+<span style="color:var(--text3);font-size:0.8rem">updateDisplay</span></div>
+        <div class="autoline-desc">
+          <div class="code"><span class="kw">const</span> <span class="fn">updateDisplay</span> <span class="op">=</span> () <span class="op">=></span> {
+  <span class="vr">element</span>.<span class="fn">propriété</span> <span class="op">=</span> <span class="vr">maDonnee</span>;
+};</div>
+          <strong style="color:var(--yellow)">Règle :</strong> <code>element_html.propriété = variable_étape_2</code><br>
+          Se place <strong>avant</strong> les événements. Ne décide de rien, obéit à l'état.
+        </div>
       </div>
       <div class="autoline">
-        <div class="autoline-code"><span style="color:var(--purple2);font-weight:700;">4.</span> LES ÉVÉNEMENTS<br><span style="color:var(--text3);font-size:0.8rem">Les déclencheurs</span></div>
-        <div class="autoline-desc">On écoute les actions utilisateur. Règle stricte dans chaque événement :<br><br><span class="badge">1</span> On met à jour les <strong>données</strong> (étape 2)<br><div style="background:#11131a;border-left:3px solid var(--purple);border-radius:6px;padding:8px 12px;margin:6px 0;font-family:Consolas,monospace;font-size:0.85rem;color:#abb2bf;"><span class="vr">variable_étape_2</span> <span class="op">=</span> <span class="vr">e</span>.<span class="fn">propriété_événement</span> <span class="cmt">// ex: posX = e.pageX</span></div><span class="badge">2</span> On appelle <code>updateDisplay()</code><br><br>On ne touche <strong>jamais</strong> au CSS directement ici.</div>
+        <div class="autoline-code"><span style="color:var(--purple2);font-weight:700;">4.</span> ÉVÉNEMENT
+<span style="color:var(--text3);font-size:0.8rem">Le déclencheur</span></div>
+        <div class="autoline-desc">
+          <div class="code"><span class="vr">element</span>.<span class="fn">addEventListener</span>(<span class="str">"evenement"</span>, (<span class="vr">e</span>) <span class="op">=></span> {
+  <span class="vr">maDonnee</span> <span class="op">=</span> <span class="vr">e</span>.<span class="fn">propriété_événement</span>;
+  <span class="fn">updateDisplay</span>();
+});</div>
+          <strong style="color:var(--yellow)">Règle :</strong> <code>variable_étape_2 = e.propriété_événement</code><br>
+          On ne touche <strong>jamais</strong> au CSS directement ici.
+        </div>
+      </div>
+    </div>
+
+    <div class="alert info" style="margin-top:12px"><span class="alert-icon">💡</span><div><code>updateDisplay</code> n'est pas un mot-clé JS — tu peux l'appeler comme tu veux. Pour un simple <code>body.classList.toggle("dark")</code>, tu peux mettre l'action directement dans l'événement sans passer par une fonction.</div></div>
+  </div>
+
+  <div class="card">
+    <h2>🔁 Variante — forEach (plusieurs éléments)</h2>
+    <p style="color:var(--text2);margin-bottom:14px">Quand tu veux le même comportement sur <strong>plusieurs éléments</strong>. La grande différence : pas de variable étape 2 — chaque élément porte son propre état via sa classe CSS.</p>
+    <div class="autopsy">
+      <div class="autoline">
+        <div class="autoline-code"><span style="color:var(--purple2);font-weight:700;">1.</span> SÉLECTIONS</div>
+        <div class="autoline-desc">
+          <div class="code"><span class="kw">const</span> <span class="vr">elements</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">querySelectorAll</span>(<span class="str">".maClasse"</span>);</div>
+          <code>querySelectorAll</code> au lieu de <code>querySelector</code> — retourne une liste.
+        </div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span style="color:var(--purple2);font-weight:700;">2.</span> DONNÉES</div>
+        <div class="autoline-desc">Pas de variable globale — chaque élément porte son propre état via sa <strong>classe CSS</strong>.</div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span style="color:var(--purple2);font-weight:700;">3.</span> AFFICHAGE</div>
+        <div class="autoline-desc">
+          <div class="code"><span class="kw">const</span> <span class="fn">updateDisplay</span> <span class="op">=</span> (<span class="vr">element</span>) <span class="op">=></span> {
+  <span class="vr">element</span>.<span class="fn">classList</span>.<span class="fn">toggle</span>(<span class="str">"maClasse"</span>);
+};</div>
+          La fonction reçoit l'élément en paramètre et agit sur lui.
+        </div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span style="color:var(--purple2);font-weight:700;">4.</span> ÉVÉNEMENT</div>
+        <div class="autoline-desc">
+          <div class="code"><span class="vr">elements</span>.<span class="fn">forEach</span>((<span class="vr">element</span>) <span class="op">=></span> {
+  <span class="vr">element</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, () <span class="op">=></span> {
+    <span class="fn">updateDisplay</span>(<span class="vr">element</span>);
+  });
+});</div>
+          <code>forEach</code> boucle sur tous les éléments et branche un événement sur chacun.
+        </div>
       </div>
     </div>
   </div>
