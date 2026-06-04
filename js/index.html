@@ -990,6 +990,25 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
   <div class="card">
     <h2>🔁 Variante — forEach (plusieurs éléments)</h2>
     <p style="color:var(--text2);margin-bottom:14px">Quand tu veux le même comportement sur <strong>plusieurs éléments</strong>. La grande différence : pas de variable étape 2 — chaque élément porte son propre état via sa classe CSS.</p>
+
+    <h3>C'est quoi forEach ?</h3>
+    <p style="color:var(--text2);margin-bottom:10px"><code>forEach</code> est une <strong>boucle</strong>. Une boucle = répéter la même action plusieurs fois. Sans forEach, pour 4 items tu écrirais :</p>
+    <div class="vs-grid">
+      <div class="vs-box vs-bad">
+        <div class="vs-label">❌ Sans forEach — répétitif</div>
+        <div class="code"><span class="vr">items</span>[<span class="num">0</span>].<span class="fn">addEventListener</span>(<span class="str">"click"</span>, ...)
+<span class="vr">items</span>[<span class="num">1</span>].<span class="fn">addEventListener</span>(<span class="str">"click"</span>, ...)
+<span class="vr">items</span>[<span class="num">2</span>].<span class="fn">addEventListener</span>(<span class="str">"click"</span>, ...)
+<span class="vr">items</span>[<span class="num">3</span>].<span class="fn">addEventListener</span>(<span class="str">"click"</span>, ...)</div>
+      </div>
+      <div class="vs-box vs-good">
+        <div class="vs-label">✅ Avec forEach — automatique</div>
+        <div class="code"><span class="vr">items</span>.<span class="fn">forEach</span>((<span class="vr">item</span>) <span class="op">=></span> {
+  <span class="vr">item</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, ...)
+})</div>
+      </div>
+    </div>
+    <div class="alert info"><span class="alert-icon">💡</span><div>Traduction en français : <strong>"Pour chaque item de ma liste, ajoute un écouteur de clic."</strong><br>forEach fait exactement la même chose que les 4 lignes du dessus, mais automatiquement — peu importe combien d'items il y a.</div></div>
     <div class="autopsy">
       <div class="autoline">
         <div class="autoline-code"><span style="color:var(--purple2);font-weight:700;">1.</span> SÉLECTIONS</div>
@@ -1101,34 +1120,80 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
   </div>
 
   <div class="card">
-    <h2>🗺️ Table de décision — Quel outil pour quel besoin ?</h2>
-    <p style="color:var(--text2);margin-bottom:14px">Quand tu bloques, cherche ton besoin dans la colonne de gauche.</p>
+    <h2>🎨 Mémo étape 3 — Qu'est-ce qui change sur mon élément ?</h2>
+    <p style="color:var(--text2);margin-bottom:14px">Dans <code>updateDisplay</code>, tu modifies une propriété de l'élément. Cherche ce qui doit changer visuellement.</p>
     <table class="tbl">
-      <thead><tr><th>Je veux…</th><th>J'utilise…</th><th>Exemple concret</th></tr></thead>
+      <thead><tr><th>Ce qui change</th><th>Propriété JS à utiliser</th></tr></thead>
       <tbody>
-        <tr><td>Attraper un élément HTML</td><td><code>document.querySelector("sélecteur")</code></td><td><code>document.querySelector("#monBtn")</code></td></tr>
-        <tr><td>Attraper TOUS les éléments d'un type</td><td><code>document.querySelectorAll("sélecteur")</code></td><td><code>document.querySelectorAll(".carte")</code></td></tr>
-        <tr><td>Réagir à un clic</td><td><code>el.addEventListener("click", () => { })</code></td><td><code>btn.addEventListener("click", () => { ... })</code></td></tr>
-        <tr><td>Réagir à la saisie dans un champ</td><td><code>el.addEventListener("input", (e) => { })</code></td><td><code>input.addEventListener("input", e => { ... })</code></td></tr>
-        <tr><td>Réagir au survol souris</td><td><code>el.addEventListener("mouseover", () => { })</code></td><td><code>div.addEventListener("mouseover", () => { ... })</code></td></tr>
-        <tr><td>Réagir à une touche clavier</td><td><code>document.addEventListener("keydown", (e) => { })</code></td><td><code>e.key</code> contient la touche pressée</td></tr>
-        <tr><td>Changer le texte affiché</td><td><code>element.textContent = valeur</code></td><td><code>h3.textContent = count</code></td></tr>
-        <tr><td>Changer du HTML à l'intérieur</td><td><code>element.innerHTML = "..."</code></td><td><code>div.innerHTML = "&lt;strong&gt;OK&lt;/strong&gt;"</code></td></tr>
-        <tr><td>Changer une propriété CSS</td><td><code>element.style.propriété = "valeur"</code></td><td><code>h3.style.color = "red"</code></td></tr>
-        <tr><td>Ajouter une classe CSS</td><td><code>element.classList.add("nom")</code></td><td><code>btn.classList.add("actif")</code></td></tr>
-        <tr><td>Retirer une classe CSS</td><td><code>element.classList.remove("nom")</code></td><td><code>btn.classList.remove("actif")</code></td></tr>
-        <tr><td>Basculer une classe (ajoute/retire)</td><td><code>element.classList.toggle("nom")</code></td><td><code>menu.classList.toggle("ouvert")</code></td></tr>
-        <tr><td>Mémoriser une valeur qui change</td><td><code>let maVar = valeurDepart</code></td><td><code>let count = 0</code></td></tr>
-        <tr><td>Mémoriser une valeur fixe</td><td><code>const maVar = valeur</code></td><td><code>const btn = document.querySelector("#btn")</code></td></tr>
-        <tr><td>Éviter de répéter du code</td><td>Créer une fonction et l'appeler</td><td><code>const maj = () => { ... }</code> puis <code>maj()</code></td></tr>
-        <tr><td>Générer un entier aléatoire</td><td><code>Math.floor(Math.random() * N)</code></td><td><code>Math.floor(Math.random() * 6)</code> → 0 à 5</td></tr>
-        <tr><td>Parcourir chaque item d'un tableau</td><td><code>tableau.forEach(item => { ... })</code></td><td><code>couleurs.forEach(c => console.log(c))</code></td></tr>
-        <tr><td>Créer un élément HTML en JS</td><td><code>document.createElement("balise")</code></td><td><code>const btn = document.createElement("button")</code></td></tr>
-        <tr><td>Ajouter un élément dans la page</td><td><code>parent.appendChild(enfant)</code></td><td><code>div.appendChild(btn)</code></td></tr>
-        <tr><td>Récupérer la valeur d'un champ texte</td><td><code>input.value</code></td><td><code>const texte = monInput.value</code></td></tr>
-        <tr><td>Empêcher le comportement par défaut</td><td><code>e.preventDefault()</code></td><td>Sur un form submit pour ne pas recharger la page</td></tr>
+        <tr><td>Le texte affiché</td><td><code>element.textContent = "..."</code></td></tr>
+        <tr><td>Le HTML à l'intérieur</td><td><code>element.innerHTML = "..."</code></td></tr>
+        <tr><td>La couleur de fond</td><td><code>element.style.background = "..."</code></td></tr>
+        <tr><td>La couleur du texte</td><td><code>element.style.color = "..."</code></td></tr>
+        <tr><td>La largeur</td><td><code>element.style.width = "..." + "px"</code></td></tr>
+        <tr><td>La hauteur</td><td><code>element.style.height = "..." + "px"</code></td></tr>
+        <tr><td>La position horizontale</td><td><code>element.style.left = "..." + "px"</code></td></tr>
+        <tr><td>La position verticale</td><td><code>element.style.top = "..." + "px"</code></td></tr>
+        <tr><td>La transparence</td><td><code>element.style.opacity = "..."</code></td></tr>
+        <tr><td>La transformation</td><td><code>element.style.transform = "scale(...)"</code></td></tr>
+        <tr><td>Les coins arrondis</td><td><code>element.style.borderRadius = "..."</code></td></tr>
+        <tr><td>La bordure</td><td><code>element.style.border = "2px solid teal"</code></td></tr>
+        <tr><td>Ajouter une classe CSS</td><td><code>element.classList.add("maClasse")</code></td></tr>
+        <tr><td>Supprimer une classe CSS</td><td><code>element.classList.remove("maClasse")</code></td></tr>
+        <tr><td>Basculer une classe CSS</td><td><code>element.classList.toggle("maClasse")</code></td></tr>
       </tbody>
     </table>
+  </div>
+
+  <div class="card">
+    <h2>📡 Mémo étape 4 — Qu'est-ce que je récupère dans <code>e</code> ?</h2>
+    <p style="color:var(--text2);margin-bottom:14px">Dans l'événement, tu stockes les infos dans une variable étape 2 : <code>maDonnee = e.propriété</code></p>
+    <table class="tbl">
+      <thead><tr><th>Ce qui se passe</th><th>Propriété de l'événement</th></tr></thead>
+      <tbody>
+        <tr><td>Souris qui bouge</td><td><code>e.pageX</code> / <code>e.pageY</code></td></tr>
+        <tr><td>Touche clavier</td><td><code>e.key</code></td></tr>
+        <tr><td>Valeur d'un input / range</td><td><code>e.target.value</code></td></tr>
+        <tr><td>Scroll</td><td><code>window.scrollY</code></td></tr>
+        <tr><td>Clic</td><td>rien à récupérer dans <code>e</code> — juste appeler <code>updateDisplay()</code></td></tr>
+        <tr><td>L'élément précisément cliqué</td><td><code>e.target</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>⚡ Mémo étape 4 — Quel événement et sur quel élément ?</h2>
+    <div class="grid2">
+      <div>
+        <h3>Ce que fait l'utilisateur → événement</h3>
+        <table class="tbl">
+          <thead><tr><th>Ce que fait l'utilisateur</th><th>Événement</th></tr></thead>
+          <tbody>
+            <tr><td>Clique sur un élément</td><td><code>"click"</code></td></tr>
+            <tr><td>Bouge la souris</td><td><code>"mousemove"</code></td></tr>
+            <tr><td>Entre sur un élément</td><td><code>"mouseenter"</code></td></tr>
+            <tr><td>Sort d'un élément</td><td><code>"mouseleave"</code></td></tr>
+            <tr><td>Appuie sur une touche</td><td><code>"keypress"</code></td></tr>
+            <tr><td>Bouge un curseur / input</td><td><code>"input"</code></td></tr>
+            <tr><td>Scrolle la page</td><td><code>"scroll"</code></td></tr>
+            <tr><td>Soumet un formulaire</td><td><code>"submit"</code></td></tr>
+            <tr><td>La page est chargée</td><td><code>"load"</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h3>Situation → on écoute sur…</h3>
+        <table class="tbl">
+          <thead><tr><th>Situation</th><th>On écoute sur</th></tr></thead>
+          <tbody>
+            <tr><td>Action sur un bouton</td><td><code>btn.addEventListener(...)</code></td></tr>
+            <tr><td>Mouvement souris partout</td><td><code>window.addEventListener(...)</code></td></tr>
+            <tr><td>Scroll</td><td><code>window.addEventListener(...)</code></td></tr>
+            <tr><td>Touche clavier</td><td><code>document.addEventListener(...)</code></td></tr>
+            <tr><td>Souris entre / sort</td><td><code>element.addEventListener(...)</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
   <div class="card">
