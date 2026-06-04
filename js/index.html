@@ -894,18 +894,34 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
 
   <div class="card">
     <h2>⏱️ Timers — setTimeout / setInterval</h2>
-    <div class="code"><span class="cmt">// setTimeout : exécuté UNE FOIS après le délai (ms)</span>
-<span class="fn">setTimeout</span>(() <span class="op">=></span> {
-  <span class="vr">div</span>.<span class="fn">style</span>.<span class="fn">borderRadius</span> <span class="op">=</span> <span class="str">"300px"</span>;
-}, <span class="num">2000</span>); <span class="cmt">// 2000ms = 2 secondes</span>
 
-<span class="cmt">// setInterval : exécuté EN BOUCLE toutes les X ms</span>
-<span class="kw">const</span> <span class="vr">interval</span> <span class="op">=</span> <span class="fn">setInterval</span>(() <span class="op">=></span> {
-  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"tic"</span>);
-}, <span class="num">1000</span>);
+    <table class="tbl" style="margin-bottom:16px">
+      <thead><tr><th>Ce qu'on veut faire</th><th>Outil</th></tr></thead>
+      <tbody>
+        <tr><td>Exécuter une action une seule fois après X ms</td><td><code>let timeout = setTimeout(() => { }, 1000)</code></td></tr>
+        <tr><td>Répéter une action toutes les X ms</td><td><code>let interval = setInterval(() => { }, 1000)</code></td></tr>
+        <tr><td>Arrêter le setInterval</td><td><code>clearInterval(interval)</code></td></tr>
+        <tr><td>Arrêter le setTimeout</td><td><code>clearTimeout(timeout)</code></td></tr>
+      </tbody>
+    </table>
 
-<span class="cmt">// Arrêter le setInterval :</span>
-<span class="fn">clearInterval</span>(<span class="vr">interval</span>);</div>
+    <div class="alert warn"><span class="alert-icon">⚠️</span><div><strong>Règle :</strong> <code>setTimeout</code> et <code>setInterval</code> se déclarent toujours à <strong>l'étape 2</strong> avec <code>let</code> et valeur <code>null</code> de départ — pour pouvoir les arrêter depuis n'importe quel événement.</div></div>
+
+    <div class="code"><span class="cmt">// ── 2. DONNÉES ── stocker les timers pour pouvoir les arrêter</span>
+<span class="kw">let</span> <span class="vr">interval</span> <span class="op">=</span> <span class="kw">null</span>;
+<span class="kw">let</span> <span class="vr">timeout</span>  <span class="op">=</span> <span class="kw">null</span>;
+
+<span class="cmt">// ── 4. ÉVÉNEMENTS ──</span>
+<span class="vr">btnStart</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, () <span class="op">=></span> {
+  <span class="vr">interval</span> <span class="op">=</span> <span class="fn">setInterval</span>(() <span class="op">=></span> {
+    <span class="vr">count</span><span class="op">++</span>;
+    <span class="fn">updateDisplay</span>();
+  }, <span class="num">1000</span>);
+});
+
+<span class="vr">btnStop</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, () <span class="op">=></span> {
+  <span class="fn">clearInterval</span>(<span class="vr">interval</span>); <span class="cmt">// possible car interval est en étape 2</span>
+});</div>
   </div>
 
   <div class="card">
