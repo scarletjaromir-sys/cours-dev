@@ -1061,12 +1061,10 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
   </div>
 
   <div class="card">
-    <h2>🔁 Variante — forEach (plusieurs éléments)</h2>
-    <p style="color:var(--text2);margin-bottom:14px">Quand tu veux le même comportement sur <strong>plusieurs éléments</strong>. La grande différence : pas de variable étape 2 — chaque élément porte son propre état via sa classe CSS.</p>
+    <h2>🔁 Variante forEach — plusieurs éléments</h2>
+    <p style="color:var(--text2);margin-bottom:14px"><code>forEach</code> est une boucle : au lieu d'écrire <code>addEventListener</code> sur chaque élément un par un, il le fait automatiquement pour tous.</p>
 
-    <h3>C'est quoi forEach ?</h3>
-    <p style="color:var(--text2);margin-bottom:10px"><code>forEach</code> est une <strong>boucle</strong>. Une boucle = répéter la même action plusieurs fois. Sans forEach, pour 4 items tu écrirais :</p>
-    <div class="vs-grid">
+    <div class="vs-grid" style="margin-bottom:16px">
       <div class="vs-box vs-bad">
         <div class="vs-label">❌ Sans forEach — répétitif</div>
         <div class="code"><span class="vr">items</span>[<span class="num">0</span>].<span class="fn">addEventListener</span>(<span class="str">"click"</span>, ...)
@@ -1081,13 +1079,15 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
 })</div>
       </div>
     </div>
-    <div class="alert info"><span class="alert-icon">💡</span><div>Traduction en français : <strong>"Pour chaque item de ma liste, ajoute un écouteur de clic."</strong><br>forEach fait exactement la même chose que les 4 lignes du dessus, mais automatiquement — peu importe combien d'items il y a.</div></div>
+    <div class="alert info" style="margin-bottom:16px"><span class="alert-icon">💡</span><div>Traduction : <strong>"Pour chaque item de ma liste, ajoute un écouteur de clic."</strong></div></div>
+
+    <h3>Les 4 étapes avec forEach</h3>
     <div class="autopsy">
       <div class="autoline">
         <div class="autoline-code"><span style="color:var(--purple2);font-weight:700;">1.</span> SÉLECTIONS</div>
         <div class="autoline-desc">
           <div class="code"><span class="kw">const</span> <span class="vr">elements</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">querySelectorAll</span>(<span class="str">".classeSelectionnee"</span>);</div>
-          <code>querySelectorAll</code> retourne une liste de tous les éléments correspondants.
+          <code>querySelectorAll</code> retourne une liste de tous les éléments.
         </div>
       </div>
       <div class="autoline">
@@ -1097,21 +1097,52 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
       <div class="autoline">
         <div class="autoline-code"><span style="color:var(--purple2);font-weight:700;">3.</span> AFFICHAGE</div>
         <div class="autoline-desc">
-          <div class="code"><span class="kw">const</span> <span class="fn">updateDisplay</span> <span class="op">=</span> (<span class="vr">element</span>) <span class="op">=></span> {
-  <span class="vr">element</span>.<span class="fn">classList</span>.<span class="fn">toggle</span>(<span class="str">"nomDeLaClasseCSS"</span>);
+          <div class="code"><span class="kw">const</span> <span class="fn">updateDisplay</span> <span class="op">=</span> (<span class="vr">element_html</span>) <span class="op">=></span> {
+  <span class="vr">element_html</span>.<span class="fn">classList</span>.<span class="fn">toggle</span>(<span class="str">"nomDeLaClasseCSS"</span>);
 };</div>
-          La fonction reçoit l'élément en <strong>paramètre</strong> — elle agit sur celui qui a été cliqué, pas sur tous.
+          La fonction reçoit l'élément en paramètre — elle agit sur celui qui a été cliqué.
         </div>
       </div>
       <div class="autoline">
         <div class="autoline-code"><span style="color:var(--purple2);font-weight:700;">4.</span> ÉVÉNEMENT</div>
         <div class="autoline-desc">
-          <div class="code"><span class="vr">elements</span>.<span class="fn">forEach</span>((<span class="vr">element</span>) <span class="op">=></span> {
-  <span class="vr">element</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, () <span class="op">=></span> {
-    <span class="fn">updateDisplay</span>(<span class="vr">element</span>);
+          <div class="code"><span class="vr">elements</span>.<span class="fn">forEach</span>((<span class="vr">element_html</span>) <span class="op">=></span> {
+  <span class="vr">element_html</span>.<span class="fn">addEventListener</span>(<span class="str">"evenement"</span>, () <span class="op">=></span> {
+    <span class="fn">updateDisplay</span>(<span class="vr">element_html</span>);
   });
 });</div>
-          <code>forEach</code> parcourt chaque élément et lui branche son propre <code>addEventListener</code>.
+          <code>forEach</code> boucle sur tous les éléments et branche un événement sur chacun.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>⏱️ Variante Timer — setInterval / clearInterval</h2>
+    <div class="autopsy">
+      <div class="autoline">
+        <div class="autoline-code"><span style="color:var(--purple2);font-weight:700;">2.</span> DONNÉES</div>
+        <div class="autoline-desc">
+          <div class="code"><span class="kw">let</span> <span class="vr">interval</span> <span class="op">=</span> <span class="kw">null</span>;</div>
+          Stocker le timer en étape 2 — indispensable pour pouvoir l'arrêter depuis n'importe quel événement.
+        </div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span style="color:var(--purple2);font-weight:700;">4.</span> DÉMARRER</div>
+        <div class="autoline-desc">
+          <div class="code"><span class="vr">interval</span> <span class="op">=</span> <span class="fn">setInterval</span>(() <span class="op">=></span> {
+  <span class="vr">maDonnee</span><span class="op">++</span>;
+  <span class="fn">updateDisplay</span>();
+}, <span class="num">1000</span>);</div>
+          À chaque tick : on modifie la donnée, puis on appelle <code>updateDisplay()</code>.
+        </div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span style="color:var(--purple2);font-weight:700;">4.</span> ARRÊTER</div>
+        <div class="autoline-desc">
+          <div class="code"><span class="fn">clearInterval</span>(<span class="vr">interval</span>);
+<span class="vr">interval</span> <span class="op">=</span> <span class="kw">null</span>;</div>
+          On remet <code>interval</code> à <code>null</code> après l'avoir arrêté — bonne pratique pour savoir qu'il n'est plus actif.
         </div>
       </div>
     </div>
