@@ -955,52 +955,109 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
 <div id="tab-raisonnement" class="tab-panel">
 
   <div class="card">
-    <h2>🧠 La méthode universelle en 4 étapes</h2>
-    <p style="color:var(--text2);margin-bottom:14px">Cette méthode sépare ce que l'app <strong style="color:var(--text)">sait</strong> (les données) de ce que l'utilisateur <strong style="color:var(--text)">voit</strong> (l'affichage). Le JS ne regarde jamais l'écran — il regarde ses variables.</p>
+    <h2>🧠 Architecture 4 étapes</h2>
 
-    <div class="autopsy">
-      <div class="autoline">
-        <div class="autoline-code"><span style="color:var(--purple2);font-weight:700;">1.</span> SÉLECTIONS
-<span style="color:var(--text3);font-size:0.8rem">Attraper les éléments</span></div>
-        <div class="autoline-desc">
-          <div class="code"><span class="kw">const</span> <span class="vr">element</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">querySelector</span>(<span class="str">".maClasse"</span>);</div>
-          Toujours en <code>const</code> — ces références ne changent jamais.
-        </div>
-      </div>
-      <div class="autoline">
-        <div class="autoline-code"><span style="color:var(--purple2);font-weight:700;">2.</span> DONNÉES
-<span style="color:var(--text3);font-size:0.8rem">L'état de l'app</span></div>
-        <div class="autoline-desc">
-          <div class="code"><span class="kw">let</span> <span class="vr">maDonnee</span> <span class="op">=</span> <span class="str">""</span>; <span class="cmt">// ou 0, ou false</span></div>
-          En <code>let</code> car ces valeurs vont changer. C'est la mémoire de l'application.
-        </div>
-      </div>
-      <div class="autoline">
-        <div class="autoline-code"><span style="color:var(--purple2);font-weight:700;">3.</span> AFFICHAGE
-<span style="color:var(--text3);font-size:0.8rem">updateDisplay</span></div>
-        <div class="autoline-desc">
-          <div class="code"><span class="kw">const</span> <span class="fn">updateDisplay</span> <span class="op">=</span> () <span class="op">=></span> {
-  <span class="vr">element</span>.<span class="fn">propriété</span> <span class="op">=</span> <span class="vr">maDonnee</span>;
+    <h3>Étape 1 — Sélection</h3>
+    <table class="tbl" style="margin-bottom:8px">
+      <thead><tr><th>Situation</th><th>Outil</th></tr></thead>
+      <tbody>
+        <tr><td>Un seul élément</td><td><code>const element = document.querySelector(".maClasse")</code></td></tr>
+        <tr><td>Plusieurs éléments identiques</td><td><code>const elements = document.querySelectorAll(".maClasse")</code></td></tr>
+        <tr><td>Par id</td><td><code>const element = document.querySelector("#monId")</code></td></tr>
+        <tr><td>Par balise</td><td><code>const element = document.querySelector("form")</code></td></tr>
+      </tbody>
+    </table>
+    <p style="color:var(--text2);font-size:0.88rem;margin-bottom:4px"><strong style="color:var(--text)">Règle :</strong> toujours <code>const</code> — ces références ne changent jamais.</p>
+    <p style="color:var(--text2);font-size:0.88rem;margin-bottom:16px"><strong style="color:var(--text)">Comment savoir quoi sélectionner ?</strong> <em>"De quoi mon script a besoin pour écouter ou pour afficher ?"</em></p>
+
+    <h3>Étape 2 — Données</h3>
+    <table class="tbl" style="margin-bottom:8px">
+      <thead><tr><th>Type de valeur</th><th>Exemple</th></tr></thead>
+      <tbody>
+        <tr><td>Texte vide</td><td><code>let maDonnee = ""</code></td></tr>
+        <tr><td>Nombre</td><td><code>let maDonnee = 0</code></td></tr>
+        <tr><td>Booléen</td><td><code>let maDonnee = false</code></td></tr>
+        <tr><td>Timer</td><td><code>let interval = null</code></td></tr>
+        <tr><td>forEach</td><td>pas de variable globale</td></tr>
+      </tbody>
+    </table>
+    <p style="color:var(--text2);font-size:0.88rem;margin-bottom:16px"><strong style="color:var(--text)">Règle :</strong> toujours <code>let</code> — ces valeurs vont changer.</p>
+
+    <h3>Étape 3 — Affichage (updateDisplay)</h3>
+    <div class="code" style="margin-bottom:8px"><span class="kw">const</span> <span class="fn">updateDisplay</span> <span class="op">=</span> () <span class="op">=></span> {
+  <span class="vr">element</span>.<span class="fn">propriété</span> <span class="op">=</span> <span class="vr">variable_etape_2</span>;
 };</div>
-          <strong style="color:var(--yellow)">Règle :</strong> <code>element_html.propriété = variable_étape_2</code><br>
-          Se place <strong>avant</strong> les événements. Ne décide de rien, obéit à l'état.
-        </div>
-      </div>
-      <div class="autoline">
-        <div class="autoline-code"><span style="color:var(--purple2);font-weight:700;">4.</span> ÉVÉNEMENT
-<span style="color:var(--text3);font-size:0.8rem">Le déclencheur</span></div>
-        <div class="autoline-desc">
-          <div class="code"><span class="vr">element</span>.<span class="fn">addEventListener</span>(<span class="str">"evenement"</span>, (<span class="vr">e</span>) <span class="op">=></span> {
-  <span class="vr">maDonnee</span> <span class="op">=</span> <span class="vr">e</span>.<span class="fn">propriété_événement</span>;
+    <p style="color:var(--text2);font-size:0.88rem;margin-bottom:8px"><strong style="color:var(--text)">Règle :</strong> <code>element_html.propriété = variable_étape_2</code></p>
+    <table class="tbl" style="margin-bottom:16px">
+      <thead><tr><th>Ce qui change</th><th>Propriété</th></tr></thead>
+      <tbody>
+        <tr><td>Le texte</td><td><code>element.textContent = maDonnee</code></td></tr>
+        <tr><td>Le HTML</td><td><code>element.innerHTML = maDonnee</code></td></tr>
+        <tr><td>Couleur de fond</td><td><code>element.style.background = maDonnee</code></td></tr>
+        <tr><td>Couleur du texte</td><td><code>element.style.color = maDonnee</code></td></tr>
+        <tr><td>Largeur</td><td><code>element.style.width = maDonnee + "px"</code></td></tr>
+        <tr><td>Hauteur</td><td><code>element.style.height = maDonnee + "px"</code></td></tr>
+        <tr><td>Position horizontale</td><td><code>element.style.left = maDonnee + "px"</code></td></tr>
+        <tr><td>Position verticale</td><td><code>element.style.top = maDonnee + "px"</code></td></tr>
+        <tr><td>Transparence</td><td><code>element.style.opacity = maDonnee</code></td></tr>
+        <tr><td>Transformation</td><td><code>element.style.transform = "scale(0.5)"</code></td></tr>
+        <tr><td>Ajouter classe CSS</td><td><code>element.classList.add("maClasse")</code></td></tr>
+        <tr><td>Supprimer classe CSS</td><td><code>element.classList.remove("maClasse")</code></td></tr>
+        <tr><td>Basculer classe CSS</td><td><code>element.classList.toggle("nomDeLaClasseCSS")</code></td></tr>
+      </tbody>
+    </table>
+
+    <h3>Étape 4 — Événement</h3>
+    <div class="code" style="margin-bottom:8px"><span class="vr">element_html</span>.<span class="fn">addEventListener</span>(<span class="str">"evenement"</span>, (<span class="vr">e</span>) <span class="op">=></span> {
+  <span class="vr">variable_étape_2</span> <span class="op">=</span> <span class="vr">valeur</span>;
   <span class="fn">updateDisplay</span>();
 });</div>
-          <strong style="color:var(--yellow)">Règle :</strong> <code>variable_étape_2 = e.propriété_événement</code><br>
-          On ne touche <strong>jamais</strong> au CSS directement ici.
-        </div>
+    <p style="color:var(--text2);font-size:0.88rem;margin-bottom:12px"><strong style="color:var(--text)">Règle :</strong> on ne touche jamais au CSS directement ici. On met à jour la variable étape 2 puis on appelle <code>updateDisplay()</code>.</p>
+    <div class="grid2">
+      <div>
+        <p style="color:var(--purple2);font-weight:600;font-size:0.88rem;margin-bottom:6px">Quel élément écouter ?</p>
+        <table class="tbl">
+          <thead><tr><th>Situation</th><th>On écoute sur</th></tr></thead>
+          <tbody>
+            <tr><td>Clic sur un bouton</td><td><code>bouton.addEventListener(...)</code></td></tr>
+            <tr><td>Mouvement souris partout</td><td><code>window.addEventListener(...)</code></td></tr>
+            <tr><td>Scroll</td><td><code>window.addEventListener(...)</code></td></tr>
+            <tr><td>Touche clavier</td><td><code>document.addEventListener(...)</code></td></tr>
+            <tr><td>Souris entre/sort</td><td><code>element_html.addEventListener(...)</code></td></tr>
+            <tr><td>Formulaire soumis</td><td><code>form.addEventListener(...)</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <p style="color:var(--purple2);font-weight:600;font-size:0.88rem;margin-bottom:6px">Quel événement ?</p>
+        <table class="tbl">
+          <thead><tr><th>Ce que fait l'utilisateur</th><th>Événement</th></tr></thead>
+          <tbody>
+            <tr><td>Clique</td><td><code>"click"</code></td></tr>
+            <tr><td>Bouge la souris</td><td><code>"mousemove"</code></td></tr>
+            <tr><td>Entre sur un élément</td><td><code>"mouseenter"</code></td></tr>
+            <tr><td>Sort d'un élément</td><td><code>"mouseleave"</code></td></tr>
+            <tr><td>Appuie sur une touche</td><td><code>"keypress"</code></td></tr>
+            <tr><td>Bouge un range/input</td><td><code>"input"</code></td></tr>
+            <tr><td>Scrolle</td><td><code>"scroll"</code></td></tr>
+            <tr><td>Soumet un formulaire</td><td><code>"submit"</code></td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
-
-    <div class="alert info" style="margin-top:12px"><span class="alert-icon">💡</span><div><code>updateDisplay</code> n'est pas un mot-clé JS — tu peux l'appeler comme tu veux. Pour un simple <code>body.classList.toggle("dark")</code>, tu peux mettre l'action directement dans l'événement sans passer par une fonction.</div></div>
+    <p style="color:var(--purple2);font-weight:600;font-size:0.88rem;margin:12px 0 6px">D'où vient la valeur ?</p>
+    <table class="tbl">
+      <thead><tr><th>Situation</th><th>Valeur</th></tr></thead>
+      <tbody>
+        <tr><td>Souris qui bouge</td><td><code>e.clientX</code> / <code>e.clientY</code></td></tr>
+        <tr><td>Touche clavier</td><td><code>e.key</code></td></tr>
+        <tr><td>Range / input</td><td><code>e.target.value</code></td></tr>
+        <tr><td>Champ texte au submit</td><td><code>elementInput_etape1.value</code></td></tr>
+        <tr><td>Scroll</td><td><code>window.scrollY</code></td></tr>
+        <tr><td>Clic simple / forEach</td><td>rien à récupérer</td></tr>
+        <tr><td>Submit</td><td>toujours <code>e.preventDefault()</code> en premier</td></tr>
+      </tbody>
+    </table>
   </div>
 
   <div class="card">
