@@ -1011,8 +1011,8 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
         <tr><td>Injecter dans la page</td><td><code>document.body.appendChild(el)</code></td></tr>
         <tr><td>Supprimer un élément</td><td><code>element.remove()</code></td></tr>
         <tr><td>Valeur aléatoire (0 à 1)</td><td><code>Math.random()</code></td></tr>
-        <tr><td>Taille aléatoire en px (ex: 100 à 300)</td><td><code>Math.random() * 200 + 100 + "px"</code></td></tr>
-        <tr><td>Position aléatoire en %</td><td><code>Math.random() * 100 + "%"</code></td></tr>
+        <tr><td>Taille aléatoire en px (ex: 100 à 300)</td><td><code>const taille = Math.random() * 200 + 100 + "px";<br>element.style.width = taille;<br>element.style.height = taille;</code></td></tr>
+        <tr><td>Position aléatoire en %</td><td><code>element.style.left = Math.random() * 100 + "%"</code></td></tr>
       </tbody>
     </table>
 
@@ -1263,82 +1263,7 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
     <div class="alert warn"><span class="alert-icon">⚠️</span><div><strong>Piège fréquent :</strong> tu vois <code>e.pageX</code> dans un exemple avec <code>mousemove</code> dans ton cours. Mais <code>e.pageX</code> existe aussi dans un <code>click</code>. Ce n'est pas l'outil qui change — c'est l'événement qui le déclenche.</div></div>
   </div>
 
-  <div class="card">
-    <h2>🎨 Mémo étape 3 — Qu'est-ce qui change sur mon élément ?</h2>
-    <p style="color:var(--text2);margin-bottom:14px">Dans <code>updateDisplay</code>, tu modifies une propriété de l'élément. Cherche ce qui doit changer visuellement.</p>
-    <table class="tbl">
-      <thead><tr><th>Ce qui change</th><th>Propriété JS à utiliser</th></tr></thead>
-      <tbody>
-        <tr><td>Le texte affiché</td><td><code>element.textContent = "..."</code></td></tr>
-        <tr><td>Le HTML à l'intérieur</td><td><code>element.innerHTML = "..."</code></td></tr>
-        <tr><td>La couleur de fond</td><td><code>element.style.background = "..."</code></td></tr>
-        <tr><td>La couleur du texte</td><td><code>element.style.color = "..."</code></td></tr>
-        <tr><td>La largeur</td><td><code>element.style.width = "..." + "px"</code></td></tr>
-        <tr><td>La hauteur</td><td><code>element.style.height = "..." + "px"</code></td></tr>
-        <tr><td>La position horizontale</td><td><code>element.style.left = "..." + "px"</code></td></tr>
-        <tr><td>La position verticale</td><td><code>element.style.top = "..." + "px"</code></td></tr>
-        <tr><td>La transparence</td><td><code>element.style.opacity = "..."</code></td></tr>
-        <tr><td>La transformation</td><td><code>element.style.transform = "scale(...)"</code></td></tr>
-        <tr><td>Les coins arrondis</td><td><code>element.style.borderRadius = "..."</code></td></tr>
-        <tr><td>La bordure</td><td><code>element.style.border = "2px solid teal"</code></td></tr>
-        <tr><td>Ajouter une classe CSS</td><td><code>element.classList.add("maClasse")</code></td></tr>
-        <tr><td>Supprimer une classe CSS</td><td><code>element.classList.remove("maClasse")</code></td></tr>
-        <tr><td>Basculer une classe CSS</td><td><code>element.classList.toggle("maClasse")</code></td></tr>
-      </tbody>
-    </table>
-  </div>
 
-  <div class="card">
-    <h2>📡 Mémo étape 4 — Qu'est-ce que je récupère dans <code>e</code> ?</h2>
-    <p style="color:var(--text2);margin-bottom:14px">Dans l'événement, tu stockes les infos dans une variable étape 2 : <code>maDonnee = e.propriété</code></p>
-    <table class="tbl">
-      <thead><tr><th>Ce qui se passe</th><th>Propriété de l'événement</th></tr></thead>
-      <tbody>
-        <tr><td>Souris qui bouge</td><td><code>e.pageX</code> / <code>e.pageY</code></td></tr>
-        <tr><td>Touche clavier</td><td><code>e.key</code></td></tr>
-        <tr><td>Valeur d'un input / range</td><td><code>e.target.value</code></td></tr>
-        <tr><td>Scroll</td><td><code>window.scrollY</code></td></tr>
-        <tr><td>Clic</td><td>rien à récupérer dans <code>e</code> — juste appeler <code>updateDisplay()</code></td></tr>
-        <tr><td>L'élément précisément cliqué</td><td><code>e.target</code></td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="card">
-    <h2>⚡ Mémo étape 4 — Quel événement et sur quel élément ?</h2>
-    <div class="grid2">
-      <div>
-        <h3>Ce que fait l'utilisateur → événement</h3>
-        <table class="tbl">
-          <thead><tr><th>Ce que fait l'utilisateur</th><th>Événement</th></tr></thead>
-          <tbody>
-            <tr><td>Clique sur un élément</td><td><code>"click"</code></td></tr>
-            <tr><td>Bouge la souris</td><td><code>"mousemove"</code></td></tr>
-            <tr><td>Entre sur un élément</td><td><code>"mouseenter"</code></td></tr>
-            <tr><td>Sort d'un élément</td><td><code>"mouseleave"</code></td></tr>
-            <tr><td>Appuie sur une touche</td><td><code>"keypress"</code></td></tr>
-            <tr><td>Bouge un curseur / input</td><td><code>"input"</code></td></tr>
-            <tr><td>Scrolle la page</td><td><code>"scroll"</code></td></tr>
-            <tr><td>Soumet un formulaire</td><td><code>"submit"</code></td></tr>
-            <tr><td>La page est chargée</td><td><code>"load"</code></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div>
-        <h3>Situation → on écoute sur…</h3>
-        <table class="tbl">
-          <thead><tr><th>Situation</th><th>On écoute sur</th></tr></thead>
-          <tbody>
-            <tr><td>Action sur un bouton</td><td><code>btn.addEventListener(...)</code></td></tr>
-            <tr><td>Mouvement souris partout</td><td><code>window.addEventListener(...)</code></td></tr>
-            <tr><td>Scroll</td><td><code>window.addEventListener(...)</code></td></tr>
-            <tr><td>Touche clavier</td><td><code>document.addEventListener(...)</code></td></tr>
-            <tr><td>Souris entre / sort</td><td><code>element.addEventListener(...)</code></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
 
   <div class="card">
     <h2>📏 Les règles d'or</h2>
@@ -1736,6 +1661,48 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
         <div class="autoline-desc"><span class="badge">propriété</span> <span class="badge">étape 4</span> Retourne <code>true</code> si la case est cochée, <code>false</code> sinon. Utilisé pour valider les CGV dans un formulaire.</div>
       </div>
     </div>
+  </div>
+
+  <div class="card">
+    <h2>🎲 Je veux générer des valeurs aléatoires — Math.random()</h2>
+    <p style="color:var(--text2);margin-bottom:14px"><code>Math.random()</code> génère un nombre entre <strong>0 et 1</strong> (ex: 0.472). On le multiplie et l'adapte pour obtenir ce qu'on veut.</p>
+    <div class="autopsy">
+      <div class="autoline">
+        <div class="autoline-code"><span class="fn">Math</span>.<span class="fn">random</span>()</div>
+        <div class="autoline-desc">Nombre entre 0 et 1. Rarement utilisé seul — sert de base pour les calculs suivants.</div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span class="fn">Math</span>.<span class="fn">random</span>() <span class="op">*</span> <span class="num">200</span> <span class="op">+</span> <span class="num">100</span></div>
+        <div class="autoline-desc">Nombre entre <strong>100 et 300</strong>. Formule : <code>Math.random() * (max - min) + min</code></div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span class="fn">Math</span>.<span class="fn">floor</span>(<span class="fn">Math</span>.<span class="fn">random</span>() <span class="op">*</span> <span class="num">6</span>)</div>
+        <div class="autoline-desc">Entier entre <strong>0 et 5</strong>. <code>Math.floor()</code> arrondit à l'entier inférieur — indispensable pour les index de tableau.</div>
+      </div>
+    </div>
+
+    <h3>Comment l'utiliser dans une fonction</h3>
+    <div class="code"><span class="kw">const</span> <span class="fn">creerElement</span> <span class="op">=</span> () <span class="op">=></span> {
+  <span class="kw">const</span> <span class="vr">el</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">createElement</span>(<span class="str">"div"</span>);
+  <span class="vr">el</span>.<span class="fn">classList</span>.<span class="fn">add</span>(<span class="str">"cercle"</span>);
+
+  <span class="cmt">// Taille aléatoire entre 100 et 300px</span>
+  <span class="kw">const</span> <span class="vr">taille</span> <span class="op">=</span> <span class="fn">Math</span>.<span class="fn">random</span>() <span class="op">*</span> <span class="num">200</span> <span class="op">+</span> <span class="num">100</span> <span class="op">+</span> <span class="str">"px"</span>;
+  <span class="vr">el</span>.<span class="fn">style</span>.<span class="fn">width</span>  <span class="op">=</span> <span class="vr">taille</span>;
+  <span class="vr">el</span>.<span class="fn">style</span>.<span class="fn">height</span> <span class="op">=</span> <span class="vr">taille</span>;
+
+  <span class="cmt">// Position aléatoire entre 0 et 100%</span>
+  <span class="vr">el</span>.<span class="fn">style</span>.<span class="fn">left</span> <span class="op">=</span> <span class="fn">Math</span>.<span class="fn">random</span>() <span class="op">*</span> <span class="num">100</span> <span class="op">+</span> <span class="str">"%"</span>;
+  <span class="vr">el</span>.<span class="fn">style</span>.<span class="fn">top</span>  <span class="op">=</span> <span class="fn">Math</span>.<span class="fn">random</span>() <span class="op">*</span> <span class="num">100</span> <span class="op">+</span> <span class="str">"%"</span>;
+
+  <span class="cmt">// Citation aléatoire dans un tableau</span>
+  <span class="kw">const</span> <span class="vr">citations</span> <span class="op">=</span> [<span class="str">"Bonjour"</span>, <span class="str">"Salut"</span>, <span class="str">"Coucou"</span>];
+  <span class="kw">const</span> <span class="vr">index</span> <span class="op">=</span> <span class="fn">Math</span>.<span class="fn">floor</span>(<span class="fn">Math</span>.<span class="fn">random</span>() <span class="op">*</span> <span class="vr">citations</span>.<span class="fn">length</span>);
+  <span class="vr">el</span>.<span class="fn">textContent</span> <span class="op">=</span> <span class="vr">citations</span>[<span class="vr">index</span>];
+
+  <span class="fn">document</span>.<span class="fn">body</span>.<span class="fn">appendChild</span>(<span class="vr">el</span>);
+};</div>
+    <div class="alert info"><span class="alert-icon">💡</span><div>On stocke souvent le résultat dans une <code>const</code> avant de l'utiliser — comme <code>const taille = Math.random() * 200 + 100 + "px"</code> — pour pouvoir l'appliquer à <code>width</code> ET <code>height</code> en une seule valeur.</div></div>
   </div>
 
   <div class="card">
