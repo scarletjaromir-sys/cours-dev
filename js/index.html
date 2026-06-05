@@ -286,11 +286,13 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
     <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px;">
       <div style="background:var(--bg3);padding:10px 14px;display:flex;align-items:center;gap:10px;">
         <span style="background:#1d4ed8;color:#fff;font-size:0.72rem;font-weight:700;text-transform:uppercase;padding:2px 8px;border-radius:4px;">Object</span>
-        <span style="color:var(--text);font-weight:600;">Objet — des données regroupées avec des étiquettes</span>
+        <span style="color:var(--text);font-weight:600;">Objet — plusieurs données liées, sous une seule variable</span>
       </div>
       <div style="padding:12px 14px;font-size:0.88rem;color:var(--text2);">
         Entre accolades <code>{ }</code>. Chaque donnée a un nom (clé) et une valeur.<br>
-        <code>{ <span style="color:#e06c75">nom</span>: <span style="color:#98c379">"Noah"</span>, <span style="color:#e06c75">age</span>: <span style="color:#d19a66">13</span>, <span style="color:#e06c75">actif</span>: <span style="color:#c678dd">true</span> }</code>
+        <div style="background:#11131a;border-radius:6px;padding:10px 12px;margin:8px 0;font-family:Consolas,monospace;font-size:0.85rem;color:#abb2bf;"><span style="color:#c678dd">let</span> <span style="color:#e06c75">user</span> = {<br>&nbsp;&nbsp;<span style="color:#e06c75">prenom</span>: <span style="color:#98c379">"audrey"</span>,<br>&nbsp;&nbsp;<span style="color:#e06c75">age</span>: <span style="color:#d19a66">33</span>,<br>&nbsp;&nbsp;<span style="color:#e06c75">ville</span>: <span style="color:#98c379">"bordeaux"</span><br>}</div>
+        <strong style="color:var(--text)">Quand l'utiliser ?</strong> Quand une "chose" a plusieurs caractéristiques. Au lieu de 3 variables séparées (<code>let prenom</code>, <code>let age</code>, <code>let ville</code>), tout est groupé sous un seul nom.<br><br>
+        <strong style="color:var(--text)">Accéder à une valeur :</strong> <code>user.prenom</code> → <code style="color:#98c379">"audrey"</code> &nbsp;·&nbsp; <code>user.age</code> → <code style="color:#d19a66">33</code>
       </div>
     </div>
     <div class="alert info">
@@ -559,6 +561,7 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
 <div id="tab-fonctions" class="tab-panel">
   <div class="card">
     <h2>🛠️ Créer une fonction</h2>
+    <div class="alert warn" style="margin-bottom:14px"><span class="alert-icon">⚠️</span><div><strong>Il faut impérativement appeler la fonction pour qu'elle s'exécute.</strong> La déclarer ne suffit pas — sans appel, elle ne fait rien.</div></div>
     <div class="vs-grid">
       <div><h3>Déclaration classique</h3><div class="code"><span class="kw">function</span> <span class="fn">saluer</span>(<span class="vr">prenom</span>) {
   <span class="kw">return</span> <span class="str">`Bonjour <span class="op">${</span><span class="vr">prenom</span><span class="op">}</span> !`</span>;
@@ -1146,6 +1149,84 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="card">
+    <h2>⚡ Méthode directe — sans updateDisplay</h2>
+    <p style="color:var(--text2);margin-bottom:10px"><strong style="color:var(--text)">Quand l'utiliser ?</strong> Un seul événement met à jour l'affichage. Code court et simple.</p>
+    <div class="code"><span class="cmt">// 1. SÉLECTION</span>
+<span class="kw">const</span> <span class="vr">element</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">querySelector</span>(<span class="str">".maClasse"</span>);
+
+<span class="cmt">// 2. DONNÉES</span>
+<span class="kw">let</span> <span class="vr">maDonnee</span> <span class="op">=</span> <span class="num">0</span>;
+
+<span class="cmt">// 3. PAS DE FONCTION — on agit directement dans l'événement</span>
+<span class="vr">element</span>.<span class="fn">addEventListener</span>(<span class="str">"evenement"</span>, () <span class="op">=></span> {
+  <span class="vr">maDonnee</span><span class="op">++</span>;
+  <span class="vr">element_html</span>.<span class="fn">propriété</span> <span class="op">=</span> <span class="vr">maDonnee</span>; <span class="cmt">// on modifie directement le CSS/HTML</span>
+});</div>
+
+    <h3 style="margin-top:16px">Quand utiliser quelle méthode ?</h3>
+    <table class="tbl">
+      <thead><tr><th>Situation</th><th>Méthode</th></tr></thead>
+      <tbody>
+        <tr><td>Un seul événement met à jour l'affichage</td><td>Méthode directe</td></tr>
+        <tr><td>Plusieurs événements mettent à jour le même affichage</td><td><code>updateDisplay</code></td></tr>
+        <tr><td>Code court et simple</td><td>Méthode directe</td></tr>
+        <tr><td>Code complexe avec beaucoup de variables</td><td><code>updateDisplay</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>🧰 Les nouveaux outils — createElement & Math.random</h2>
+    <table class="tbl" style="margin-bottom:16px">
+      <thead><tr><th>Outil</th><th>Ce que ça fait</th></tr></thead>
+      <tbody>
+        <tr><td><code>document.createElement("div")</code></td><td>Crée un élément HTML en mémoire</td></tr>
+        <tr><td><code>element.classList.add("maClasse")</code></td><td>Lui ajoute une classe CSS</td></tr>
+        <tr><td><code>document.body.appendChild(element)</code></td><td>L'injecte dans le HTML</td></tr>
+        <tr><td><code>element.remove()</code></td><td>Supprime l'élément du DOM</td></tr>
+        <tr><td><code>Math.random()</code></td><td>Génère un nombre aléatoire entre 0 et 1</td></tr>
+        <tr><td><code>Math.random() * 200 + 100</code></td><td>Nombre aléatoire entre 100 et 300</td></tr>
+        <tr><td><code>Math.random() * 100 + "%"</code></td><td>Position aléatoire en %</td></tr>
+        <tr><td><code>setTimeout(() => { }, 8000)</code></td><td>Exécute une action après 8 secondes</td></tr>
+        <tr><td><code>setInterval(maFonction, 1000)</code></td><td>Répète la fonction toutes les secondes</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Exemple complet — créer un élément dynamique</h3>
+    <div class="code"><span class="kw">const</span> <span class="fn">maFonction</span> <span class="op">=</span> () <span class="op">=></span> {
+  <span class="cmt">// 1. Créer l'élément en mémoire</span>
+  <span class="kw">const</span> <span class="vr">element</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">createElement</span>(<span class="str">"div"</span>);
+
+  <span class="cmt">// 2. Lui ajouter une classe CSS</span>
+  <span class="vr">element</span>.<span class="fn">classList</span>.<span class="fn">add</span>(<span class="str">"maClasse"</span>);
+
+  <span class="cmt">// 3. Le personnaliser avec Math.random()</span>
+  <span class="kw">const</span> <span class="vr">taille</span> <span class="op">=</span> <span class="fn">Math</span>.<span class="fn">random</span>() <span class="op">*</span> <span class="num">200</span> <span class="op">+</span> <span class="num">100</span> <span class="op">+</span> <span class="str">"px"</span>;
+  <span class="vr">element</span>.<span class="fn">style</span>.<span class="fn">width</span>  <span class="op">=</span> <span class="vr">taille</span>;
+  <span class="vr">element</span>.<span class="fn">style</span>.<span class="fn">height</span> <span class="op">=</span> <span class="vr">taille</span>;
+
+  <span class="cmt">// 4. Le positionner aléatoirement</span>
+  <span class="vr">element</span>.<span class="fn">style</span>.<span class="fn">left</span> <span class="op">=</span> <span class="fn">Math</span>.<span class="fn">random</span>() <span class="op">*</span> <span class="num">100</span> <span class="op">+</span> <span class="str">"%"</span>;
+
+  <span class="cmt">// 5. L'injecter dans le HTML</span>
+  <span class="fn">document</span>.<span class="fn">body</span>.<span class="fn">appendChild</span>(<span class="vr">element</span>);
+
+  <span class="cmt">// 6. Lui mettre un événement</span>
+  <span class="vr">element</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, () <span class="op">=></span> {
+    <span class="vr">element</span>.<span class="fn">remove</span>(); <span class="cmt">// supprimer l'élément du DOM</span>
+  });
+
+  <span class="cmt">// 7. Le supprimer automatiquement après X ms</span>
+  <span class="fn">setTimeout</span>(() <span class="op">=></span> {
+    <span class="vr">element</span>.<span class="fn">remove</span>();
+  }, <span class="num">8000</span>);
+};
+
+<span class="cmt">// Appeler la fonction toutes les X ms</span>
+<span class="fn">setInterval</span>(<span class="vr">maFonction</span>, <span class="num">1000</span>);</div>
   </div>
 
   <div class="card">
