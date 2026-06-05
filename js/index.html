@@ -1007,6 +1007,11 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
         <tr><td>Ajouter classe CSS</td><td><code>element.classList.add("maClasse")</code></td></tr>
         <tr><td>Supprimer classe CSS</td><td><code>element.classList.remove("maClasse")</code></td></tr>
         <tr><td>Basculer classe CSS</td><td><code>element.classList.toggle("nomDeLaClasseCSS")</code></td></tr>
+        <tr><td>Créer un élément HTML</td><td><code>const el = document.createElement("div")</code></td></tr>
+        <tr><td>Injecter dans la page</td><td><code>document.body.appendChild(el)</code></td></tr>
+        <tr><td>Supprimer un élément</td><td><code>element.remove()</code></td></tr>
+        <tr><td>Taille aléatoire en px</td><td><code>Math.random() * 200 + 100 + "px"</code></td></tr>
+        <tr><td>Position aléatoire en %</td><td><code>Math.random() * 100 + "%"</code></td></tr>
       </tbody>
     </table>
 
@@ -1059,6 +1064,8 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
         <tr><td>Scroll</td><td><code>window.scrollY</code></td></tr>
         <tr><td>Clic simple / forEach</td><td>rien à récupérer</td></tr>
         <tr><td>Submit</td><td>toujours <code>e.preventDefault()</code> en premier</td></tr>
+        <tr><td>Valeur aléatoire</td><td><code>Math.random()</code> → entre 0 et 1</td></tr>
+        <tr><td>L'élément cliqué (pour le supprimer)</td><td><code>e.target.remove()</code></td></tr>
       </tbody>
     </table>
   </div>
@@ -1508,20 +1515,49 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
     <div class="autopsy">
       <div class="autoline">
         <div class="autoline-code"><span class="kw">const</span> <span class="vr">el</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">createElement</span>(<span class="str">"div"</span>);</div>
-        <div class="autoline-desc"><span class="badge">1. Fabriquer</span> JS crée une <code>&lt;div&gt;</code> en mémoire. Elle n'est pas encore dans la page — elle n'existe que dans la variable <code>el</code>.</div>
+        <div class="autoline-desc"><span class="badge">1. Fabriquer</span> JS crée une <code>&lt;div&gt;</code> en mémoire. Elle n'est pas encore dans la page.</div>
       </div>
       <div class="autoline">
-        <div class="autoline-code"><span class="vr">el</span>.<span class="fn">style</span>.<span class="fn">color</span> <span class="op">=</span> <span class="str">"red"</span>;
-<span class="vr">el</span>.<span class="fn">textContent</span> <span class="op">=</span> <span class="str">"Salut"</span>;</div>
-        <div class="autoline-desc"><span class="badge">2. Configurer</span> Tu lui appliques tout ce que tu veux — style, texte, classes, événements — avant de l'insérer.</div>
+        <div class="autoline-code"><span class="vr">el</span>.<span class="fn">classList</span>.<span class="fn">add</span>(<span class="str">"maClasse"</span>);
+<span class="vr">el</span>.<span class="fn">style</span>.<span class="fn">width</span> <span class="op">=</span> <span class="fn">Math</span>.<span class="fn">random</span>() <span class="op">*</span> <span class="num">200</span> <span class="op">+</span> <span class="num">100</span> <span class="op">+</span> <span class="str">"px"</span>;
+<span class="vr">el</span>.<span class="fn">style</span>.<span class="fn">left</span> <span class="op">=</span> <span class="fn">Math</span>.<span class="fn">random</span>() <span class="op">*</span> <span class="num">100</span> <span class="op">+</span> <span class="str">"%"</span>;</div>
+        <div class="autoline-desc"><span class="badge">2. Configurer</span> Style, classe, position — tout ce qu'on veut avant d'insérer. <code>Math.random()</code> pour des valeurs aléatoires.</div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span class="vr">el</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, () <span class="op">=></span> {
+  <span class="vr">el</span>.<span class="fn">remove</span>();
+});</div>
+        <div class="autoline-desc"><span class="badge">3. Événement</span> On peut aussi brancher un événement sur l'élément avant de l'insérer. <code>remove()</code> le supprime du DOM.</div>
       </div>
       <div class="autoline">
         <div class="autoline-code"><span class="fn">document</span>.<span class="fn">body</span>.<span class="fn">appendChild</span>(<span class="vr">el</span>);</div>
-        <div class="autoline-desc"><span class="badge">3. Insérer</span> Seulement là, l'élément apparaît dans la page. <code>appendChild</code> l'ajoute à la fin du parent choisi.</div>
+        <div class="autoline-desc"><span class="badge">4. Insérer</span> Seulement là, l'élément apparaît dans la page.</div>
       </div>
     </div>
 
-    <div class="alert info"><span class="alert-icon">💡</span><div>Pour des projets simples, <code>innerHTML</code> suffit amplement. Utilise <code>createElement</code> quand tu génères beaucoup d'éléments à la volée ou quand tu veux attacher des événements à chaque élément créé.</div></div>
+    <h3>Dans une fonction — le bon pattern</h3>
+    <div class="code"><span class="kw">const</span> <span class="fn">creerElement</span> <span class="op">=</span> () <span class="op">=></span> {
+  <span class="cmt">// 1. Créer</span>
+  <span class="kw">const</span> <span class="vr">el</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">createElement</span>(<span class="str">"div"</span>);
+
+  <span class="cmt">// 2. Configurer</span>
+  <span class="vr">el</span>.<span class="fn">classList</span>.<span class="fn">add</span>(<span class="str">"maClasse"</span>);
+  <span class="vr">el</span>.<span class="fn">style</span>.<span class="fn">width</span>  <span class="op">=</span> <span class="fn">Math</span>.<span class="fn">random</span>() <span class="op">*</span> <span class="num">200</span> <span class="op">+</span> <span class="num">100</span> <span class="op">+</span> <span class="str">"px"</span>;
+  <span class="vr">el</span>.<span class="fn">style</span>.<span class="fn">height</span> <span class="op">=</span> <span class="fn">Math</span>.<span class="fn">random</span>() <span class="op">*</span> <span class="num">200</span> <span class="op">+</span> <span class="num">100</span> <span class="op">+</span> <span class="str">"px"</span>;
+  <span class="vr">el</span>.<span class="fn">style</span>.<span class="fn">left</span>   <span class="op">=</span> <span class="fn">Math</span>.<span class="fn">random</span>() <span class="op">*</span> <span class="num">100</span> <span class="op">+</span> <span class="str">"%"</span>;
+
+  <span class="cmt">// 3. Brancher un événement dessus</span>
+  <span class="vr">el</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, () <span class="op">=></span> {
+    <span class="vr">el</span>.<span class="fn">remove</span>();
+  });
+
+  <span class="cmt">// 4. Insérer dans la page</span>
+  <span class="fn">document</span>.<span class="fn">body</span>.<span class="fn">appendChild</span>(<span class="vr">el</span>);
+};
+
+<span class="cmt">// Appeler la fonction au clic ou en boucle :</span>
+<span class="fn">setInterval</span>(<span class="vr">creerElement</span>, <span class="num">1000</span>);</div>
+    <div class="alert info"><span class="alert-icon">💡</span><div>Tout se passe dans la fonction — créer, configurer, brancher, insérer. La fonction est ensuite appelée au clic ou avec <code>setInterval</code>.</div></div>
   </div>
 
 </div><!-- /raisonnement -->
