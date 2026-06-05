@@ -1010,7 +1010,8 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
         <tr><td>Créer un élément HTML</td><td><code>const el = document.createElement("div")</code></td></tr>
         <tr><td>Injecter dans la page</td><td><code>document.body.appendChild(el)</code></td></tr>
         <tr><td>Supprimer un élément</td><td><code>element.remove()</code></td></tr>
-        <tr><td>Taille aléatoire en px</td><td><code>Math.random() * 200 + 100 + "px"</code></td></tr>
+        <tr><td>Valeur aléatoire (0 à 1)</td><td><code>Math.random()</code></td></tr>
+        <tr><td>Taille aléatoire en px (ex: 100 à 300)</td><td><code>Math.random() * 200 + 100 + "px"</code></td></tr>
         <tr><td>Position aléatoire en %</td><td><code>Math.random() * 100 + "%"</code></td></tr>
       </tbody>
     </table>
@@ -1185,56 +1186,7 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
     </table>
   </div>
 
-  <div class="card">
-    <h2>🧰 Les nouveaux outils — createElement & Math.random</h2>
-    <table class="tbl" style="margin-bottom:16px">
-      <thead><tr><th>Outil</th><th>Ce que ça fait</th></tr></thead>
-      <tbody>
-        <tr><td><code>document.createElement("div")</code></td><td>Crée un élément HTML en mémoire</td></tr>
-        <tr><td><code>element.classList.add("maClasse")</code></td><td>Lui ajoute une classe CSS</td></tr>
-        <tr><td><code>document.body.appendChild(element)</code></td><td>L'injecte dans le HTML</td></tr>
-        <tr><td><code>element.remove()</code></td><td>Supprime l'élément du DOM</td></tr>
-        <tr><td><code>Math.random()</code></td><td>Génère un nombre aléatoire entre 0 et 1</td></tr>
-        <tr><td><code>Math.random() * 200 + 100</code></td><td>Nombre aléatoire entre 100 et 300</td></tr>
-        <tr><td><code>Math.random() * 100 + "%"</code></td><td>Position aléatoire en %</td></tr>
-        <tr><td><code>setTimeout(() => { }, 8000)</code></td><td>Exécute une action après 8 secondes</td></tr>
-        <tr><td><code>setInterval(maFonction, 1000)</code></td><td>Répète la fonction toutes les secondes</td></tr>
-      </tbody>
-    </table>
 
-    <h3>Exemple complet — créer un élément dynamique</h3>
-    <div class="code"><span class="kw">const</span> <span class="fn">maFonction</span> <span class="op">=</span> () <span class="op">=></span> {
-  <span class="cmt">// 1. Créer l'élément en mémoire</span>
-  <span class="kw">const</span> <span class="vr">element</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">createElement</span>(<span class="str">"div"</span>);
-
-  <span class="cmt">// 2. Lui ajouter une classe CSS</span>
-  <span class="vr">element</span>.<span class="fn">classList</span>.<span class="fn">add</span>(<span class="str">"maClasse"</span>);
-
-  <span class="cmt">// 3. Le personnaliser avec Math.random()</span>
-  <span class="kw">const</span> <span class="vr">taille</span> <span class="op">=</span> <span class="fn">Math</span>.<span class="fn">random</span>() <span class="op">*</span> <span class="num">200</span> <span class="op">+</span> <span class="num">100</span> <span class="op">+</span> <span class="str">"px"</span>;
-  <span class="vr">element</span>.<span class="fn">style</span>.<span class="fn">width</span>  <span class="op">=</span> <span class="vr">taille</span>;
-  <span class="vr">element</span>.<span class="fn">style</span>.<span class="fn">height</span> <span class="op">=</span> <span class="vr">taille</span>;
-
-  <span class="cmt">// 4. Le positionner aléatoirement</span>
-  <span class="vr">element</span>.<span class="fn">style</span>.<span class="fn">left</span> <span class="op">=</span> <span class="fn">Math</span>.<span class="fn">random</span>() <span class="op">*</span> <span class="num">100</span> <span class="op">+</span> <span class="str">"%"</span>;
-
-  <span class="cmt">// 5. L'injecter dans le HTML</span>
-  <span class="fn">document</span>.<span class="fn">body</span>.<span class="fn">appendChild</span>(<span class="vr">element</span>);
-
-  <span class="cmt">// 6. Lui mettre un événement</span>
-  <span class="vr">element</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, () <span class="op">=></span> {
-    <span class="vr">element</span>.<span class="fn">remove</span>(); <span class="cmt">// supprimer l'élément du DOM</span>
-  });
-
-  <span class="cmt">// 7. Le supprimer automatiquement après X ms</span>
-  <span class="fn">setTimeout</span>(() <span class="op">=></span> {
-    <span class="vr">element</span>.<span class="fn">remove</span>();
-  }, <span class="num">8000</span>);
-};
-
-<span class="cmt">// Appeler la fonction toutes les X ms</span>
-<span class="fn">setInterval</span>(<span class="vr">maFonction</span>, <span class="num">1000</span>);</div>
-  </div>
 
   <div class="card">
     <h2>🔬 La méthode en code — Exemple compteur</h2>
