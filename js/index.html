@@ -896,6 +896,84 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
   </div>
 
   <div class="card">
+    <h2>📜 Scroll avancé — détecter la position dans la page</h2>
+
+    <div class="code"><span class="cmt">// Les trois valeurs utiles :</span>
+<span class="vr">window</span>.<span class="fn">scrollY</span>              <span class="cmt">// pixels scrollés depuis le haut</span>
+<span class="vr">window</span>.<span class="fn">innerHeight</span>          <span class="cmt">// hauteur de la fenêtre visible</span>
+<span class="vr">document</span>.<span class="fn">body</span>.<span class="fn">offsetHeight</span>  <span class="cmt">// hauteur totale de la page</span></div>
+
+    <div class="vs-grid" style="margin:12px 0">
+      <div class="vs-box" style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.3);">
+        <div class="vs-label" style="color:var(--blue)">Seuil en pixels — simple</div>
+        <div class="code"><span class="kw">if</span> (<span class="vr">window</span>.<span class="fn">scrollY</span> <span class="op">></span> <span class="num">500</span>) {
+  <span class="cmt">// déclenche après 500px</span>
+}</div>
+        <p style="font-size:0.82rem;color:var(--text2);margin-top:6px">Simple mais pas responsive — ne s'adapte pas à la taille de l'écran.</p>
+      </div>
+      <div class="vs-box" style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.3);">
+        <div class="vs-label" style="color:var(--green)">Pourcentage — responsive</div>
+        <div class="code"><span class="kw">let</span> <span class="vr">scrollValue</span> <span class="op">=</span>
+  (<span class="vr">window</span>.<span class="fn">scrollY</span> <span class="op">+</span> <span class="vr">window</span>.<span class="fn">innerHeight</span>)
+  <span class="op">/</span> <span class="vr">document</span>.<span class="fn">body</span>.<span class="fn">offsetHeight</span>;
+<span class="cmt">// 0 = tout en haut · 1 = tout en bas</span>
+<span class="kw">if</span> (<span class="vr">scrollValue</span> <span class="op">></span> <span class="num">0.85</span>) {
+  <span class="cmt">// déclenche à 85% de la page</span>
+}</div>
+      </div>
+    </div>
+
+    <h3>Un seul addEventListener pour tout le scroll</h3>
+    <div class="vs-grid">
+      <div class="vs-box vs-bad">
+        <div class="vs-label">❌ Plusieurs écouteurs séparés</div>
+        <div class="code"><span class="vr">window</span>.<span class="fn">addEventListener</span>(<span class="str">"scroll"</span>, () <span class="op">=></span> { <span class="cmt">/* navbar */</span> });
+<span class="vr">window</span>.<span class="fn">addEventListener</span>(<span class="str">"scroll"</span>, () <span class="op">=></span> { <span class="cmt">/* image */</span> });
+<span class="vr">window</span>.<span class="fn">addEventListener</span>(<span class="str">"scroll"</span>, () <span class="op">=></span> { <span class="cmt">/* popup */</span> });</div>
+      </div>
+      <div class="vs-box vs-good">
+        <div class="vs-label">✅ Tout dans un seul</div>
+        <div class="code"><span class="vr">window</span>.<span class="fn">addEventListener</span>(<span class="str">"scroll"</span>, () <span class="op">=></span> {
+  <span class="kw">if</span> (<span class="vr">window</span>.<span class="fn">scrollY</span> <span class="op">></span> <span class="num">0</span>) { <span class="cmt">// navbar</span> }
+  <span class="kw">if</span> (<span class="vr">scrollValue</span> <span class="op">></span> <span class="num">0.45</span>) { <span class="cmt">// image</span> }
+  <span class="kw">if</span> (<span class="vr">scrollValue</span> <span class="op">></span> <span class="num">0.85</span>) { <span class="cmt">// popup</span> }
+});</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>⚡ Le ternaire — if/else en une ligne</h2>
+    <p style="color:var(--text2);margin-bottom:10px">Utile quand la condition est simple et qu'on veut éviter un if/else en 6 lignes.</p>
+    <div class="code"><span class="cmt">// Structure :</span>
+<span class="vr">variable</span> <span class="op">=</span> condition <span class="op">?</span> <span class="str">"valeur si vrai"</span> <span class="op">:</span> <span class="str">"valeur si faux"</span>;</div>
+
+    <div class="vs-grid" style="margin-top:12px">
+      <div class="vs-box vs-bad">
+        <div class="vs-label">❌ if/else classique — verbeux</div>
+        <div class="code"><span class="kw">if</span> (<span class="vr">window</span>.<span class="fn">scrollY</span> <span class="op">></span> <span class="num">250</span>) {
+  <span class="vr">img</span>.<span class="fn">style</span>.<span class="fn">opacity</span>   <span class="op">=</span> <span class="str">"1"</span>;
+  <span class="vr">img</span>.<span class="fn">style</span>.<span class="fn">transform</span> <span class="op">=</span> <span class="str">"translateX(0)"</span>;
+} <span class="kw">else</span> {
+  <span class="vr">img</span>.<span class="fn">style</span>.<span class="fn">opacity</span>   <span class="op">=</span> <span class="str">"0"</span>;
+  <span class="vr">img</span>.<span class="fn">style</span>.<span class="fn">transform</span> <span class="op">=</span> <span class="str">"translateX(-200px)"</span>;
+}</div>
+      </div>
+      <div class="vs-box vs-good">
+        <div class="vs-label">✅ Ternaire — compact</div>
+        <div class="code"><span class="kw">const</span> <span class="vr">visible</span> <span class="op">=</span> <span class="vr">window</span>.<span class="fn">scrollY</span> <span class="op">></span> <span class="num">250</span>;
+<span class="cmt">// visible = true ou false</span>
+
+<span class="vr">img</span>.<span class="fn">style</span>.<span class="fn">opacity</span> <span class="op">=</span>
+  <span class="vr">visible</span> <span class="op">?</span> <span class="str">"1"</span> <span class="op">:</span> <span class="str">"0"</span>;
+
+<span class="vr">img</span>.<span class="fn">style</span>.<span class="fn">transform</span> <span class="op">=</span>
+  <span class="vr">visible</span> <span class="op">?</span> <span class="str">"translateX(0)"</span> <span class="op">:</span> <span class="str">"translateX(-200px)"</span>;</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
     <h2>⏱️ Timers — setTimeout / setInterval</h2>
 
     <table class="tbl" style="margin-bottom:16px">
