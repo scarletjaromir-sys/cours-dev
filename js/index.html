@@ -150,7 +150,6 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
     <button class="tab-btn" onclick="showTab('evenements',this)">⚡ Événements</button>
     <button class="tab-btn" onclick="showTab('raisonnement',this)">🧠 Raisonnement</button>
     <button class="tab-btn" onclick="showTab('outils',this)">🔧 Méthodes</button>
-    <button class="tab-btn" onclick="showTab('recettes',this)">📋 Recettes</button>
   </div>
 </header>
 
@@ -1610,6 +1609,34 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
   </div>
 
   <div class="card">
+    <h2>🏷️ Je veux ajouter / retirer / basculer une classe CSS</h2>
+    <div class="autopsy">
+      <div class="autoline">
+        <div class="autoline-code"><span class="vr">el</span>.<span class="fn">classList</span>.<span class="fn">add</span>(<span class="str">"actif"</span>)</div>
+        <div class="autoline-desc"><span class="badge">méthode</span> <span class="badge">étape 3</span> Ajoute la classe. Ne touche pas aux classes déjà présentes.</div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span class="vr">el</span>.<span class="fn">classList</span>.<span class="fn">remove</span>(<span class="str">"actif"</span>)</div>
+        <div class="autoline-desc"><span class="badge">méthode</span> <span class="badge">étape 3</span> Retire la classe.</div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span class="vr">el</span>.<span class="fn">classList</span>.<span class="fn">toggle</span>(<span class="str">"dark"</span>)</div>
+        <div class="autoline-desc"><span class="badge">méthode</span> <span class="badge">étape 3</span> Si la classe est là → la retire. Si elle n'est pas là → l'ajoute. <strong>Parfait pour les boutons on/off.</strong><br><br>
+          <div class="code"><span class="cmt">// Exemple — toggle thème sombre :</span>
+<span class="vr">body</span>.<span class="fn">classList</span>.<span class="fn">toggle</span>(<span class="str">"dark"</span>);
+<span class="cmt">// 1er clic → ajoute "dark"</span>
+<span class="cmt">// 2e clic  → retire "dark"</span>
+<span class="cmt">// 3e clic  → ajoute "dark"... etc</span></div>
+        </div>
+      </div>
+      <div class="autoline">
+        <div class="autoline-code"><span class="vr">el</span>.<span class="fn">classList</span>.<span class="fn">contains</span>(<span class="str">"actif"</span>)</div>
+        <div class="autoline-desc"><span class="badge">méthode</span> Retourne <code>true</code> ou <code>false</code> — utile dans un <code>if</code> pour savoir si la classe est présente.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
     <h2>👂 Je veux réagir à une action utilisateur</h2>
     <div class="autopsy">
       <div class="autoline">
@@ -1799,317 +1826,7 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
 
 
 
-<!-- ============================================================
-     RECETTES
-============================================================ -->
-<div id="tab-recettes" class="tab-panel">
 
-  <div class="card">
-    <h2>📋 Comment utiliser ces recettes</h2>
-    <p style="color:var(--text2);margin-bottom:12px">Chaque recette est un code complet prêt à tester. Copie les 3 blocs (HTML, CSS, JS) dans des fichiers séparés et ouvre le HTML dans le navigateur.</p>
-    <div class="autopsy">
-      <div class="autoline">
-        <div class="autoline-code" style="color:var(--tag)">index.html</div>
-        <div class="autoline-desc">Colle le bloc HTML dans un nouveau fichier <code>index.html</code>. Le lien vers le CSS et le JS est déjà inclus.</div>
-      </div>
-      <div class="autoline">
-        <div class="autoline-code" style="color:var(--fn)">style.css</div>
-        <div class="autoline-desc">Colle le bloc CSS dans un fichier <code>style.css</code> dans le même dossier.</div>
-      </div>
-      <div class="autoline">
-        <div class="autoline-code" style="color:var(--str)">script.js</div>
-        <div class="autoline-desc">Colle le bloc JS dans un fichier <code>script.js</code> dans le même dossier.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- TP1 -->
-  <div class="card">
-    <h2>🌗 Recette 1 — Toggle thème clair/sombre</h2>
-    <p style="color:var(--text2);margin-bottom:14px">Un clic sur le bouton bascule entre thème clair et sombre. <strong style="color:var(--yellow)">Donnée : un booléen</strong> — vrai ou faux.</p>
-    <div class="autopsy" style="margin-bottom:16px">
-      <div class="autoline"><div class="autoline-code"><span style="color:var(--purple2)">1. Sélection</span></div><div class="autoline-desc">Le bouton + le body (pour changer sa classe)</div></div>
-      <div class="autoline"><div class="autoline-code"><span style="color:var(--purple2)">2. Données</span></div><div class="autoline-desc"><code>let isDark = false</code> — l'état du thème au départ</div></div>
-      <div class="autoline"><div class="autoline-code"><span style="color:var(--purple2)">3. Affichage</span></div><div class="autoline-desc">Ajoute/retire la classe <code>.dark</code> sur le body + met à jour le texte du bouton</div></div>
-      <div class="autoline"><div class="autoline-code"><span style="color:var(--purple2)">4. Événement</span></div><div class="autoline-desc">Click sur le bouton → inverse <code>isDark</code> → appelle updateDisplay</div></div>
-    </div>
-    <h3 style="color:var(--tag)">HTML — index.html</h3>
-    <div class="code"><span class="cmt">&lt;!DOCTYPE html&gt;</span>
-&lt;<span class="tag">html</span> <span class="attr">lang</span>=<span class="str">"fr"</span>&gt;
-&lt;<span class="tag">head</span>&gt;
-  &lt;<span class="tag">meta</span> <span class="attr">charset</span>=<span class="str">"UTF-8"</span>&gt;
-  &lt;<span class="tag">link</span> <span class="attr">rel</span>=<span class="str">"stylesheet"</span> <span class="attr">href</span>=<span class="str">"style.css"</span>&gt;
-  &lt;<span class="tag">title</span>&gt;Toggle Thème&lt;/<span class="tag">title</span>&gt;
-&lt;/<span class="tag">head</span>&gt;
-&lt;<span class="tag">body</span>&gt;
-  &lt;<span class="tag">button</span> <span class="attr">id</span>=<span class="str">"btn-theme"</span>&gt;🌙 Mode sombre&lt;/<span class="tag">button</span>&gt;
-  &lt;<span class="tag">h1</span>&gt;Bonjour !&lt;/<span class="tag">h1</span>&gt;
-  &lt;<span class="tag">p</span>&gt;Clique sur le bouton pour changer de thème.&lt;/<span class="tag">p</span>&gt;
-  &lt;<span class="tag">script</span> <span class="attr">src</span>=<span class="str">"script.js"</span>&gt;&lt;/<span class="tag">script</span>&gt;
-&lt;/<span class="tag">body</span>&gt;
-&lt;/<span class="tag">html</span>&gt;</div>
-    <h3 style="color:var(--fn)">CSS — style.css</h3>
-    <div class="code">body {
-  font-family: sans-serif;
-  background: #ffffff;
-  color: #111111;
-  padding: 40px;
-  transition: all 0.3s;
-}
-body.dark {
-  background: #1a1a2e;
-  color: #e0e0e0;
-}
-button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 1rem;
-  background: #7c3aed;
-  color: white;
-  margin-bottom: 20px;
-}</div>
-    <h3 style="color:var(--str)">JS — script.js</h3>
-    <div class="code"><span class="cmt">// ── 1. SÉLECTIONS ──────────────────────────────</span>
-<span class="kw">const</span> <span class="vr">btn</span>  <span class="op">=</span> <span class="fn">document</span>.<span class="fn">querySelector</span>(<span class="str">"#btn-theme"</span>);
-<span class="kw">const</span> <span class="vr">body</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">querySelector</span>(<span class="str">"body"</span>);
-
-<span class="cmt">// ── 2. DONNÉES ─────────────────────────────────</span>
-<span class="kw">let</span> <span class="vr">isDark</span> <span class="op">=</span> <span class="kw">false</span>;
-
-<span class="cmt">// ── 3. AFFICHAGE ───────────────────────────────</span>
-<span class="kw">const</span> <span class="fn">updateDisplay</span> <span class="op">=</span> () <span class="op">=></span> {
-  <span class="kw">if</span> (<span class="vr">isDark</span>) {
-    <span class="vr">body</span>.<span class="fn">classList</span>.<span class="fn">add</span>(<span class="str">"dark"</span>);
-    <span class="vr">btn</span>.<span class="fn">textContent</span> <span class="op">=</span> <span class="str">"☀️ Mode clair"</span>;
-  } <span class="kw">else</span> {
-    <span class="vr">body</span>.<span class="fn">classList</span>.<span class="fn">remove</span>(<span class="str">"dark"</span>);
-    <span class="vr">btn</span>.<span class="fn">textContent</span> <span class="op">=</span> <span class="str">"🌙 Mode sombre"</span>;
-  }
-};
-
-<span class="cmt">// ── 4. ÉVÉNEMENT ───────────────────────────────</span>
-<span class="vr">btn</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, () <span class="op">=></span> {
-  <span class="vr">isDark</span> <span class="op">=</span> <span class="op">!</span><span class="vr">isDark</span>;       <span class="cmt">// inverse le booléen</span>
-  <span class="fn">updateDisplay</span>();
-});</div>
-  </div>
-
-  <!-- TP2 -->
-  <div class="card">
-    <h2>✍️ Recette 2 — Affichage de texte en temps réel</h2>
-    <p style="color:var(--text2);margin-bottom:14px">Ce que l'utilisateur tape dans le champ s'affiche instantanément. <strong style="color:var(--yellow)">Donnée : une string</strong></p>
-    <div class="autopsy" style="margin-bottom:16px">
-      <div class="autoline"><div class="autoline-code"><span style="color:var(--purple2)">1. Sélection</span></div><div class="autoline-desc">Le champ input + le paragraphe d'affichage</div></div>
-      <div class="autoline"><div class="autoline-code"><span style="color:var(--purple2)">2. Données</span></div><div class="autoline-desc"><code>let texte = ""</code> — vide au départ</div></div>
-      <div class="autoline"><div class="autoline-code"><span style="color:var(--purple2)">3. Affichage</span></div><div class="autoline-desc">Injecte <code>texte</code> dans le <code>textContent</code> du paragraphe</div></div>
-      <div class="autoline"><div class="autoline-code"><span style="color:var(--purple2)">4. Événement</span></div><div class="autoline-desc"><code>"input"</code> sur le champ → stocke <code>e.target.value</code> → appelle updateDisplay</div></div>
-    </div>
-    <h3 style="color:var(--tag)">HTML</h3>
-    <div class="code">&lt;<span class="tag">body</span>&gt;
-  &lt;<span class="tag">input</span> <span class="attr">type</span>=<span class="str">"text"</span> <span class="attr">id</span>=<span class="str">"champ"</span> <span class="attr">placeholder</span>=<span class="str">"Tape quelque chose..."</span>&gt;
-  &lt;<span class="tag">p</span> <span class="attr">id</span>=<span class="str">"affichage"</span>&gt;Ici apparaîtra ton texte&lt;/<span class="tag">p</span>&gt;
-  &lt;<span class="tag">script</span> <span class="attr">src</span>=<span class="str">"script.js"</span>&gt;&lt;/<span class="tag">script</span>&gt;
-&lt;/<span class="tag">body</span>&gt;</div>
-    <h3 style="color:var(--str)">JS</h3>
-    <div class="code"><span class="cmt">// ── 1. SÉLECTIONS ──</span>
-<span class="kw">const</span> <span class="vr">champ</span>    <span class="op">=</span> <span class="fn">document</span>.<span class="fn">querySelector</span>(<span class="str">"#champ"</span>);
-<span class="kw">const</span> <span class="vr">affichage</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">querySelector</span>(<span class="str">"#affichage"</span>);
-
-<span class="cmt">// ── 2. DONNÉES ─────</span>
-<span class="kw">let</span> <span class="vr">texte</span> <span class="op">=</span> <span class="str">""</span>;
-
-<span class="cmt">// ── 3. AFFICHAGE ───</span>
-<span class="kw">const</span> <span class="fn">updateDisplay</span> <span class="op">=</span> () <span class="op">=></span> {
-  <span class="vr">affichage</span>.<span class="fn">textContent</span> <span class="op">=</span> <span class="vr">texte</span>;
-};
-
-<span class="cmt">// ── 4. ÉVÉNEMENT ───</span>
-<span class="vr">champ</span>.<span class="fn">addEventListener</span>(<span class="str">"input"</span>, (<span class="vr">e</span>) <span class="op">=></span> {
-  <span class="vr">texte</span> <span class="op">=</span> <span class="vr">e</span>.<span class="fn">target</span>.<span class="fn">value</span>;  <span class="cmt">// stocke ce qui est tapé</span>
-  <span class="fn">updateDisplay</span>();
-});</div>
-  </div>
-
-  <!-- TP3 -->
-  <div class="card">
-    <h2>🔒 Recette 3 — Validateur de mot de passe</h2>
-    <p style="color:var(--text2);margin-bottom:14px">Vérifie la longueur du mot de passe et change la couleur. <strong style="color:var(--yellow)">Données : la string du champ + logique if/else dans updateDisplay</strong></p>
-    <div class="autopsy" style="margin-bottom:16px">
-      <div class="autoline"><div class="autoline-code"><span style="color:var(--purple2)">3. Affichage</span></div><div class="autoline-desc">if <code>password.length >= 8</code> → vert, sinon → rouge. Le message change aussi.</div></div>
-      <div class="autoline"><div class="autoline-code"><span style="color:var(--purple2)">4. Événement</span></div><div class="autoline-desc"><code>"input"</code> sur le champ password → stocke <code>e.target.value</code> → updateDisplay</div></div>
-    </div>
-    <h3 style="color:var(--str)">JS</h3>
-    <div class="code"><span class="cmt">// ── 1. SÉLECTIONS ──</span>
-<span class="kw">const</span> <span class="vr">input</span>   <span class="op">=</span> <span class="fn">document</span>.<span class="fn">querySelector</span>(<span class="str">"#password"</span>);
-<span class="kw">const</span> <span class="vr">message</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">querySelector</span>(<span class="str">"#message"</span>);
-
-<span class="cmt">// ── 2. DONNÉES ─────</span>
-<span class="kw">let</span> <span class="vr">password</span> <span class="op">=</span> <span class="str">""</span>;
-
-<span class="cmt">// ── 3. AFFICHAGE ───</span>
-<span class="kw">const</span> <span class="fn">updateDisplay</span> <span class="op">=</span> () <span class="op">=></span> {
-  <span class="kw">if</span> (<span class="vr">password</span>.<span class="fn">length</span> <span class="op">===</span> <span class="num">0</span>) {
-    <span class="vr">message</span>.<span class="fn">textContent</span> <span class="op">=</span> <span class="str">"Tape un mot de passe"</span>;
-    <span class="vr">message</span>.<span class="fn">style</span>.<span class="fn">color</span> <span class="op">=</span> <span class="str">"grey"</span>;
-  } <span class="kw">else if</span> (<span class="vr">password</span>.<span class="fn">length</span> <span class="op">&lt;</span> <span class="num">8</span>) {
-    <span class="vr">message</span>.<span class="fn">textContent</span> <span class="op">=</span> <span class="str">"Trop court (" + "</span> <span class="op">+</span> <span class="vr">password</span>.<span class="fn">length</span> <span class="op">+</span> <span class="str">"/8)"</span>;
-    <span class="vr">message</span>.<span class="fn">style</span>.<span class="fn">color</span> <span class="op">=</span> <span class="str">"red"</span>;
-  } <span class="kw">else</span> {
-    <span class="vr">message</span>.<span class="fn">textContent</span> <span class="op">=</span> <span class="str">"✅ Mot de passe valide !"</span>;
-    <span class="vr">message</span>.<span class="fn">style</span>.<span class="fn">color</span> <span class="op">=</span> <span class="str">"green"</span>;
-  }
-};
-
-<span class="cmt">// ── 4. ÉVÉNEMENT ───</span>
-<span class="vr">input</span>.<span class="fn">addEventListener</span>(<span class="str">"input"</span>, (<span class="vr">e</span>) <span class="op">=></span> {
-  <span class="vr">password</span> <span class="op">=</span> <span class="vr">e</span>.<span class="fn">target</span>.<span class="fn">value</span>;
-  <span class="fn">updateDisplay</span>();
-});</div>
-  </div>
-
-  <!-- TP4 -->
-  <div class="card">
-    <h2>📐 Recette 4 — Contrôleur de taille (curseur range)</h2>
-    <p style="color:var(--text2);margin-bottom:14px">Un curseur change la taille d'une boîte en temps réel. <strong style="color:var(--yellow)">Donnée : un nombre</strong> — la valeur du curseur en pixels.</p>
-    <div class="autopsy" style="margin-bottom:16px">
-      <div class="autoline"><div class="autoline-code"><span style="color:var(--purple2)">3. Affichage</span></div><div class="autoline-desc">Applique <code>valeur + "px"</code> sur <code>style.width</code> et <code>style.height</code> de la boîte. Le chiffre vient de la variable, <code>"px"</code> est du texte collé derrière.</div></div>
-      <div class="autoline"><div class="autoline-code"><span style="color:var(--purple2)">4. Événement</span></div><div class="autoline-desc"><code>"input"</code> sur le range → stocke <code>parseInt(e.target.value)</code> → updateDisplay</div></div>
-    </div>
-    <h3 style="color:var(--tag)">HTML</h3>
-    <div class="code">&lt;<span class="tag">body</span>&gt;
-  &lt;<span class="tag">input</span> <span class="attr">type</span>=<span class="str">"range"</span> <span class="attr">id</span>=<span class="str">"curseur"</span> <span class="attr">min</span>=<span class="str">"50"</span> <span class="attr">max</span>=<span class="str">"300"</span> <span class="attr">value</span>=<span class="str">"100"</span>&gt;
-  &lt;<span class="tag">p</span> <span class="attr">id</span>=<span class="str">"valeur-affichee"</span>&gt;100px&lt;/<span class="tag">p</span>&gt;
-  &lt;<span class="tag">div</span> <span class="attr">id</span>=<span class="str">"boite"</span>&gt;&lt;/<span class="tag">div</span>&gt;
-  &lt;<span class="tag">script</span> <span class="attr">src</span>=<span class="str">"script.js"</span>&gt;&lt;/<span class="tag">script</span>&gt;
-&lt;/<span class="tag">body</span>&gt;</div>
-    <h3 style="color:var(--fn)">CSS</h3>
-    <div class="code">#boite {
-  width: 100px;
-  height: 100px;
-  background: #7c3aed;
-  border-radius: 8px;
-  transition: all 0.2s;
-  margin-top: 20px;
-}</div>
-    <h3 style="color:var(--str)">JS</h3>
-    <div class="code"><span class="cmt">// ── 1. SÉLECTIONS ──</span>
-<span class="kw">const</span> <span class="vr">curseur</span>  <span class="op">=</span> <span class="fn">document</span>.<span class="fn">querySelector</span>(<span class="str">"#curseur"</span>);
-<span class="kw">const</span> <span class="vr">boite</span>    <span class="op">=</span> <span class="fn">document</span>.<span class="fn">querySelector</span>(<span class="str">"#boite"</span>);
-<span class="kw">const</span> <span class="vr">valLabel</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">querySelector</span>(<span class="str">"#valeur-affichee"</span>);
-
-<span class="cmt">// ── 2. DONNÉES ─────</span>
-<span class="kw">let</span> <span class="vr">valeur</span> <span class="op">=</span> <span class="num">100</span>;
-
-<span class="cmt">// ── 3. AFFICHAGE ───</span>
-<span class="kw">const</span> <span class="fn">updateDisplay</span> <span class="op">=</span> () <span class="op">=></span> {
-  <span class="vr">boite</span>.<span class="fn">style</span>.<span class="fn">width</span>  <span class="op">=</span> <span class="vr">valeur</span> <span class="op">+</span> <span class="str">"px"</span>;  <span class="cmt">// nombre + unité</span>
-  <span class="vr">boite</span>.<span class="fn">style</span>.<span class="fn">height</span> <span class="op">=</span> <span class="vr">valeur</span> <span class="op">+</span> <span class="str">"px"</span>;
-  <span class="vr">valLabel</span>.<span class="fn">textContent</span> <span class="op">=</span> <span class="vr">valeur</span> <span class="op">+</span> <span class="str">"px"</span>;
-};
-
-<span class="cmt">// ── 4. ÉVÉNEMENT ───</span>
-<span class="vr">curseur</span>.<span class="fn">addEventListener</span>(<span class="str">"input"</span>, (<span class="vr">e</span>) <span class="op">=></span> {
-  <span class="vr">valeur</span> <span class="op">=</span> <span class="fn">parseInt</span>(<span class="vr">e</span>.<span class="fn">target</span>.<span class="fn">value</span>); <span class="cmt">// string → nombre</span>
-  <span class="fn">updateDisplay</span>();
-});</div>
-  </div>
-
-  <!-- TP5 -->
-  <div class="card">
-    <h2>💬 Recette 5 — Générateur de citations aléatoires</h2>
-    <p style="color:var(--text2);margin-bottom:14px">Un clic affiche une citation tirée au sort dans un tableau. <strong style="color:var(--yellow)">Données : un tableau [ ]</strong></p>
-    <div class="autopsy" style="margin-bottom:16px">
-      <div class="autoline"><div class="autoline-code"><span style="color:var(--purple2)">2. Données</span></div><div class="autoline-desc"><code>const citations = ["...", "...", "..."]</code> — le tableau des phrases</div></div>
-      <div class="autoline"><div class="autoline-code"><span style="color:var(--purple2)">3. Affichage</span></div><div class="autoline-desc">Calcule un index aléatoire avec <code>Math.floor(Math.random() * citations.length)</code>, puis injecte <code>citations[index]</code> dans le paragraphe</div></div>
-      <div class="autoline"><div class="autoline-code"><span style="color:var(--purple2)">4. Événement</span></div><div class="autoline-desc">Click sur le bouton → appelle directement updateDisplay (pas de donnée à modifier avant)</div></div>
-    </div>
-    <h3 style="color:var(--tag)">HTML</h3>
-    <div class="code">&lt;<span class="tag">body</span>&gt;
-  &lt;<span class="tag">p</span> <span class="attr">id</span>=<span class="str">"citation"</span>&gt;Clique pour une citation&lt;/<span class="tag">p</span>&gt;
-  &lt;<span class="tag">button</span> <span class="attr">id</span>=<span class="str">"btn-suivante"</span>&gt;✨ Suivante&lt;/<span class="tag">button</span>&gt;
-  &lt;<span class="tag">script</span> <span class="attr">src</span>=<span class="str">"script.js"</span>&gt;&lt;/<span class="tag">script</span>&gt;
-&lt;/<span class="tag">body</span>&gt;</div>
-    <h3 style="color:var(--str)">JS</h3>
-    <div class="code"><span class="cmt">// ── 1. SÉLECTIONS ──</span>
-<span class="kw">const</span> <span class="vr">paragraphe</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">querySelector</span>(<span class="str">"#citation"</span>);
-<span class="kw">const</span> <span class="vr">btnSuivante</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">querySelector</span>(<span class="str">"#btn-suivante"</span>);
-
-<span class="cmt">// ── 2. DONNÉES ─────</span>
-<span class="kw">const</span> <span class="vr">citations</span> <span class="op">=</span> [
-  <span class="str">"La vie est belle."</span>,
-  <span class="str">"Code, donc je suis."</span>,
-  <span class="str">"Chaque bug corrigé te rend plus fort."</span>,
-  <span class="str">"Le génie c'est 1% d'inspiration et 99% de transpiration."</span>,
-  <span class="str">"Il n'y a pas d'erreur, seulement des apprentissages."</span>
-];
-
-<span class="cmt">// ── 3. AFFICHAGE ───</span>
-<span class="kw">const</span> <span class="fn">updateDisplay</span> <span class="op">=</span> () <span class="op">=></span> {
-  <span class="cmt">// Calcule un index aléatoire entre 0 et la fin du tableau</span>
-  <span class="kw">let</span> <span class="vr">index</span> <span class="op">=</span> <span class="fn">Math</span>.<span class="fn">floor</span>(<span class="fn">Math</span>.<span class="fn">random</span>() <span class="op">*</span> <span class="vr">citations</span>.<span class="fn">length</span>);
-  <span class="cmt">// Affiche la citation à cet index</span>
-  <span class="vr">paragraphe</span>.<span class="fn">textContent</span> <span class="op">=</span> <span class="vr">citations</span>[<span class="vr">index</span>];
-};
-
-<span class="cmt">// ── 4. ÉVÉNEMENT ───</span>
-<span class="vr">btnSuivante</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, () <span class="op">=></span> {
-  <span class="fn">updateDisplay</span>(); <span class="cmt">// pas de donnée à modifier — juste afficher</span>
-});</div>
-  </div>
-
-  <!-- TP6 : Cercles au clic -->
-  <div class="card">
-    <h2>🔴 Recette 6 — Cercles au clic (createElement)</h2>
-    <p style="color:var(--text2);margin-bottom:14px">Un clic sur la page crée un cercle à l'endroit du clic. <strong style="color:var(--yellow)">Données : la position de la souris (e.pageX / e.pageY)</strong></p>
-    <div class="autopsy" style="margin-bottom:16px">
-      <div class="autoline"><div class="autoline-code"><span style="color:var(--purple2)">2. Données</span></div><div class="autoline-desc"><code>let posX = 0</code> et <code>let posY = 0</code> — coordonnées du clic</div></div>
-      <div class="autoline"><div class="autoline-code"><span style="color:var(--purple2)">3. Affichage</span></div><div class="autoline-desc">Crée une <code>&lt;div&gt;</code> en mémoire, lui ajoute la classe <code>.circle</code>, la positionne avec <code>posX</code> et <code>posY</code>, puis l'insère dans le body avec <code>appendChild</code></div></div>
-      <div class="autoline"><div class="autoline-code"><span style="color:var(--purple2)">4. Événement</span></div><div class="autoline-desc">Click sur le body → stocke <code>e.pageX</code> dans <code>posX</code> et <code>e.pageY</code> dans <code>posY</code> → appelle updateDisplay</div></div>
-    </div>
-    <h3 style="color:var(--fn)">CSS</h3>
-    <div class="code">body { margin: 0; min-height: 100vh; background: #0f1117; }
-
-.circle {
-  position: absolute;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #7c3aed;
-  transform: translate(-50%, -50%); /* centre le cercle sur le clic */
-  pointer-events: none; /* le cercle ne capte pas les clics suivants */
-}</div>
-    <h3 style="color:var(--str)">JS</h3>
-    <div class="code"><span class="cmt">// ── 1. SÉLECTIONS ──</span>
-<span class="kw">const</span> <span class="vr">body</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">querySelector</span>(<span class="str">"body"</span>);
-
-<span class="cmt">// ── 2. DONNÉES ─────</span>
-<span class="kw">let</span> <span class="vr">posX</span> <span class="op">=</span> <span class="num">0</span>;
-<span class="kw">let</span> <span class="vr">posY</span> <span class="op">=</span> <span class="num">0</span>;
-
-<span class="cmt">// ── 3. AFFICHAGE ───</span>
-<span class="kw">const</span> <span class="fn">updateDisplay</span> <span class="op">=</span> () <span class="op">=></span> {
-  <span class="cmt">// A. Créer la div en mémoire</span>
-  <span class="kw">const</span> <span class="vr">cercle</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">createElement</span>(<span class="str">"div"</span>);
-  <span class="cmt">// B. Lui donner la classe CSS</span>
-  <span class="vr">cercle</span>.<span class="fn">classList</span>.<span class="fn">add</span>(<span class="str">"circle"</span>);
-  <span class="cmt">// C. Le positionner avec les données de l'étape 2</span>
-  <span class="vr">cercle</span>.<span class="fn">style</span>.<span class="fn">left</span> <span class="op">=</span> <span class="vr">posX</span> <span class="op">+</span> <span class="str">"px"</span>;
-  <span class="vr">cercle</span>.<span class="fn">style</span>.<span class="fn">top</span>  <span class="op">=</span> <span class="vr">posY</span> <span class="op">+</span> <span class="str">"px"</span>;
-  <span class="cmt">// D. L'insérer dans la page</span>
-  <span class="vr">body</span>.<span class="fn">appendChild</span>(<span class="vr">cercle</span>);
-};
-
-<span class="cmt">// ── 4. ÉVÉNEMENT ───</span>
-<span class="vr">body</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, (<span class="vr">e</span>) <span class="op">=></span> {
-  <span class="vr">posX</span> <span class="op">=</span> <span class="vr">e</span>.<span class="fn">pageX</span>;  <span class="cmt">// stocker la position brute</span>
-  <span class="vr">posY</span> <span class="op">=</span> <span class="vr">e</span>.<span class="fn">pageY</span>;  <span class="cmt">// pas de "px" ici — juste le nombre</span>
-  <span class="fn">updateDisplay</span>();
-});</div>
-  </div>
-
-</div><!-- /recettes -->
 
 </main>
 
