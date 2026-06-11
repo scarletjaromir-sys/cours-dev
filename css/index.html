@@ -215,6 +215,9 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
     <button class="tab-btn" onclick="showTab('simulateur',this)">🧪 Simulateur</button>
     <button class="tab-btn" onclick="showTab('texte',this)">✏️ Texte</button>
     <button class="tab-btn" onclick="showTab('responsive',this)">📱 Responsive</button>
+    <button class="tab-btn" onclick="showTab('position',this)">📐 Position</button>
+    <button class="tab-btn" onclick="showTab('animations',this)">🎬 Animations</button>
+    <button class="tab-btn" onclick="showTab('grid',this)">🔲 Grid</button>
   </div>
 </header>
 
@@ -286,6 +289,51 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
   <span class="prop">margin-bottom</span>: <span class="val">var</span>(<span class="prop">--espace</span>);
 }</div>
     <div class="alert good"><span class="alert-icon">✅</span><div>Les variables CSS te permettent de changer une couleur ou une taille en un seul endroit pour tout le site. C'est indispensable sur un vrai projet !</div></div>
+  </div>
+
+
+  <div class="card">
+    <h2>🌫️ box-shadow — Ombre de boîte</h2>
+    <div class="code"><span class="cmt">/* x  y  flou  étendue  couleur */</span>
+<span class="sel">.card</span> {
+  <span class="prop">box-shadow</span>: <span class="num">0px</span> <span class="num">0px</span> <span class="num">20px</span> <span class="num">4px</span> <span class="val">#81cfc6</span>;
+}
+
+<span class="cmt">/* Ombre portée classique */</span>
+<span class="sel">.el</span>  { <span class="prop">box-shadow</span>: <span class="num">2px</span> <span class="num">4px</span> <span class="num">8px</span> <span class="val">rgba</span>(<span class="num">0</span>,<span class="num">0</span>,<span class="num">0</span>,<span class="num">0.3</span>); }
+
+<span class="cmt">/* Plusieurs ombres */</span>
+<span class="sel">.el</span>  { <span class="prop">box-shadow</span>: <span class="num">0</span> <span class="num">2px</span> <span class="num">4px</span> <span class="val">rgba</span>(<span class="num">0</span>,<span class="num">0</span>,<span class="num">0</span>,<span class="num">0.2</span>), <span class="num">0</span> <span class="num">8px</span> <span class="num">20px</span> <span class="val">rgba</span>(<span class="num">0</span>,<span class="num">0</span>,<span class="num">0</span>,<span class="num">0.1</span>); }
+
+<span class="cmt">/* Ombre intérieure (inset) */</span>
+<span class="sel">.el</span>  { <span class="prop">box-shadow</span>: <span class="val">inset</span> <span class="num">0</span> <span class="num">2px</span> <span class="num">6px</span> <span class="val">rgba</span>(<span class="num">0</span>,<span class="num">0</span>,<span class="num">0</span>,<span class="num">0.2</span>); }</div>
+  </div>
+
+  <div class="card">
+    <h2>🔘 border-radius — Coins arrondis</h2>
+    <div class="code"><span class="sel">.el</span> { <span class="prop">border-radius</span>: <span class="num">8px</span>; }          <span class="cmt">/* 4 coins identiques */</span>
+<span class="sel">.el</span> { <span class="prop">border-radius</span>: <span class="num">150px</span>; }        <span class="cmt">/* cercle si hauteur = largeur */</span>
+<span class="sel">.el</span> { <span class="prop">border-radius</span>: <span class="num">50%</span>; }           <span class="cmt">/* cercle parfait */</span>
+
+<span class="cmt">/* Coins différents : haut-gauche  haut-droite  bas-droite  bas-gauche */</span>
+<span class="sel">.el</span> { <span class="prop">border-radius</span>: <span class="num">20px</span> <span class="num">20px</span> <span class="num">0</span> <span class="num">0</span>; } <span class="cmt">/* arrondi seulement en haut */</span></div>
+  </div>
+
+  <div class="card">
+    <h2>🔤 @font-face — Utiliser une police locale</h2>
+    <div class="code"><span class="cmt">/* Police hébergée dans le projet */</span>
+<span class="sel">@font-face</span> {
+  <span class="prop">font-family</span>: <span class="str">"DMSerif"</span>;
+  <span class="prop">src</span>: <span class="val">url</span>(<span class="val">./assets/fonts/DMSerifDisplay-Regular.ttf</span>);
+}
+
+<span class="cmt">/* Google Fonts via @import en haut du CSS */</span>
+<span class="sel">@import</span> <span class="val">url</span>(<span class="str">"https://fonts.googleapis.com/css2?family=Oswald:wght@500&display=swap"</span>);
+
+<span class="cmt">/* Utilisation */</span>
+<span class="sel">body</span> { <span class="prop">font-family</span>: <span class="str">"DMSerif"</span>, <span class="val">Verdana</span>; }
+<span class="sel">h1</span>   { <span class="prop">font-family</span>: <span class="str">"Oswald"</span>, <span class="val">sans-serif</span>; }</div>
+    <div class="alert info"><span class="alert-icon">💡</span><div>Toujours mettre une police de secours après la virgule. Si la police ne charge pas, le navigateur utilise la suivante.</div></div>
   </div>
 
 </div><!-- /bases -->
@@ -788,6 +836,407 @@ footer { text-align: center; padding: 20px; color: var(--text3); font-size: 0.8r
 
 </div><!-- /responsive -->
 
+
+
+<!-- ============================================================ POSITION -->
+<div id="tab-position" class="tab-panel">
+
+  <div class="card">
+    <h2>📐 Les valeurs de position</h2>
+    <table class="tbl">
+      <thead><tr><th>Valeur</th><th>Comportement</th><th>Quand l'utiliser</th></tr></thead>
+      <tbody>
+        <tr><td><code>static</code></td><td>Position normale dans le flux (défaut)</td><td>Ne pas toucher — c'est la valeur par défaut</td></tr>
+        <tr><td><code>relative</code></td><td>Se déplace par rapport à sa position normale. <strong>Crée un contexte de positionnement</strong> pour ses enfants</td><td>Quand un enfant doit être <code>absolute</code></td></tr>
+        <tr><td><code>absolute</code></td><td>Sorti du flux. Se positionne par rapport à son ancêtre <code>relative</code> le plus proche</td><td>Superposer des éléments, badges, décorations</td></tr>
+        <tr><td><code>fixed</code></td><td>Sorti du flux. Se positionne par rapport à la <strong>fenêtre</strong> — reste fixe au scroll</td><td>Navbar sticky, bouton retour en haut</td></tr>
+        <tr><td><code>sticky</code></td><td>Normal jusqu'à un seuil de scroll, puis se fixe</td><td>Titres de section qui restent visibles</td></tr>
+      </tbody>
+    </table>
+    <div class="alert warn"><span class="alert-icon">⚠️</span><div><strong>Règle fondamentale :</strong> un élément <code>absolute</code> se positionne par rapport à son ancêtre <code>relative</code> le plus proche. Si aucun ancêtre n'est <code>relative</code>, il se positionne par rapport à la page entière.</div></div>
+  </div>
+
+  <div class="card">
+    <h2>🔧 top / right / bottom / left / z-index</h2>
+    <div class="code"><span class="sel">.parent</span> {
+  <span class="prop">position</span>: <span class="val">relative</span>; <span class="cmt">/* crée le contexte */</span>
+}
+
+<span class="sel">.enfant</span> {
+  <span class="prop">position</span>: <span class="val">absolute</span>;
+  <span class="prop">top</span>: <span class="num">14px</span>;      <span class="cmt">/* 14px depuis le haut du parent */</span>
+  <span class="prop">right</span>: <span class="num">20px</span>;    <span class="cmt">/* 20px depuis la droite du parent */</span>
+}
+
+<span class="sel">.par-dessus</span> {
+  <span class="prop">position</span>: <span class="val">absolute</span>;
+  <span class="prop">top</span>: <span class="num">50%</span>;
+  <span class="prop">left</span>: <span class="num">50%</span>;
+  <span class="prop">transform</span>: <span class="val">translate</span>(<span class="num">-50%</span>, <span class="num">-50%</span>); <span class="cmt">/* centrage parfait */</span>
+  <span class="prop">z-index</span>: <span class="num">10</span>;  <span class="cmt">/* par-dessus les autres éléments */</span>
+}</div>
+    <div class="alert info"><span class="alert-icon">💡</span><div><code>top: 50%; left: 50%; transform: translate(-50%, -50%)</code> est la recette universelle pour centrer un élément en position absolue.</div></div>
+  </div>
+
+  <div class="card">
+    <h2>🛠️ Outils utiles liés au positionnement</h2>
+    <div class="code"><span class="cmt">/* Cacher le débordement */</span>
+<span class="sel">.conteneur</span> { <span class="prop">overflow</span>: <span class="val">hidden</span>; } <span class="cmt">/* cache ce qui dépasse */</span>
+<span class="sel">.conteneur</span> { <span class="prop">overflow</span>: <span class="val">auto</span>; }   <span class="cmt">/* scrollbar si besoin */</span>
+
+<span class="cmt">/* Empêcher les clics sur un élément */</span>
+<span class="sel">.decoration</span> { <span class="prop">pointer-events</span>: <span class="val">none</span>; }
+
+<span class="cmt">/* Empêcher la sélection de texte */</span>
+<span class="sel">label</span> { <span class="prop">user-select</span>: <span class="val">none</span>; }
+
+<span class="cmt">/* Curseur souris */</span>
+<span class="sel">button</span> { <span class="prop">cursor</span>: <span class="val">pointer</span>; }
+
+<span class="cmt">/* calc() — mélanger des unités */</span>
+<span class="sel">.card</span> { <span class="prop">width</span>: <span class="val">calc</span>(<span class="num">100%</span> - <span class="num">50px</span>); }
+
+<span class="cmt">/* Sélection de texte stylisée */</span>
+<span class="sel">p::selection</span> {
+  <span class="prop">background</span>: <span class="val">pink</span>;
+  <span class="prop">color</span>: <span class="num">#333</span>;
+}
+
+<span class="cmt">/* Limiter le texte à N lignes */</span>
+<span class="sel">p</span> {
+  <span class="prop">display</span>: <span class="val">-webkit-box</span>;
+  <span class="prop">-webkit-box-orient</span>: <span class="val">vertical</span>;
+  <span class="prop">-webkit-line-clamp</span>: <span class="num">4</span>; <span class="cmt">/* max 4 lignes */</span>
+  <span class="prop">overflow</span>: <span class="val">hidden</span>;
+}</div>
+  </div>
+
+  <div class="card">
+    <h2>✂️ clip-path — Découper la forme d'un élément</h2>
+    <div class="code"><span class="cmt">/* Losange */</span>
+<span class="sel">.losange</span> {
+  <span class="prop">clip-path</span>: <span class="val">polygon</span>(<span class="num">50%</span> <span class="num">0%</span>, <span class="num">100%</span> <span class="num">50%</span>, <span class="num">50%</span> <span class="num">100%</span>, <span class="num">0%</span> <span class="num">50%</span>);
+}
+
+<span class="cmt">/* Triangle */</span>
+<span class="sel">.triangle</span> {
+  <span class="prop">clip-path</span>: <span class="val">polygon</span>(<span class="num">50%</span> <span class="num">0%</span>, <span class="num">0%</span> <span class="num">100%</span>, <span class="num">100%</span> <span class="num">100%</span>);
+}
+
+<span class="cmt">/* Cercle */</span>
+<span class="sel">.cercle</span> {
+  <span class="prop">clip-path</span>: <span class="val">circle</span>(<span class="num">50%</span>);
+}</div>
+    <div class="alert info"><span class="alert-icon">💡</span><div>Les coordonnées de <code>polygon()</code> sont des paires <code>x% y%</code> séparées par des virgules. Outil en ligne utile : <strong>clippy.dhulte.com</strong></div></div>
+  </div>
+
+</div><!-- /position -->
+
+
+<!-- ============================================================ ANIMATIONS -->
+<div id="tab-animations" class="tab-panel">
+
+  <div class="card">
+    <h2>🔄 transition — Animer un changement de style</h2>
+    <p style="color:var(--text2);margin-bottom:12px"><code>transition</code> anime le passage d'un style à un autre (au hover, au focus, quand une classe change).</p>
+    <div class="code"><span class="sel">button</span> {
+  <span class="prop">background</span>: <span class="val">pink</span>;
+  <span class="prop">transition</span>: <span class="num">0.3s</span>;              <span class="cmt">/* toutes les propriétés en 0.3s */</span>
+}
+<span class="sel">button:hover</span> {
+  <span class="prop">background</span>: <span class="val">red</span>;              <span class="cmt">/* ← animé automatiquement */</span>
+  <span class="prop">letter-spacing</span>: <span class="num">3px</span>;
+}
+
+<span class="cmt">/* Cibler une propriété précise */</span>
+<span class="sel">.card</span> {
+  <span class="prop">transition</span>: <span class="val">transform</span> <span class="num">0.2s</span> <span class="val">ease</span>;
+}
+
+<span class="cmt">/* Plusieurs propriétés */</span>
+<span class="sel">.card</span> {
+  <span class="prop">transition</span>: <span class="val">background</span> <span class="num">0.3s</span>, <span class="val">transform</span> <span class="num">0.2s</span>;
+}</div>
+    <table class="tbl" style="margin-top:12px">
+      <thead><tr><th>Timing function</th><th>Effet</th></tr></thead>
+      <tbody>
+        <tr><td><code>ease</code></td><td>Commence lentement, accélère, ralentit (défaut)</td></tr>
+        <tr><td><code>linear</code></td><td>Vitesse constante</td></tr>
+        <tr><td><code>ease-in</code></td><td>Commence lentement</td></tr>
+        <tr><td><code>ease-out</code></td><td>Finit lentement</td></tr>
+        <tr><td><code>ease-in-out</code></td><td>Commence et finit lentement</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>🔀 transform — Déplacer, redimensionner, faire pivoter</h2>
+    <div class="code"><span class="cmt">/* Déplacer */</span>
+<span class="sel">.el</span> { <span class="prop">transform</span>: <span class="val">translateX</span>(<span class="num">50px</span>); }    <span class="cmt">/* → droite */</span>
+<span class="sel">.el</span> { <span class="prop">transform</span>: <span class="val">translateY</span>(<span class="num">-20px</span>); }   <span class="cmt">/* ↑ haut */</span>
+<span class="sel">.el</span> { <span class="prop">transform</span>: <span class="val">translate</span>(<span class="num">-50%</span>, <span class="num">-50%</span>); } <span class="cmt">/* centrage absolu */</span>
+
+<span class="cmt">/* Redimensionner */</span>
+<span class="sel">.el</span> { <span class="prop">transform</span>: <span class="val">scale</span>(<span class="num">1.2</span>); }        <span class="cmt">/* 20% plus grand */</span>
+<span class="sel">.el</span> { <span class="prop">transform</span>: <span class="val">scale</span>(<span class="num">0.5</span>); }        <span class="cmt">/* moitié */</span>
+<span class="sel">.el</span> { <span class="prop">transform</span>: <span class="val">scaleX</span>(<span class="num">0</span>); }         <span class="cmt">/* largeur = 0 (pour les lignes) */</span>
+
+<span class="cmt">/* Faire pivoter */</span>
+<span class="sel">.el</span> { <span class="prop">transform</span>: <span class="val">rotate</span>(<span class="num">45deg</span>); }     <span class="cmt">/* 45° dans le sens horaire */</span>
+<span class="sel">.el</span> { <span class="prop">transform</span>: <span class="val">rotate</span>(<span class="num">344deg</span>); }
+
+<span class="cmt">/* Combiner plusieurs transforms */</span>
+<span class="sel">.el</span> { <span class="prop">transform</span>: <span class="val">translateX</span>(<span class="num">-50%</span>) <span class="val">scaleX</span>(<span class="num">0</span>); }
+
+<span class="cmt">/* Point d'origine de la transformation */</span>
+<span class="sel">.el</span> { <span class="prop">transform-origin</span>: <span class="val">center</span>; }    <span class="cmt">/* défaut */</span>
+<span class="sel">.el</span> { <span class="prop">transform-origin</span>: <span class="val">left</span>; }      <span class="cmt">/* depuis la gauche */</span>
+
+<span class="cmt">/* 3D — nécessite perspective sur le parent */</span>
+<span class="sel">.parent</span> { <span class="prop">perspective</span>: <span class="num">30px</span>; }
+<span class="sel">.el</span> { <span class="prop">transform</span>: <span class="val">translateZ</span>(<span class="num">30px</span>); }  <span class="cmt">/* vers l'avant */</span></div>
+  </div>
+
+  <div class="card">
+    <h2>🎬 animation + @keyframes</h2>
+    <p style="color:var(--text2);margin-bottom:12px">Contrairement à <code>transition</code> qui réagit à un changement, <code>animation</code> se joue automatiquement.</p>
+    <div class="code"><span class="cmt">/* 1. Définir l'animation avec @keyframes */</span>
+<span class="sel">@keyframes</span> <span class="val">monAnimation</span> {
+  <span class="num">0%</span>   { <span class="prop">transform</span>: <span class="val">translateX</span>(<span class="num">-50%</span>) <span class="val">scaleX</span>(<span class="num">0</span>); }
+  <span class="num">100%</span> { <span class="prop">transform</span>: <span class="val">translateX</span>(<span class="num">-50%</span>) <span class="val">scaleX</span>(<span class="num">1</span>); }
+}
+
+<span class="cmt">/* 2. Appliquer sur un élément */</span>
+<span class="sel">.el</span> {
+  <span class="prop">animation</span>: <span class="val">monAnimation</span> <span class="num">6s</span> <span class="val">ease-in-out</span> <span class="val">forwards</span>;
+}           <span class="cmt">/* ↑ nom       durée  timing        mode-remplissage */</span>
+
+<span class="cmt">/* Animation en boucle infinie */</span>
+<span class="sel">.spaceship</span> {
+  <span class="prop">animation</span>: <span class="val">voler</span> <span class="num">60s</span> <span class="val">infinite</span> <span class="val">linear</span>;
+}
+
+<span class="cmt">/* Avec étapes intermédiaires */</span>
+<span class="sel">@keyframes</span> <span class="val">rebond</span> {
+  <span class="num">0%</span>   { <span class="prop">transform</span>: <span class="val">scale</span>(<span class="num">1</span>); }
+  <span class="num">50%</span>  { <span class="prop">transform</span>: <span class="val">scale</span>(<span class="num">1.2</span>); }
+  <span class="num">100%</span> { <span class="prop">transform</span>: <span class="val">scale</span>(<span class="num">1</span>); }
+}</div>
+    <table class="tbl" style="margin-top:12px">
+      <thead><tr><th>Mode remplissage</th><th>Effet</th></tr></thead>
+      <tbody>
+        <tr><td><code>forwards</code></td><td>Reste sur le dernier état après la fin</td></tr>
+        <tr><td><code>backwards</code></td><td>Commence sur le premier état avant de jouer</td></tr>
+        <tr><td><code>both</code></td><td>Combine forwards et backwards</td></tr>
+        <tr><td><code>infinite</code></td><td>Se répète indéfiniment (à la place d'un nombre)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>✨ filter — Effets visuels sur un élément</h2>
+    <div class="code"><span class="cmt">/* Ombre portée (sur l'élément, respecte la transparence) */</span>
+<span class="sel">.logo</span> {
+  <span class="prop">filter</span>: <span class="val">drop-shadow</span>(<span class="num">-1px</span> <span class="num">6px</span> <span class="num">3px</span> <span class="val">pink</span>);
+}
+<span class="cmt">/* drop-shadow(x y flou couleur) */</span>
+
+<span class="cmt">/* Luminosité */</span>
+<span class="sel">.el:hover</span> { <span class="prop">filter</span>: <span class="val">brightness</span>(<span class="num">120%</span>); } <span class="cmt">/* plus lumineux */</span>
+<span class="sel">.el</span>       { <span class="prop">filter</span>: <span class="val">brightness</span>(<span class="num">50%</span>); }  <span class="cmt">/* plus sombre */</span>
+
+<span class="cmt">/* Flou */</span>
+<span class="sel">.floue</span> { <span class="prop">filter</span>: <span class="val">blur</span>(<span class="num">4px</span>); }
+
+<span class="cmt">/* backdrop-filter — flou sur le fond DERRIÈRE l'élément */</span>
+<span class="sel">.glass</span> {
+  <span class="prop">background</span>: <span class="val">rgba</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>, <span class="num">0.5</span>);
+  <span class="prop">backdrop-filter</span>: <span class="val">blur</span>(<span class="num">5px</span>); <span class="cmt">/* effet verre dépoli */</span>
+}</div>
+    <div class="alert info"><span class="alert-icon">💡</span><div><code>box-shadow</code> et <code>drop-shadow</code> ne font pas la même chose : <code>box-shadow</code> suit le rectangle de la boîte, <code>drop-shadow</code> suit la forme réelle de l'élément (utile pour les PNG avec transparence).</div></div>
+  </div>
+
+  <div class="card">
+    <h2>🎨 Dégradés — linear-gradient</h2>
+    <div class="code"><span class="cmt">/* Horizontal */</span>
+<span class="sel">.el</span> { <span class="prop">background</span>: <span class="val">linear-gradient</span>(<span class="num">90deg</span>, <span class="num">#3b82f6</span>, <span class="num">#ec4899</span>); }
+
+<span class="cmt">/* Diagonal */</span>
+<span class="sel">.el</span> { <span class="prop">background</span>: <span class="val">linear-gradient</span>(<span class="num">135deg</span>, <span class="val">pink</span> <span class="num">0%</span>, <span class="val">white</span> <span class="num">100%</span>); }
+
+<span class="cmt">/* Texte en dégradé */</span>
+<span class="sel">.titre</span> {
+  <span class="prop">background</span>: <span class="val">linear-gradient</span>(<span class="num">90deg</span>, <span class="num">#3b82f6</span>, <span class="num">#ec4899</span>);
+  <span class="prop">-webkit-background-clip</span>: <span class="val">text</span>;
+  <span class="prop">-webkit-text-fill-color</span>: <span class="val">transparent</span>;
+}
+
+<span class="cmt">/* Image de fond */</span>
+<span class="sel">body</span> {
+  <span class="prop">background</span>: <span class="val">url</span>(<span class="val">./bg.jpg</span>) <span class="val">center</span>/<span class="val">cover</span>;
+}</div>
+  </div>
+
+</div><!-- /animations -->
+
+
+
+<!-- ============================================================ GRID -->
+<div id="tab-grid" class="tab-panel">
+
+  <div class="card">
+    <h2>🔲 CSS Grid — La mise en page en 2D</h2>
+    <p style="color:var(--text2);margin-bottom:12px">Grid organise les éléments sur <strong>deux axes</strong> (colonnes ET lignes). Parfait pour les mises en page complexes.</p>
+    <div class="code"><span class="sel">.conteneur</span> {
+  <span class="prop">display</span>: <span class="val">grid</span>;
+  <span class="prop">grid-template-columns</span>: <span class="num">30%</span> <span class="num">70%</span>;     <span class="cmt">/* 2 colonnes */</span>
+  <span class="prop">grid-template-columns</span>: <span class="num">1fr</span> <span class="num">1fr</span> <span class="num">1fr</span>;  <span class="cmt">/* 3 colonnes égales */</span>
+  <span class="prop">grid-template-columns</span>: <span class="val">repeat</span>(<span class="num">3</span>, <span class="num">1fr</span>); <span class="cmt">/* idem, version courte */</span>
+  <span class="prop">grid-template-rows</span>: <span class="num">1fr</span> <span class="num">1fr</span> <span class="num">1fr</span>;     <span class="cmt">/* 3 lignes */</span>
+  <span class="prop">gap</span>: <span class="num">16px</span>;                              <span class="cmt">/* espace entre les cases */</span>
+}</div>
+    <div class="alert info"><span class="alert-icon">💡</span><div><code>fr</code> = fraction de l'espace disponible. <code>1fr 2fr</code> = la 2e colonne est deux fois plus large que la 1ère.</div></div>
+  </div>
+
+  <div class="card">
+    <h2>🗺️ grid-template-areas — Nommer les zones</h2>
+    <p style="color:var(--text2);margin-bottom:12px">Permet de dessiner visuellement la mise en page avec des noms.</p>
+    <div class="code"><span class="sel">form</span> {
+  <span class="prop">display</span>: <span class="val">grid</span>;
+  <span class="prop">grid-template-columns</span>: <span class="num">1fr</span> <span class="num">1fr</span>;
+  <span class="prop">grid-template-rows</span>: <span class="num">1fr</span> <span class="num">1fr</span> <span class="num">1fr</span>;
+  <span class="prop">grid-template-areas</span>:
+    <span class="str">"i1 i2"</span>   <span class="cmt">/* ligne 1 : deux inputs côte à côte */</span>
+    <span class="str">"ta ta"</span>   <span class="cmt">/* ligne 2 : textarea sur toute la largeur */</span>
+    <span class="str">"vi bt"</span>;  <span class="cmt">/* ligne 3 : vide + bouton */</span>
+}
+
+<span class="cmt">/* Assigner chaque élément à sa zone */</span>
+<span class="sel">textarea</span>    { <span class="prop">grid-area</span>: <span class="val">ta</span>; }
+<span class="sel">#btn-submit</span> { <span class="prop">grid-area</span>: <span class="val">bt</span>; }</div>
+    <div class="alert info"><span class="alert-icon">💡</span><div>Un <code>.</code> dans <code>grid-template-areas</code> représente une cellule vide.</div></div>
+  </div>
+
+  <div class="card">
+    <h2>🧩 Propriétés essentielles</h2>
+    <table class="tbl">
+      <thead><tr><th>Propriété</th><th>Exemple</th><th>Rôle</th></tr></thead>
+      <tbody>
+        <tr><td><code>grid-template-columns</code></td><td><code>1fr 2fr</code> · <code>repeat(3, 1fr)</code> · <code>30% 70%</code></td><td>Définit les colonnes</td></tr>
+        <tr><td><code>grid-template-rows</code></td><td><code>1fr 1fr 1fr</code> · <code>auto</code></td><td>Définit les lignes</td></tr>
+        <tr><td><code>grid-template-areas</code></td><td><code>"header header" "sidebar main"</code></td><td>Nomme les zones visuellement</td></tr>
+        <tr><td><code>grid-area</code></td><td><code>grid-area: header</code></td><td>Assigne un item à une zone nommée</td></tr>
+        <tr><td><code>gap</code></td><td><code>16px</code> · <code>10px 20px</code></td><td>Espace entre les cases (ligne colonne)</td></tr>
+        <tr><td><code>place-self</code></td><td><code>center left</code></td><td>Aligne un item dans sa cellule (vertical horizontal)</td></tr>
+        <tr><td><code>grid-column</code></td><td><code>1 / 3</code> · <code>span 2</code></td><td>L'item s'étend sur plusieurs colonnes</td></tr>
+        <tr><td><code>grid-row</code></td><td><code>1 / 3</code></td><td>L'item s'étend sur plusieurs lignes</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>↔️ Grid vs Flexbox — Quand utiliser quoi ?</h2>
+    <div class="grid2">
+      <div style="background:rgba(37,99,235,0.08);border:1.5px solid var(--blue);border-radius:8px;padding:14px;">
+        <div style="color:var(--blue2);font-weight:700;margin-bottom:8px;">Flexbox — 1 dimension</div>
+        <div style="color:var(--text2);font-size:0.88rem;margin-bottom:8px;">Items sur <strong>un axe</strong> : une rangée OU une colonne.</div>
+        <div style="color:var(--text2);font-size:0.85rem;">✅ Navbar, boutons, liste d'items<br>✅ Centrer un élément<br>✅ Répartir des éléments horizontalement</div>
+      </div>
+      <div style="background:rgba(16,185,129,0.08);border:1.5px solid var(--green);border-radius:8px;padding:14px;">
+        <div style="color:var(--green);font-weight:700;margin-bottom:8px;">Grid — 2 dimensions</div>
+        <div style="color:var(--text2);font-size:0.88rem;margin-bottom:8px;">Items sur <strong>deux axes</strong> : colonnes ET lignes.</div>
+        <div style="color:var(--text2);font-size:0.85rem;">✅ Mise en page globale<br>✅ Formulaires<br>✅ Galeries photos<br>✅ Layouts complexes</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIMULATEUR GRID -->
+  <div class="card" style="padding:0;overflow:hidden;">
+    <div style="padding:18px 22px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+      <h2 style="margin:0;">🧪 Simulateur Grid</h2>
+      <span style="color:var(--text3);font-size:0.85rem;">Manipule les propriétés et vois le résultat en direct</span>
+    </div>
+
+    <div style="padding:18px;">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:16px;">
+
+        <div class="ctrl-group">
+          <div class="ctrl-label">Colonnes</div>
+          <div class="btn-group" id="g-ctrl-cols">
+            <button class="prop-btn" data-gprop="cols" data-gval="1fr" onclick="setGridProp(this)">1</button>
+            <button class="prop-btn active" data-gprop="cols" data-gval="1fr 1fr" onclick="setGridProp(this)">2</button>
+            <button class="prop-btn" data-gprop="cols" data-gval="1fr 1fr 1fr" onclick="setGridProp(this)">3</button>
+            <button class="prop-btn" data-gprop="cols" data-gval="1fr 1fr 1fr 1fr" onclick="setGridProp(this)">4</button>
+            <button class="prop-btn" data-gprop="cols" data-gval="1fr 2fr" onclick="setGridProp(this)">1fr 2fr</button>
+            <button class="prop-btn" data-gprop="cols" data-gval="30% 70%" onclick="setGridProp(this)">30% 70%</button>
+            <button class="prop-btn" data-gprop="cols" data-gval="200px 1fr" onclick="setGridProp(this)">200px 1fr</button>
+          </div>
+        </div>
+
+        <div class="ctrl-group">
+          <div class="ctrl-label">Lignes (grid-template-rows)</div>
+          <div class="btn-group" id="g-ctrl-rows">
+            <button class="prop-btn active" data-gprop="rows" data-gval="auto" onclick="setGridProp(this)">auto</button>
+            <button class="prop-btn" data-gprop="rows" data-gval="1fr 1fr" onclick="setGridProp(this)">1fr 1fr</button>
+            <button class="prop-btn" data-gprop="rows" data-gval="1fr 1fr 1fr" onclick="setGridProp(this)">1fr 1fr 1fr</button>
+            <button class="prop-btn" data-gprop="rows" data-gval="100px 1fr" onclick="setGridProp(this)">100px 1fr</button>
+            <button class="prop-btn" data-gprop="rows" data-gval="repeat(3,80px)" onclick="setGridProp(this)">repeat(3, 80px)</button>
+          </div>
+        </div>
+
+        <div class="ctrl-group">
+          <div class="ctrl-label">repeat() — colonnes automatiques</div>
+          <div class="btn-group" id="g-ctrl-repeat">
+            <button class="prop-btn active" data-gprop="repeat" data-gval="off" onclick="setGridProp(this)">Manuel</button>
+            <button class="prop-btn" data-gprop="repeat" data-gval="repeat(2,1fr)" onclick="setGridProp(this)">repeat(2, 1fr)</button>
+            <button class="prop-btn" data-gprop="repeat" data-gval="repeat(3,1fr)" onclick="setGridProp(this)">repeat(3, 1fr)</button>
+            <button class="prop-btn" data-gprop="repeat" data-gval="repeat(auto-fill,minmax(100px,1fr))" onclick="setGridProp(this)">auto-fill</button>
+            <button class="prop-btn" data-gprop="repeat" data-gval="repeat(auto-fit,minmax(100px,1fr))" onclick="setGridProp(this)">auto-fit</button>
+          </div>
+        </div>
+
+        <div class="ctrl-group">
+          <div class="ctrl-label">Gap</div>
+          <div class="btn-group" id="g-ctrl-gap">
+            <button class="prop-btn" data-gprop="gap" data-gval="0px" onclick="setGridProp(this)">0</button>
+            <button class="prop-btn active" data-gprop="gap" data-gval="8px" onclick="setGridProp(this)">8px</button>
+            <button class="prop-btn" data-gprop="gap" data-gval="16px" onclick="setGridProp(this)">16px</button>
+            <button class="prop-btn" data-gprop="gap" data-gval="24px" onclick="setGridProp(this)">24px</button>
+          </div>
+        </div>
+
+        <div class="ctrl-group">
+          <div class="ctrl-label">Nombre d'items</div>
+          <div class="item-controls">
+            <button class="item-ctrl-btn" onclick="removeGridItem()">− Retirer</button>
+            <span class="item-count-display" id="g-item-count">6</span>
+            <button class="item-ctrl-btn" onclick="addGridItem()">+ Ajouter</button>
+          </div>
+        </div>
+
+        <div class="ctrl-group">
+          <div class="ctrl-label">Item 1 — grid-column span</div>
+          <div class="btn-group" id="g-ctrl-span">
+            <button class="prop-btn active" data-gprop="span" data-gval="1" onclick="setGridProp(this)">1</button>
+            <button class="prop-btn" data-gprop="span" data-gval="2" onclick="setGridProp(this)">span 2</button>
+            <button class="prop-btn" data-gprop="span" data-gval="3" onclick="setGridProp(this)">span 3</button>
+            <button class="prop-btn" data-gprop="span" data-gval="full" onclick="setGridProp(this)">pleine largeur</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Prévisualisation -->
+      <div style="background:var(--bg);border-top:1px solid var(--border);border-radius:0 0 10px 10px;padding:16px;">
+        <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text3);margin-bottom:10px;">Résultat en direct</div>
+        <div id="grid-preview" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;min-height:160px;padding:8px;background:rgba(37,99,235,0.04);border:2px dashed rgba(37,99,235,0.3);border-radius:10px;"></div>
+        <div class="sim-code-block" id="grid-code" style="margin-top:12px;"></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /grid -->
+
 </main>
 
 <footer>CSS Pense-Bête · Cours personnalisé</footer>
@@ -948,6 +1397,104 @@ function removeItem() {
 // Init
 applyState();
 updateLegend();
+
+/* ===== SIMULATEUR GRID ===== */
+var gridState = { cols: '1fr 1fr', rows: 'auto', gap: '8px', span: '1', repeat: 'off' };
+var gridItemCount = 6;
+var GRID_COLORS = ['#2563eb','#10b981','#f59e0b','#ec4899','#a855f7','#ef4444','#06b6d4','#f97316'];
+
+function setGridProp(btn) {
+  var prop = btn.dataset.gprop;
+  var val  = btn.dataset.gval;
+  var siblings = btn.parentElement.querySelectorAll('.prop-btn');
+  for (var i = 0; i < siblings.length; i++) siblings[i].classList.remove('active');
+  btn.classList.add('active');
+  gridState[prop] = val;
+  applyGridState();
+}
+
+function applyGridState() {
+  var c = document.getElementById('grid-preview');
+  if (!c) return;
+  // repeat override cols si actif
+  var cols = (gridState.repeat && gridState.repeat !== 'off') ? gridState.repeat : gridState.cols;
+  c.style.gridTemplateColumns = cols;
+  c.style.gridTemplateRows = (gridState.rows && gridState.rows !== 'auto') ? gridState.rows : '';
+  c.style.gap = gridState.gap;
+  var items = c.children;
+  for (var i = 0; i < items.length; i++) {
+    items[i].style.gridColumn = '';
+  }
+  if (items.length > 0) {
+    if (gridState.span === 'full') {
+      items[0].style.gridColumn = '1 / -1';
+    } else if (gridState.span !== '1') {
+      items[0].style.gridColumn = 'span ' + gridState.span;
+    }
+  }
+  updateGridCode();
+}
+
+function buildGridItems() {
+  var c = document.getElementById('grid-preview');
+  if (!c) return;
+  c.innerHTML = '';
+  for (var i = 0; i < gridItemCount; i++) {
+    var el = document.createElement('div');
+    el.style.cssText = 'padding:18px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:Consolas,monospace;font-weight:700;font-size:0.95rem;border:2px solid ' + GRID_COLORS[i % GRID_COLORS.length] + ';background:' + GRID_COLORS[i % GRID_COLORS.length] + '22;color:' + GRID_COLORS[i % GRID_COLORS.length] + ';transition:all 0.3s;';
+    el.textContent = i + 1;
+    c.appendChild(el);
+  }
+  applyGridState();
+}
+
+function addGridItem() {
+  if (gridItemCount >= 8) return;
+  gridItemCount++;
+  document.getElementById('g-item-count').textContent = gridItemCount;
+  buildGridItems();
+}
+
+function removeGridItem() {
+  if (gridItemCount <= 1) return;
+  gridItemCount--;
+  document.getElementById('g-item-count').textContent = gridItemCount;
+  buildGridItems();
+}
+
+function updateGridCode() {
+  var lines = ['.conteneur {'];
+  lines.push('  display: grid;');
+  var cols = (gridState.repeat && gridState.repeat !== 'off') ? gridState.repeat : gridState.cols;
+  lines.push('  grid-template-columns: ' + cols + ';');
+  if (gridState.rows && gridState.rows !== 'auto') lines.push('  grid-template-rows: ' + gridState.rows + ';');
+  if (gridState.gap !== '0px') lines.push('  gap: ' + gridState.gap + ';');
+  lines.push('}');
+  if (gridState.span !== '1') {
+    lines.push('');
+    lines.push('.item-1 {');
+    lines.push('  grid-column: ' + (gridState.span === 'full' ? '1 / -1' : 'span ' + gridState.span) + ';');
+    lines.push('}');
+  }
+  var colorized = lines.map(function(l) {
+    return l
+      .replace(/(display|grid-template-columns|gap|grid-column)/g, '<span style="color:#7dd3fc">$1</span>')
+      .replace(/:\s([^;{]+)/g, function(m, v) { return ': <span style="color:#86efac">' + v + '</span>'; })
+      .replace(/\.conteneur|\.item-1/g, '<span style="color:#fca5a5">$&</span>');
+  });
+  var el = document.getElementById('grid-code');
+  if (el) el.innerHTML = colorized.join('\n');
+}
+
+// Init Grid
+(function() {
+  var t = setInterval(function() {
+    if (document.getElementById('grid-preview')) {
+      clearInterval(t);
+      buildGridItems();
+    }
+  }, 100);
+})();
 
 /* ===== PWA ===== */
 if ('serviceWorker' in navigator) {
